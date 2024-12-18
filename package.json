@@ -1,0 +1,49 @@
+{
+  "name": "denim-reverse-engineering",
+  "version": "1.0.0",
+  "description": "This application enables to reverse-engineer a microservices architecture from a data perspective.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "evaluation": "node evaluation/index.js",
+    "swagger": "node swagger.js",
+    "test_unit": "jest --testRegex=^/test/unit/(.*)\\.test\\.js$ --coverage --forceExit --runInBand",
+    "test_integration": "jest --testRegex=^/test/integration/(.*)\\.test\\.js$"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.unamur.be/denim/reverse-engineering"
+  },
+  "keywords": [
+    "microservice",
+    "reverse engineering",
+    "data"
+  ],
+  "author": "Maxime ANDRÉ",
+  "license": "ISC",
+  "dependencies": {
+    "adm-zip": "^0.5.16",
+    "body-parser": "^1.20.1",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "natural": "^7.1.0",
+    "redis": "^4.5.1",
+    "sloc": "^0.3.2",
+    "swagger-autogen": "^2.22.0",
+    "swagger-ui-express": "^4.6.0",
+    "wink-eng-lite-web-model": "^1.7.1",
+    "wink-lemmatizer": "^3.0.4",
+    "wink-nlp": "^2.2.2"
+  },
+  "devDependencies": {
+    "jest": "^29.3.1",
+    "supertest": "^6.3.3"
+  },
+  "jest": {
+    "testTimeout": 240000,
+    "modulePathIgnorePatterns": [
+      "lib"
+    ]
+  }
+}

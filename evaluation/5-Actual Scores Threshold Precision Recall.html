@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actual Scores Threshold Precision and Recall</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+<div id="precisionRecallGraph" style="width:100%;height:600px;"></div>
+<script>
+
+    // API Express data
+
+    var api_express_scores_threshold = [1, 2, 3, 4, 5, 6, 7, 8];
+
+    var api_express_precision_cinema = [73.68, 93.33, 100.00, 100.00, 100.00, null, null, null];
+    var api_express_recall_cinema = [100.00, 100.00, 100.00, 85.71, 85.71, null, null, null];
+
+    var api_express_precision_cloudboost = [29.33, 61.68, 95.65, 100.00, 100.00, null, null, null];
+    var api_express_recall_cloudboost = [100.00, 100.00, 100.00, 98.48, 98.48, 0, 0, 0];
+
+    var api_express_precision_comments_api = [54.55, 66.67, 100.00, 100.00, 100.00, 100.00, 100.00, 100.00];
+    var api_express_recall_comments_api = [100.00, 100.00, 100.00, 100.00, 100.00, 100.00, 100.00, 100.00];
+
+    var api_express_precision_overleaf = [69.33, 81.25, 92.86, 100.00, 100.00, 100.00, 100.00, 100.00];
+    var api_express_recall_overleaf = [100.00, 100.00, 100.00, 100.00, 100.00, 92.31, 87.82, 84.62];
+
+    var api_express_precision_robot_shop = [78.57, 78.57, 78.57, 78.57, 100.00, 100.00, 100.00, 100.00];
+    var api_express_recall_robot_shop = [100.00, 100.00, 100.00, 100.00, 100.00, 100.00, 100.00, 100.00];
+
+    var trace_api_express_precision_cinema = {
+        x: api_express_scores_threshold,
+        y: api_express_precision_cinema,
+        mode: 'lines',
+        name: 'Cinema - API Express - Precision',
+        line: {
+            color: '#e6c200',
+            dash: 'solid',
+            width: 3
+        },
+        legendgroup: 'API Express Precision',
+        showlegend: true
+    };
+
+    var trace_api_express_recall_cinema = {
+        x: api_express_scores_threshold,
+        y: api_express_recall_cinema,
+        mode: 'lines',
+        name: 'Cinema - API Express - Recall',
+        line: {
+            color: '#f6e248',
+            dash: 'dash',
+            width: 3
+        },
+        legendgroup: 'API Express Recall',
+        showlegend: true
+    };
+
+    var trace_api_express_precision_cloudboost = {
+        x: api_express_scores_threshold,
+        y: api_express_precision_cloudboost,
+        mode: 'lines',
+        name: 'Cloudboost - API Express - Precision',
+        line: {
+            color: '#e6c200',
+            dash: 'solid',
+            width: 3
+        },
+        legendgroup: 'API Express Precision',
+        showlegend: true
+    };
+
+    var trace_api_express_recall_cloudboost = {
+        x: api_express_scores_threshold,
+        y: api_express_recall_cloudboost,
+        mode: 'lines',
+        name: 'Cloudboost - API Express - Recall',
+        line: {
+            color: '#f6e248',
+            dash: 'dash',
+            width: 3
+        },
+        legendgroup: 'API Express Recall',
+        showlegend: true
+    };
+
+    var trace_api_express_precision_comments = {
+        x: api_express_scores_threshold,
+        y: api_express_precision_comments_api,
+        mode: 'lines',
+        name: 'Comments - API Express - Precision',
+        line: {
+            color: '#e6c200',
+            dash: 'solid',
+            width: 3
+        },
+        legendgroup: 'API Express Precision',
+        showlegend: true
+    };
+
+    var trace_api_express_recall_comments = {
+        x: api_express_scores_threshold,
+        y: api_express_recall_comments_api,
+        mode: 'lines',
+        name: 'Comments - API Express - Recall',
+        line: {
+            color: '#f6e248',
+            dash: 'dash',
+            width: 3
+        },
+        legendgroup: 'API Express Recall',
+        showlegend: true
+    };
+
+    var trace_api_express_precision_overleaf = {
+        x: api_express_scores_threshold,
+        y: api_express_precision_overleaf,
+        mode: 'lines',
+        name: 'Overleaf - API Express - Precision',
+        line: {
+            color: '#e6c200',
+            dash: 'solid',
+            width: 3
+        },
+        legendgroup: 'API Express Precision',
+        showlegend: true
+    };
+
+    var trace_api_express_recall_overleaf = {
+        x: api_express_scores_threshold,
+        y: api_express_recall_overleaf,
+        mode: 'lines',
+        name: 'Overleaf - API Express - Recall',
+        line: {
+            color: '#f6e248',
+            dash: 'dash',
+            width: 3
+        },
+        legendgroup: 'API Express Recall',
+        showlegend: true
+    };
+
+    var trace_api_express_precision_robot_shop = {
+        x: api_express_scores_threshold,
+        y: api_express_precision_robot_shop,
+        mode: 'lines',
+        name: 'Robot Shop - API Express - Precision',
+        line: {
+            color: '#e6c200',
+            dash: 'solid',
+            width: 3
+        },
+        legendgroup: 'API Express Precision',
+        showlegend: true
+    };
+
+    var trace_api_express_recall_robot_shop = {
+        x: api_express_scores_threshold,
+        y: api_express_recall_robot_shop,
+        mode: 'lines',
+        name: 'Robot Shop - API Express - Recall',
+        line: {
+            color: '#f6e248',
+            dash: 'dash',
+            width: 3
+        },
+        legendgroup: 'API Express Recall',
+        showlegend: true
+    };
+
+    // DB MongoDB data
+
+    var db_mongo_scores_threshold = [1, 2, 3, 4, 5, 6];
+
+    var db_mongo_precision_cinema = [100.00, 100.00, 100.00, null, null, null];
+    var db_mongo_recall_cinema = [100.00, 100.00, 65.00, 0.0, 0.0, 0.0];
+
+    var db_mongo_precision_cloudboost = [53.16, 63.92, 97.94, 100.00, null, null];
+    var db_mongo_recall_cloudboost = [100.00, 100.00, 94.06, 36.63, 0, 0];
+
+    var db_mongo_precision_comments_api = [72, 75, 78.95, null, null, null];
+    var db_mongo_recall_comments_api = [100, 100, 83.33, 0.00, 0.00, 0.00];
+
+    var db_mongo_precision_overleaf = [78.36, 92.92, 99.06, 100.00, 100.00, 100.00];
+    var db_mongo_recall_overleaf = [100.00, 100.00, 100.00, 72.38, 11.43, 10.48];
+
+    var db_mongo_precision_robot_shop = [100.00, 100.00, 100.00, 100.00, 100.00, 100.00];
+    var db_mongo_recall_robot_shop = [100.00, 100.00, 100.00, 78.26, 73.91, 13.04];
+
+    var trace_db_mongo_precision_cinema = {
+        x: db_mongo_scores_threshold,
+        y: db_mongo_precision_cinema,
+        mode: 'lines',
+        name: 'Cinema - DB Mongo - Precision',
+        line: {
+            color: '#3e7c36',
+            dash: 'solid',
+            width: 3
+        },
+        legendgroup: 'DB Mongo Precision',
+        showlegend: true
+    };
+
+    var trace_db_mongo_recall_cinema = {
+        x: db_mongo_scores_threshold,
+        y: db_mongo_recall_cinema,
+        mode: 'lines',
+        name: 'Cinema - DB Mongo - Recall',
+        line: {
+            color: '#54a850',
+            dash: 'dash',
+            width: 3
+        },
+        legendgroup: 'DB Mongo Recall',
+        showlegend: true
+    };
+
+    var trace_db_mongo_precision_cloudboost = {
+        x: db_mongo_scores_threshold,
+        y: db_mongo_precision_cloudboost,
+        mode: 'lines',
+        name: 'Cloudboost - DB Mongo - Precision',
+        line: {
+            color: '#3e7c36',
+            dash: 'solid',
+            width: 3
+        },
+        legendgroup: 'DB Mongo Precision',
+        showlegend: true
+    };
+
+    var trace_db_mongo_recall_cloudboost = {
+        x: db_mongo_scores_threshold,
+        y: db_mongo_recall_cloudboost,
+        mode: 'lines',
+        name: 'Cloudboost - DB Mongo - Recall',
+        line: {
+            color: '#54a850',
+            dash: 'dash',
+            width: 3
+        },
+        legendgroup: 'DB Mongo Recall',
+        showlegend: true
+    };
+
+    var trace_db_mongo_precision_comments = {
+        x: db_mongo_scores_threshold,
+        y: db_mongo_precision_comments_api,
+        mode: 'lines',
+        name: 'Comments - DB Mongo - Precision',
+        line: {
+            color: '#3e7c36',
+            dash: 'solid',
+            width: 3
+        },
+        legendgroup: 'DB Mongo Precision',
+        showlegend: true
+    };
+
+    var trace_db_mongo_recall_comments = {
+        x: db_mongo_scores_threshold,
+        y: db_mongo_recall_comments_api,
+        mode: 'lines',
+        name: 'Comments - DB Mongo - Recall',
+        line: {
+            color: '#54a850',
+            dash: 'dash',
+            width: 3
+        },
+        legendgroup: 'DB Mongo Recall',
+        showlegend: true
+    };
+
+    var trace_db_mongo_precision_overleaf = {
+        x: db_mongo_scores_threshold,
+        y: db_mongo_precision_overleaf,
+        mode: 'lines',
+        name: 'Overleaf - DB Mongo - Precision',
+        line: {
+            color: '#3e7c36',
+            dash: 'solid',
+            width: 3
+        },
+        legendgroup: 'DB Mongo Precision',
+        showlegend: true
+    };
+
+    var trace_db_mongo_recall_overleaf = {
+        x: db_mongo_scores_threshold,
+        y: db_mongo_recall_overleaf,
+        mode: 'lines',
+        name: 'Overleaf - DB Mongo - Recall',
+        line: {
+            color: '#54a850',
+            dash: 'dash',
+            width: 3
+        },
+        legendgroup: 'DB Mongo Recall',
+        showlegend: true
+    };
+
+    var trace_db_mongo_precision_robot_shop = {
+        x: db_mongo_scores_threshold,
+        y: db_mongo_precision_robot_shop,
+        mode: 'lines',
+        name: 'Robot Shop - DB Mongo - Precision',
+        line: {
+            color: '#3e7c36',
+            dash: 'solid',
+            width: 3
+        },
+        legendgroup: 'DB Mongo Precision',
+        showlegend: true
+    };
+
+    var trace_db_mongo_recall_robot_shop = {
+        x: db_mongo_scores_threshold,
+        y: db_mongo_recall_robot_shop,
+        mode: 'lines',
+        name: 'Robot Shop - DB Mongo - Recall',
+        line: {
+            color: '#54a850',
+            dash: 'dash',
+            width: 3
+        },
+        legendgroup: 'DB Mongo Recall',
+        showlegend: true
+    };
+
+    // DB Redis data
+
+    var db_redis_scores_threshold = [1, 2, 3, 4, 5, 6];
+
+    var db_redis_precision_cinema = [null, null, null, null, null, null];
+    var db_redis_recall_cinema = [null, null, null, null, null, null];
+
+    var db_redis_precision_cloudboost = [9.76, 32.88, 91.30, null, null, null];
+    var db_redis_recall_cloudboost = [100.00, 100.00, 87.5, 0, 0, 0];
+
+    var db_redis_precision_comments = [null, null, null, null, null, null];
+    var db_redis_recall_comments = [null, null, null, null, null, null];
+
+    var db_redis_precision_overleaf = [40.94, 67.10, 82.64, 96.43, 100.00, 100.00];
+    var db_redis_recall_overleaf = [100.00, 100.00, 96.15, 51.92, 48.08, 4.81];
+
+    var db_redis_precision_robot_shop = [22.58, 28.00, 30.43, 58.33, 100.00, null];
+    var db_redis_recall_robot_shop = [100.00, 100.00, 100.00, 100.00, 100.00, 0.00];
+
+    var trace_db_redis_precision_cinema = {
+        x: db_redis_scores_threshold,
+        y: db_redis_precision_cinema,
+        mode: 'lines',
+        name: 'Cinema - DB Redis - Precision',
+        line: {
+            color: '#c7322e',
+            dash: 'solid',
+            width: 3
+        },
+        legendgroup: 'DB Redis Precision',
+        showlegend: true
+    };
+
+    var trace_db_redis_recall_cinema = {
+        x: db_redis_scores_threshold,
+        y: db_redis_recall_cinema,
+        mode: 'lines',
+        name: 'Cinema - DB Redis - Recall',
+        line: {
+            color: '#f74d3e',
+            dash: 'dash',
+            width: 3
+        },
+        legendgroup: 'DB Redis Recall',
+        showlegend: true
+    };
+
+    var trace_db_redis_precision_cloudboost = {
+        x: db_redis_scores_threshold,
+        y: db_redis_precision_cloudboost,
+        mode: 'lines',
+        name: 'Cloudboost - DB Redis - Precision',
+        line: {
+            color: '#c7322e',
+            dash: 'solid',
+            width: 3
+        },
+        legendgroup: 'DB Redis Precision',
+        showlegend: true
+    };
+
+    var trace_db_redis_recall_cloudboost = {
+        x: db_redis_scores_threshold,
+        y: db_redis_recall_cloudboost,
+        mode: 'lines',
+        name: 'Cloudboost - DB Redis - Recall',
+        line: {
+            color: '#f74d3e',
+            dash: 'dash',
+            width: 3
+        },
+        legendgroup: 'DB Redis Recall',
+        showlegend: true
+    };
+
+    var trace_db_redis_precision_comments = {
+        x: db_redis_scores_threshold,
+        y: db_redis_precision_comments,
+        mode: 'lines',
+        name: 'Comments - DB Redis - Precision',
+        line: {
+            color: '#c7322e',
+            dash: 'solid',
+            width: 3
+        },
+        legendgroup: 'DB Redis Precision',
+        showlegend: true
+    };
+
+    var trace_db_redis_recall_comments = {
+        x: db_redis_scores_threshold,
+        y: db_redis_recall_comments,
+        mode: 'lines',
+        name: 'Comments - DB Redis - Recall',
+        line: {
+            color: '#f74d3e',
+            dash: 'dash',
+            width: 3
+        },
+        legendgroup: 'DB Redis Recall',
+        showlegend: true
+    };
+
+    var trace_db_redis_precision_overleaf = {
+        x: db_redis_scores_threshold,
+        y: db_redis_precision_overleaf,
+        mode: 'lines',
+        name: 'Overleaf - DB Redis - Precision',
+        line: {
+            color: '#c7322e',
+            dash: 'solid',
+            width: 3
+        },
+        legendgroup: 'DB Redis Precision',
+        showlegend: true
+    };
+
+    var trace_db_redis_recall_overleaf = {
+        x: db_redis_scores_threshold,
+        y: db_redis_recall_overleaf,
+        mode: 'lines',
+        name: 'Overleaf - DB Redis - Recall',
+        line: {
+            color: '#f74d3e',
+            dash: 'dash',
+            width: 3
+        },
+        legendgroup: 'DB Redis Recall',
+        showlegend: true
+    };
+
+    var trace_db_redis_precision_robot_shop = {
+        x: db_redis_scores_threshold,
+        y: db_redis_precision_robot_shop,
+        mode: 'lines',
+        name: 'Robot Shop - DB Redis - Precision',
+        line: {
+            color: '#c7322e',
+            dash: 'solid',
+            width: 3
+        },
+        legendgroup: 'DB Redis Precision',
+        showlegend: true
+    };
+
+    var trace_db_redis_recall_robot_shop = {
+        x: db_redis_scores_threshold,
+        y: db_redis_recall_robot_shop,
+        mode: 'lines',
+        name: 'Robot Shop - DB Redis - Recall',
+        line: {
+            color: '#f74d3e',
+            dash: 'dash',
+            width: 3
+        },
+        legendgroup: 'DB Redis Recall',
+        showlegend: true
+    };
+
+    // Layout
+
+    var layout = {
+        //title: 'Actual Scores Threshold Precision and Recall',
+        xaxis: {
+            title: 'Scores threshold',
+            titlefont: {
+                size: 18
+            },
+            tickfont: {
+                size: 15
+            }
+        },
+        yaxis: {
+            title: 'Precision and Recall (%)',
+            titlefont: {
+                size: 18
+            },
+            tickfont: {
+                size: 15
+            }
+        },
+        legend: {
+            font: {
+                size: 15
+            }
+        },
+        font: {
+            size: 15
+        }
+    };
+
+    // Data
+
+    var data = [
+
+        // Express
+
+        trace_api_express_precision_cinema,
+        trace_api_express_recall_cinema,
+
+        trace_api_express_precision_cloudboost,
+        trace_api_express_recall_cloudboost,
+
+        trace_api_express_precision_comments,
+        trace_api_express_recall_comments,
+
+        trace_api_express_precision_overleaf,
+        trace_api_express_recall_overleaf,
+
+        trace_api_express_precision_robot_shop,
+        trace_api_express_recall_robot_shop,
+
+        // MongoDB
+
+        trace_db_mongo_precision_cinema,
+        trace_db_mongo_recall_cinema,
+
+        trace_db_mongo_precision_cloudboost,
+        trace_db_mongo_recall_cloudboost,
+
+        trace_db_mongo_precision_comments,
+        trace_db_mongo_recall_comments,
+
+        trace_db_mongo_precision_overleaf,
+        trace_db_mongo_recall_overleaf,
+
+        trace_db_mongo_precision_robot_shop,
+        trace_db_mongo_recall_robot_shop,
+
+        // Redis
+
+        trace_db_redis_precision_cinema,
+        trace_db_redis_recall_cinema,
+
+        trace_db_redis_precision_cloudboost,
+        trace_db_redis_recall_cloudboost,
+
+        trace_db_redis_precision_comments,
+        trace_db_redis_recall_comments,
+
+        trace_db_redis_precision_overleaf,
+        trace_db_redis_recall_overleaf,
+
+        trace_db_redis_precision_robot_shop,
+        trace_db_redis_recall_robot_shop
+    ];
+    Plotly.newPlot('precisionRecallGraph', data, layout);
+</script>
+</body>
+</html>

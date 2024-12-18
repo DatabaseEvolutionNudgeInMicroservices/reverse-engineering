@@ -1,0 +1,25 @@
+# Dependency directories
+node_modules/
+package-lock.json
+
+# Optional npm cache directory
+.npm
+
+# IDE directory
+.idea
+
+# Test
+coverage
+
+# Swagger
+swagger.json
+
+# Environement variable
+.env
+
+# Working directory used by the analyzer
+TEMP
+
+# Lib directory
+lib/codeql-cli
+lib/codeql-lib

@@ -1,0 +1,122 @@
+# -- Stages --
+
+stages:
+  - build
+  - test
+  # - deploy
+  - clean
+
+# -- Variables --
+
+variables:
+  GIT_DEPTH: 1 # Sets git shallow clone to 1 commit.
+
+# -- Jobs --
+
+# Application building
+
+building:
+   stage: build
+   only:
+     - master # Restricts the building to the master branch.
+     - develop # Restricts the building to the develop branch.
+   script:
+     - echo "--Building--"
+
+     # npm
+
+     - npm install # Installs the dependencies.
+
+     # Swagger
+
+     - npm run swagger # Generates the application documentation (Swagger).
+
+     # CodeQL: Directories
+
+     - New-Item -Name "lib" -ItemType "directory" # Creates the lib directory.
+     - cd lib
+     - New-Item -Name "codeql-cli" -ItemType "directory" # Creates the codeql-cli directory.
+     - New-Item -Name "codeql-lib" -ItemType "directory" # Creates the codeql-lib directory.
+     - cd ..
+
+     # CodeQL: CLI
+
+     - git clone git@gitlab.unamur.be:denim/codeql-cli-2.13.0.git lib/codeql-cli # Downloads the CodeQL CLI.
+     - '& ${env:ProgramFiles}\7-Zip\7z.exe x -olib/codeql-cli lib/codeql-cli/codeql-cli.zip' # Unzips the CodeQL CLI.
+     - Remove-Item -Path lib/codeql-cli/codeql-cli.zip
+     #- Move-Item -Path ${env:ProgramFiles}/codeql/codeql-cli -Destination lib/codeql-cli # CodeQL CLI moving to right folder.
+
+     # CodeQL: libraries
+
+     - git clone git@gitlab.unamur.be:denim/codeql-lib-2.13.0.git lib/codeql-lib # Downloads the CodeQL CLI.
+     - '& ${env:ProgramFiles}\7-Zip\7z.exe x -olib/codeql-lib lib/codeql-lib/codeql-lib.zip' # Unzips the CodeQL CLI.
+     - Remove-Item -Path lib/codeql-lib/codeql-lib.zip
+     #- Move-Item -Path ${env:ProgramFiles}/codeql/codeql-lib -Destination lib/codeql-lib # CodeQL CLI moving to right folder.
+
+     # Environment variables
+
+     - New-Item -Name ".env" -ItemType "file" # Creates the environment variables file.
+     - Add-Content .env 'FILE_SYSTEM_SEPARATOR="\"' # Adds the file system separator environment variable for Windows.
+     - New-Item -Name "TEMP" -ItemType "directory" # Creates the temporary working directory for analysis files.
+
+# Unit testing
+
+unit-testing:
+   stage: test
+   only:
+     - master # Restricts the unit testing to the master branch.
+     - develop # Restricts the unit testing to the develop branch.
+   variables:
+     GIT_STRATEGY: none # Skips the 'git fetch'.
+   script:
+     - echo "--Unit testing--"
+     - npm run test_unit # Starts the unit testing.
+
+# Integration testing
+
+integration-testing:
+   stage: test
+   only:
+     - master # Restricts the integration testing to the master branch.
+     - develop # Restricts the unit testing to the develop branch.
+   variables:
+     GIT_STRATEGY: none # Skips the 'git fetch'.
+   needs: [ unit-testing ]
+   script:
+     - echo "--Integration testing--"
+     - Set-Content .env 'FILE_SYSTEM_SEPARATOR="/"' # Sets the file system separator environment variable for Linux.
+     - docker-compose up -d # Sets up and starts the docker container via docker-compose started in background.
+     - npm run test_integration # Launches the integration testing.
+
+# Application deployment
+
+# deploying:
+#   image: docker:latest
+#   stage: deploy
+#   only:
+#     - master # Restricts the deployment only for the master branch.
+#   services:
+#     - docker:dind
+#   script:
+#     - echo "--Deploying--"
+#     # TODO: Clean temporary directory content, unused zip files, ...
+#     - docker build -t <host>:<port>/<image name>:latest .
+#     - docker push <host>:<port>/<image name>:latest
+
+# Cleaning
+
+cleaning:
+  image: docker:latest
+  stage: clean
+  only:
+    - master # Restricts the cleaning to the master branch.
+    - develop # Restricts the cleaning to the develop branch.
+  variables:
+    GIT_STRATEGY: none # Skips the 'git fetch'.
+  script:
+    - echo "--Cleaning Docker & $CI_PROJECT_DIR--"
+    - docker rm -f $(docker ps -a -q) # Removes ALL the Docker containers on the host machine runner.
+    - docker rmi $(docker images -a -q) # Removes ALL the images on the host machine runner.
+    - New-Item -Path ../ -Name "empty" -ItemType "directory" # Creates an empty folder for file deletion.
+    - robocopy ../empty ./ /MIR; if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null } # Removes ALL the source files on the host machine runner.
+    - rm ..\empty\

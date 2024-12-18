@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redis Heuristics Precision and Recall</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+<div id="plot" style="width:35%;height:600px;"></div>
+<script>
+    let xValues = ['R1', 'R2', 'R3', 'R4', 'R5', 'R6'];
+
+    let yValues = [
+        'Overleaf - Precision',
+        'Overleaf - Recall',
+        'Robot Shop - Precision',
+        'Robot Shop - Recall',
+        'Cloudboost - Precision',
+        'Cloudboost - Recall'
+    ];
+
+    let zValues = [
+        [40.94, 33.33, 86.35, 77.69, 82.20, 100.00],
+        [100.00, 7.69, 54.81, 97.12, 93.27, 48.08],
+        [22.58, 0, 100, 30.43, 30.43, 100],
+        [100, "N/A", 100, 100, 100, 100],
+        [9.76, 30.43, 96.00, "N/A", "N/A", "N/A"],
+        [100, 87.50, 100, 0, 0, 0]
+    ];
+
+    let colorscaleValue = [
+        [0, '#ffffff'],
+        [1, '#c7322e']
+    ];
+
+    let data = [{
+        x: xValues,
+        y: yValues,
+        z: zValues,
+        type: 'heatmap',
+        colorscale: colorscaleValue,
+        showscale: true,
+        colorbar: {
+            title: {
+                text: ' % ',
+            }
+        }
+    }];
+
+    let layout = {
+        title: 'Redis Heuristics Precision and Recall',
+        annotations: [],
+        xaxis: {
+            automargin: true,
+            showgrid: false
+        },
+        yaxis: {
+            automargin: true,
+            showgrid: false
+        },
+        shapes: [] // Separation lines
+    };
+
+    // Data
+
+    for (let i = 0; i < yValues.length; i++) {
+        for (let j = 0; j < xValues.length; j++) {
+            let result = {
+                xref: 'x1',
+                yref: 'y1',
+                x: xValues[j],
+                y: yValues[i],
+                text: zValues[i][j],
+                font: {
+                    family: 'Arial',
+                    size: 12
+                },
+                showarrow: false,
+                font: {
+                    color: 'black'
+                }
+            };
+            layout.annotations.push(result);
+        }
+    }
+
+    // Separation lines
+
+    for (let i = 2; i < yValues.length; i += 2) {
+        layout.shapes.push({
+            type: 'line',
+            x0: -0.5,
+            x1: xValues.length - 0.5,
+            y0: i - 0.5,
+            y1: i - 0.5,
+            line: {
+                color: 'black',
+                width: 2
+            }
+        });
+    }
+
+    Plotly.newPlot('plot', data, layout);
+</script>
+</body>
+</html>
