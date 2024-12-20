@@ -1,10 +1,18 @@
 # DENIM Reverse Engineering
 
-## Description
+## 📣 Description
 
 This application enables to reverse-engineer a microservices architecture from a data perspective.
 
-## Features
+## 📊 Evaluation
+
+The complete data of our evaluation is detailed in the `/evaluation` folder. The `1-Ground truth <system name>.xlsx`
+files details the manual annotation performed on the system codebases. The `2-Actual <system name>.xlsx` file
+details the results of the empirical evaluation, for example in terms of precision and recall. The script `index.js`
+with files `3-expected <system name>.csv` and `4-actual <system name>.csv` help to compute precision and recall
+scores. Files `5-<...>...` contains charts and metrics.
+
+## ⭐ Features
 
 Here is a summary of the features currently supported.
 
@@ -94,7 +102,7 @@ Consult the response object:
 ]
 ```
 
-## Development details
+## 👩‍💻 Development details
 
 ### Setup
 
@@ -201,7 +209,7 @@ Learn more about GitLab CI/CD via [this page](https://docs.gitlab.com/ee/ci/).
 This one is described in the `.gitlab-ci.yml`.
 Warning! Right privileges must be granted to Docker on the session on which the CI is executed.
 
-## Technical details
+## 🪛 Technical details
 
 ### Technologies
 
@@ -244,7 +252,7 @@ Warning! Right privileges must be granted to Docker on the session on which the 
 * [Docker Desktop](https://docs.docker.com/desktop/windows/install/) is the containerization technology used.
 * [Postman](https://www.postman.com/) is the tool for testing manually the API.
 
-## Design details
+## 🧪 Design details
 
 ### Static Analysis
 
@@ -287,16 +295,7 @@ DB (MongoDB) Likelihood Score Heuristics.
 | M5  | According to the MongoDB documentation, the method call has a MongoDB-like client assignment around (in the same file).                         |
 | M6  | According to the MongoDB documentation, the method call is linked to a MongoDB-like client assignment around (in the same file).                |
 
-## Evaluation
-
-The complete data of our evaluation is detailed in the `/evaluation` folder. The `1-Ground truth <system name>.xlsx` 
-files details in the "Data" folder the manual annotation performed on the system codebases. The "Analysis" folder 
-gives insights of some metrics. The `2-Actual <system name>.xlsx` file details the results of the empirical 
-evaluation, for example in terms of precision and recall. Other files (i.e., HTML) give graphical visual of the 
-results. The script `index.js` with files `3-expected <system name>.csv` and `4-actual <system name>.csv` help to 
-compute precision and recall scores. Files `5-<...>.html` contains charts.
-
-## Contributing
+## 🤝 Contributing
 
 If you want to contribute to the project by supporting new technologies or heuristics, please consider the 
 following instructions:
