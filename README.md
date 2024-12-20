@@ -6,11 +6,11 @@ This application enables to reverse-engineer a microservices architecture from a
 
 ## 📊 Evaluation
 
-The complete data of our evaluation is detailed in the `/evaluation` folder. The `1-Ground truth <system name>.xlsx`
-files details the manual annotation performed on the system codebases. The `2-Actual <system name>.xlsx` file
-details the results of the empirical evaluation, for example in terms of precision and recall. The script `index.js`
-with files `3-expected <system name>.csv` and `4-actual <system name>.csv` help to compute precision and recall
-scores. Files `5-<...>...` contains charts and metrics.
+The complete data of our evaluation is detailed in the [`/evaluation`](https://github.com/DatabaseEvolutionNudgeInMicroservices/reverse-engineering/tree/main/evaluation) folder. The `1-Ground truth 
+<system name>.xlsx` files details the manual annotation performed on the system codebases. The `2-Actual <system 
+name>.xlsx` file details the results of the empirical evaluation, for example in terms of precision and recall. The 
+script `index.js` with files `3-expected <system name>.csv` and `4-actual <system name>.csv` help to compute 
+precision and recall scores. Files `5-<...>...` contains charts and metrics.
 
 ## ⭐ Features
 
