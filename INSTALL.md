@@ -17,7 +17,7 @@ You have the tree following options.
 
 #### Launching from Docker Hub (preferred)
 
-- Run with Docker the [DENIM Reverse Engineering image from Docker Hub](#).
+- Run with Docker the [DENIM Reverse Engineering image from Docker Hub](https://hub.docker.com/repository/docker/maxiandr/denim-reverse-engineering/general).
 
 #### Launching from source code
 
