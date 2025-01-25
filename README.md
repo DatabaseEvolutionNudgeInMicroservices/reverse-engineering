@@ -4,14 +4,6 @@
 
 This application enables to reverse-engineer a microservices architecture from a data perspective.
 
-## 📊 Evaluation
-
-The complete data of our evaluation is detailed in the [`/evaluation`](https://github.com/DatabaseEvolutionNudgeInMicroservices/reverse-engineering/tree/main/evaluation) folder. The `1-Ground truth 
-<system name>.xlsx` files details the manual annotation performed on the system codebases. The `2-Actual <system 
-name>.xlsx` file details the results of the empirical evaluation, for example in terms of precision and recall. The 
-script `index.js` with files `3-expected <system name>.csv` and `4-actual <system name>.csv` help to compute 
-precision and recall scores. Files `5-<...>...` contains charts and metrics.
-
 ## ⭐ Features
 
 Here is a summary of the features currently supported.
@@ -44,7 +36,8 @@ Here is a summary of languages and technologies currently supported:
 **__INPUT__**
 
 Invoke the static analysis by using the [POST /static/language/:language/repository/zip](http://locahost:3000/static/language/:language/repository/zip) root with a ZIP file inside the request.
-All repositories to analyze should be integrated in the ZIP file.
+WARNING: This can take a while depending on the repository size.
+All repositories to analyze have to be integrated in the ZIP file.
 Each directory at the root of the zip file represents a repository.
 
 This zip file can be generated from GitHub/GitLab repositories thanks to [DENIM Downloading](https://github.com/DatabaseEvolutionNudgeInMicroservices/downloading).
@@ -106,30 +99,7 @@ Consult the response object:
 
 ### Setup
 
-- [Install NodeJS](https://nodejs.org/fr/download).
-- [Install Docker Desktop](https://docs.docker.com/desktop/windows/install/).
-- [Download the last CodeQL CLI binaries zip file](https://github.com/github/codeql-cli-binaries/releases) and extract
-  it at `/lib/codeql-cli`).
-- [Download last CodeQL libraries](https://github.com/github/codeql) and extract them next to CodeQL CLI at
-  `/lib/codeql-lib`).
-- Open the project in an IDE and install the dependencies.
-  ```shell
-  npm install
-  ```
-- Create an `.env` file with the following content.
-  ```shell
-  # Windows
-  FILE_SYSTEM_SEPARATOR="\"
-  ```
-  ```shell
-  # Linux
-  FILE_SYSTEM_SEPARATOR="/"
-  ```
-- Launch the application.
-  ```shell
-  npm run start
-  ```
-  The app runs at [http://localhost:3000](http://localhost:3000).
+See [INSTALL file](INSTALL.md).
 
 ### Test the app (manually)
 
@@ -174,21 +144,6 @@ The configuration of Jest is stated in the `/package.json` file.
   ```bash
   npm run test_integration
   ```
-
-### Dockerize the application
-
-The project contains a `Dockerfile` at its root in order to create an image of the application.
-
-A `docker-compose.yml` file also exists at the root in order to launch easily a container for the application.
-
-- Build the image and launch the container.
-
-  ```bash
-  docker-compose up
-  ```
-
-  Warning! This command must be executed at the location of the `docker-compose.yml` file and have to be run as with the
-  right privileges (administrator).
 
 ### Documentation
 
@@ -295,6 +250,10 @@ DB (MongoDB) Likelihood Score Heuristics.
 | M5  | According to the MongoDB documentation, the method call has a MongoDB-like client assignment around (in the same file).                         |
 | M6  | According to the MongoDB documentation, the method call is linked to a MongoDB-like client assignment around (in the same file).                |
 
+The resulting report follows that model:
+
+<img src="assets/model.png" alt="Model" width="400px"/>
+
 ## 🤝 Contributing
 
 If you want to contribute to the project by supporting new technologies or heuristics, please consider the 
@@ -314,3 +273,12 @@ following instructions:
   contribution.
 - Any contribution must be documented, especially by updating the `README.md` file.
 - Any contribution must be approved via the pull request mechanism.
+
+## 📊 Evaluation
+
+The complete data of our evaluation is detailed in the [`/evaluation`](https://github.com/DatabaseEvolutionNudgeInMicroservices/reverse-engineering/tree/main/evaluation) folder. The `1-Ground truth
+<system name>.xlsx` files details the manual annotation performed on the system codebases. The `2-Actual <system
+name>.xlsx` file details the results of the empirical evaluation, for example in terms of precision and recall. The
+script `index.js` with files `3-expected <system name>.csv` and `4-actual <system name>.csv` help to compute
+precision and recall scores. The `4-actual <system name>.json` show examples of final reports according to the model. 
+Files `5-<...>...` contains charts and metrics.
