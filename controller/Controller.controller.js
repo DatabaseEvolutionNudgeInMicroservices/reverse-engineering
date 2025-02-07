@@ -115,10 +115,6 @@ class Controller {
 
             if (zipTempFilePath !== undefined && zipTempFilePath !== null && zipTempFilePath.length !== 0 && language !== undefined && language !== null && language.length !== 0 && LANGUAGES_SUPPORTED.includes(language)) {
                 try {
-
-
-                    console.log("a", this, this.downloaderZip)
-
                     // 1. Acquisition
                     this.downloaderZip.downloadByElement(zipTempFilePath).then((downloadedRepositoryList) => {
 
