@@ -181,41 +181,53 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
 
             try {
                 const repositoryFolder = this.getRepositoryFolder(element);
-                const files = fs.readdirSync(repositoryFolder);
+                const repositoryName = this.getRepositoryName(element);
                 const analysisResults = [];
 
-                files.forEach(fileName => {
-                    const filePath = `${repositoryFolder}${FILE_SYSTEM_SEPARATOR}${fileName}`;
-                    const stats = fs.statSync(filePath);
+                // Recursive function to explore directories
+                const exploreDirectory = (currentPath) => {
+                    const items = fs.readdirSync(currentPath);
 
-                    if (stats.isFile()) {
-                        const fileContent = fs.readFileSync(filePath, 'utf8');
-                        const fileConcepts = this.extractConceptsFromFile(fileName, fileContent);
-                        const location = `${fileName}#L0C0-L0C0`;
+                    items.forEach(item => {
+                        const itemPath = `${currentPath}${FILE_SYSTEM_SEPARATOR}${item}`;
+                        const stats = fs.statSync(itemPath);
 
-                        const fileExtension = this.getFileExtension(filePath);
-                        const fileNumberOfLinesOfCode = this.getFileNumberOfLinesOfCode(fileContent, fileExtension);
+                        if (stats.isDirectory()) {
+                            // If it's a directory, explore recursively
+                            exploreDirectory(itemPath);
+                        } else if (stats.isFile() && this.fileExtensionSupportedForAnalysis(itemPath)) {
+                            // If it's a file, perform the analysis
+                            const fileContent = fs.readFileSync(itemPath, 'utf8');
+                            const fileConcepts = this.extractConceptsFromFile(item, fileContent);
+                            const location = `${itemPath}#L0C0-L0C0`;
 
-                        analysisResults.push({
-                            type: null,
-                            repository: element,
-                            file: fileName,
-                            location: location,
-                            operation: null,
-                            method: null,
-                            sample: null,
-                            tokens: fileConcepts,
-                            fileNumberOfLinesOfCode: fileNumberOfLinesOfCode
-                        });
-                    }
-                });
+                            const fileExtension = this.getFileExtension(itemPath);
+                            const fileNumberOfLinesOfCode = this.getFileNumberOfLinesOfCode(fileContent, fileExtension);
 
+                            analysisResults.push({
+                                type: null,
+                                repository: repositoryName,
+                                file: itemPath,
+                                location: location,
+                                operation: null,
+                                method: null,
+                                sample: null,
+                                tokens: fileConcepts,
+                                fileNumberOfLinesOfCode: fileNumberOfLinesOfCode
+                            });
+                        }
+                    });
+                };
+
+                // Start exploration from the root folder
+                exploreDirectory(repositoryFolder);
+
+                // Sort and filter by TF-IDF
                 const sortedResults = this.sortAndFilterByTfIdfScores(analysisResults);
-                console.log(sortedResults)
                 resolve(sortedResults);
 
             } catch (error) {
-                console.log(error)
+                console.log(error);
                 reject(new AnalysisFail(error.message));
             }
         });
@@ -330,8 +342,8 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
             return normalizedConcept
                 .replace(/([a-z])([A-Z])/g, '$1 $2')  // camelCase to isolated words
                 .replace(/([A-Z])([A-Z][a-z])/g, '$1 $2')  // PascalCase to isolated words
-                .toLowerCase()
-                .split(" ");
+                .toLowerCase();
+                // .split(" ");
         });
     }
 
@@ -361,7 +373,8 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
     filterByDictionaryType(concepts) {
         // Check if all parts of a concept are common words
         return concepts.filter(concept =>
-            concept.split(" ").every(word => dictionary.check(word))
+            // concept.split(" ").every(word => dictionary.check(word))
+            concept.split(" ").some(word => dictionary.check(word))
         );
     }
 
@@ -412,6 +425,18 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
     // }
 
     /**
+     * Checks if the file extension is supported for analysis.
+     *
+     * @param {string} filePath - The full path of the file to be analyzed.
+     *                            It should include the file name and extension.
+     * @returns {boolean} - Returns `true` if the file extension is supported (currently 'js' or 'java'),
+     *                      otherwise returns `false`.
+     */
+    fileExtensionSupportedForAnalysis(filePath) {
+        return ["js", "java"].includes(this.getFileExtension(filePath));
+    }
+
+    /**
      * Extracts the file extension from the given file path.
      * The extension is determined by the substring following the last dot in the file path.
      *
@@ -452,6 +477,23 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         } else {
             throw new BadFormat(INPUT_INCORRECTLY_FORMATTED);
         }
+    }
+
+    /**
+     * Retrieves the repository name from a 'denim' file if it exists,
+     * otherwise returns the original element name.
+     *
+     * @param {string} element - The repository identifier, typically the folder name.
+     * @returns {string} - The repository URL if the 'denim' file exists and contains a URL,
+     *                     otherwise returns the original element.
+     */
+    getRepositoryName(element) {
+        let denimFilePath = this.getRepositoryFolder(element) + FILE_SYSTEM_SEPARATOR + 'denim';
+        if (fs.existsSync(denimFilePath)) {
+            const url = fs.readFileSync(denimFilePath, 'utf8').split('\n')[0].trim();
+            return url;
+        }
+        return element;
     }
 }
 
