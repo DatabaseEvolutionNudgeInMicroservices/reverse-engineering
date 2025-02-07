@@ -27,10 +27,12 @@ const upload = multer({
     })
 });
 
-router.post('/static/language/:language/repository/zip', upload.single('file'), function (request, response) {
+// Helper function for handling file uploads and responses
+
+const handleFileUploadAndResponse = (fileMethod) => (request, response) => {
     if (request.file) {
         const {path: zipTempFilePath, originalname: originalFileName} = request.file;
-        controller.analyzeStatically(zipTempFilePath, request.params.language)
+        fileMethod.call(controller, zipTempFilePath, request.params.language)
             .then((result) => {
                 response.status(200);
                 response.json(result);
@@ -58,6 +60,13 @@ router.post('/static/language/:language/repository/zip', upload.single('file'), 
     } else {
         response.status(400).json({name: DOWNLOAD_FAIL, message: INPUT_INCORRECTLY_FORMATTED});
     }
-});
+};
+
+// Endpoints
+
+router.post('/static/heuristics/language/:language/repository/zip', upload.single('file'), handleFileUploadAndResponse(controller.analyzeStaticallyHeuristics));
+
+router.post('/static/text-retrieval/language/:language/repository/zip', upload.single('file'), handleFileUploadAndResponse(controller.analyzeStaticallyTextRetrieval));
+
 
 module.exports = router;
