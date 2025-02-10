@@ -290,18 +290,24 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         }
 
         // Combine language and library keywords into a Set for faster lookup
-        const reservedKeywords = new Set(
-            [
-                ...fileTypeKeywords.language,
-                ...(fileTypeKeywords.libraries
-                    ? Object.values(fileTypeKeywords.libraries).flat()
-                    : [])
-            ].map(keyword => keyword.toLowerCase())
-        );
+        const reservedKeywords = [
+            ...fileTypeKeywords.language,
+            ...(fileTypeKeywords.libraries
+                ? Object.values(fileTypeKeywords.libraries).flat()
+                : [])
+        ];
+
+        // Function to check if a concept matches or is included in any reserved keyword
+        const isReservedKeyword = (concept) => {
+            return reservedKeywords.some(keyword =>
+                concept.toLowerCase().includes(keyword.toLowerCase())
+            );
+        };
 
         // Filter out reserved keywords
-        return concepts.filter(concept => !reservedKeywords.has(concept.toLowerCase()));
+        return concepts.filter(concept => !isReservedKeyword(concept));
     }
+
 
     /**
      * Removes duplicate concepts from the array, ensuring uniqueness.
