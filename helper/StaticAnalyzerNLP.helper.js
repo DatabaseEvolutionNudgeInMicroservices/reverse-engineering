@@ -185,7 +185,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                         if (stats.isDirectory()) {
                             // If it's a directory, explore recursively
                             exploreDirectory(itemPath);
-                        } else if (stats.isFile() && this.fileExtensionSupportedForAnalysis(itemPath)) {
+                        } else if (stats.isFile() && this.fileIsSupportedForAnalysis(itemPath)) {
                             // If it's a file, perform the analysis
                             const fileContent = fs.readFileSync(itemPath, 'utf8');
                             const fileConcepts = this.extractConceptsFromFile(item, fileContent);
@@ -436,14 +436,14 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
     }
 
     /**
-     * Checks if the file extension is supported for analysis.
+     * Checks if the file is supported for analysis.
      *
      * @param {string} filePath - The full path of the file to be analyzed.
      *                            It should include the file name and extension.
      * @returns {boolean} - Returns `true` if the file extension is supported (currently 'js' or 'java'),
      *                      otherwise returns `false`.
      */
-    fileExtensionSupportedForAnalysis(filePath) {
+    fileIsSupportedForAnalysis(filePath) {
         return FILE_EXTENSIONS_SUPPORTED_FOR_NLP_ANALYSIS.includes(this.getFileExtension(filePath));
     }
 
