@@ -5,23 +5,13 @@ const {
     TEMP_FOLDER_NAME,
 } = require('./Constant.helper.js');
 
+const FILE_EXTENSIONS_SUPPORTED_FOR_NLP_ANALYSIS = ["js"];
+
 // Error
 
 const BadFormat = require('../error/BadFormat.error.js');
 const AnalysisFail = require('../error/AnalysisFail.error.js');
 const {INPUT_INCORRECTLY_FORMATTED} = require('../error/Constant.error.js');
-
-// Model
-
-const CodeFragment = require("../model/CodeFragment.model");
-const Repository = require("../model/Repository.model");
-const Directory = require("../model/Directory.model");
-const File = require("../model/File.model");
-const Technology = require("../model/Technology.model");
-const Operation = require("../model/Operation.model");
-const Method = require("../model/Method.model");
-const Sample = require("../model/Sample.model");
-const Concept = require("../model/Concept.model");
 
 // Helpers
 
@@ -433,7 +423,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      *                      otherwise returns `false`.
      */
     fileExtensionSupportedForAnalysis(filePath) {
-        return ["js", "java"].includes(this.getFileExtension(filePath));
+        return FILE_EXTENSIONS_SUPPORTED_FOR_NLP_ANALYSIS.includes(this.getFileExtension(filePath));
     }
 
     /**
