@@ -357,6 +357,11 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         return concepts.map(concept =>
             concept
                 .split(' ')
+                // Reduces plural nouns and derived forms to their base form (lemma).
+                // If the word is not a recognized noun, it returns the original word.
+                // Examples: cars -> car,
+                //           libraries -> library
+                //           ...
                 .map(winkNLPLemmatizer.noun)
                 .join(' ')
         );
