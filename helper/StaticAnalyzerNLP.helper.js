@@ -227,32 +227,6 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
     }
 
     /**
-     * Sums and ranks concepts by their cumulative TF-IDF scores across files.
-     *
-     * @param analysisResults {Array} List of files with tokens containing 'concept' and 'score'.
-     * @returns {Array} Sorted concepts with their total scores.
-     */
-    getTopConcepts(analysisResults) {
-        const conceptScores = {};
-
-        // Iterate through all files to sum up the scores of concepts
-        analysisResults.forEach(file => {
-            file.tokens.forEach(({ concept, score }) => {
-                if (conceptScores[concept]) {
-                    conceptScores[concept] += score;
-                } else {
-                    conceptScores[concept] = score;
-                }
-            });
-        });
-
-        // Convert the object to an array, sort by descending score, and return the formatted results
-        return Object.entries(conceptScores)
-            .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
-            .map(([concept, score]) => ({ concept, totalTfIdfScore: score.toFixed(2) }));
-    }
-
-    /**
      * Extracts and processes concepts from a given file content.
      * The function filters, normalizes, and refines the concepts before returning them.
      *
@@ -432,6 +406,33 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         });
 
         return analysisResults;
+    }
+
+
+    /**
+     * Sums and ranks concepts by their cumulative TF-IDF scores across files.
+     *
+     * @param analysisResults {Array} List of files with tokens containing 'concept' and 'score'.
+     * @returns {Array} Sorted concepts with their total scores.
+     */
+    getTopConcepts(analysisResults) {
+        const conceptScores = {};
+
+        // Iterate through all files to sum up the scores of concepts
+        analysisResults.forEach(file => {
+            file.tokens.forEach(({ concept, score }) => {
+                if (conceptScores[concept]) {
+                    conceptScores[concept] += score;
+                } else {
+                    conceptScores[concept] = score;
+                }
+            });
+        });
+
+        // Convert the object to an array, sort by descending score, and return the formatted results
+        return Object.entries(conceptScores)
+            .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
+            .map(([concept, score]) => ({ concept, totalTfIdfScore: score.toFixed(2) }));
     }
 
     /**
