@@ -226,11 +226,16 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         });
     }
 
-    // TODO : document this function
+    /**
+     * Sums and ranks concepts by their cumulative TF-IDF scores across files.
+     *
+     * @param analysisResults {Array} List of files with tokens containing 'concept' and 'score'.
+     * @returns {Array} Sorted concepts with their total scores.
+     */
     getTopConcepts(analysisResults) {
         const conceptScores = {};
 
-        // Parcours de tous les fichiers pour additionner les scores des concepts
+        // Iterate through all files to sum up the scores of concepts
         analysisResults.forEach(file => {
             file.tokens.forEach(({ concept, score }) => {
                 if (conceptScores[concept]) {
@@ -241,7 +246,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
             });
         });
 
-        // Convertir l'objet en tableau, trier par score décroissant et extraire les top N concepts
+        // Convert the object to an array, sort by descending score, and return the formatted results
         return Object.entries(conceptScores)
             .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
             .map(([concept, score]) => ({ concept, totalScore: score.toFixed(2) }));
