@@ -1,12 +1,12 @@
 module.exports = {
     ".js": {
         "language": [
-            // words
             "require", "break", "case", "catch", "class", "const", "continue", "debugger", "default",
             "delete", "do", "else", "export", "extends", "finally", "for", "function",
             "if", "import", "in", "instanceof", "new", "return", "super", "switch",
             "this", "throw", "try", "typeof", "var", "void", "while", "with", "yield",
             "let", "static", "await", "enum", "implements", "package", "protected", "interface", "private", "public", "true", "false", "null",
+            "resolve", 'reject', "promise", "logger", "parser"
         ],
         "libraries": {
             "mongoDb": [
@@ -48,7 +48,7 @@ module.exports = {
         "language": [
             "abstract", "assert", "boolean", "break", "byte", "case", "catch", "char", "class", "const",
             "continue", "default", "do", "double", "else", "enum", "extends", "final", "finally", "float",
-            "for", "goto", "if", "implements", "import", "instanceof", "int", "interface", "long", "native",
+            "for", "goto", "if", "implements", "import", "instanceof", "int", "string", "interface", "long", "native", "exception",
             "new", "package", "private", "protected", "public", "return", "short", "static", "strictfp",
             "super", "switch", "synchronized", "this", "throw", "throws", "transient", "try", "void",
             "volatile", "while", "module", "requires", "exports", "opens", "provides", "uses", "to", "with"
