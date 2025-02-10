@@ -249,7 +249,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         // Convert the object to an array, sort by descending score, and return the formatted results
         return Object.entries(conceptScores)
             .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
-            .map(([concept, score]) => ({ concept, totalScore: score.toFixed(2) }));
+            .map(([concept, score]) => ({ concept, totalTfIdfScore: score.toFixed(2) }));
     }
 
     /**
@@ -390,16 +390,17 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
 
     /**
      * Filters the concepts by checking if each word in the concept is a valid dictionary word.
-     * Only concepts composed entirely of common dictionary words are retained.
+     * Only concepts composed of at least one common dictionary words are retained.
      *
      * @param concepts {Array} The array of concepts to filter.
      * @returns {Array} A filtered array containing only valid concepts.
      */
     filterByDictionaryType(concepts) {
-        // Check if all parts of a concept are common words
+        // Check if some parts of a concept are common words
         return concepts.filter(concept =>
-            // concept.split(" ").every(word => dictionary.check(word))
-            concept.split(" ").some(word => dictionary.check(word))
+            // The dictionary check is based on the default english dictionary of the Typo.js libray
+            // See https://github.com/cfinke/Typo.js/tree/master/typo/dictionaries/en_US
+            concept.split(" ").some(word => dictionary.check(word)) //
         );
     }
 
@@ -432,22 +433,6 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
 
         return analysisResults;
     }
-
-    // TODO not finished
-    // sortByWordProbability(analysisResults) {
-    //     const WORD_FREQUENCY_PATH = process.cwd() + FILE_SYSTEM_SEPARATOR + "helper" + FILE_SYSTEM_SEPARATOR + "word.txt";
-    //     const frequencies = fs.readFileSync(WORD_FREQUENCY_PATH, 'utf-8');
-    //
-    //     function isCommonWord(word) {
-    //         return frequencies.includes(word.toLowerCase());
-    //     }
-    //
-    //     analysisResults.forEach(result => {
-    //         result.tokens.forEach(token => {
-    //             console.log("test: " + token.concept + " - " + isCommonWord(token.concept));
-    //         })
-    //     })
-    // }
 
     /**
      * Checks if the file extension is supported for analysis.
