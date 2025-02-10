@@ -214,6 +214,9 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
 
                 // Sort and filter by TF-IDF
                 const sortedResults = this.sortAndFilterByTfIdfScores(analysisResults);
+
+                console.dir(this.getTopConcepts(sortedResults), {'maxArrayLength': null});
+
                 resolve(sortedResults);
 
             } catch (error) {
@@ -221,6 +224,27 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                 reject(new AnalysisFail(error.message));
             }
         });
+    }
+
+    // TODO : document this function
+    getTopConcepts(analysisResults) {
+        const conceptScores = {};
+
+        // Parcours de tous les fichiers pour additionner les scores des concepts
+        analysisResults.forEach(file => {
+            file.tokens.forEach(({ concept, score }) => {
+                if (conceptScores[concept]) {
+                    conceptScores[concept] += score;
+                } else {
+                    conceptScores[concept] = score;
+                }
+            });
+        });
+
+        // Convertir l'objet en tableau, trier par score décroissant et extraire les top N concepts
+        return Object.entries(conceptScores)
+            .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
+            .map(([concept, score]) => ({ concept, totalScore: score.toFixed(2) }));
     }
 
     /**
