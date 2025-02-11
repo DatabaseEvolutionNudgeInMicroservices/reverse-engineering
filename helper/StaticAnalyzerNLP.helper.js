@@ -239,14 +239,15 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         // Filtering
         let concepts = this.extractRawConcepts(fileContent);
         concepts = this.filterNoisyConcepts(concepts);
+        concepts = this.removeStopWords(concepts);
         concepts = this.removeReservedKeywords(fileName, concepts);
-        concepts = this.removeDuplicates(concepts);
 
         // Normalizing
         concepts = this.separateMultipleWordsConcepts(concepts);
         concepts = this.lemmatizeConcepts(concepts);
 
         // Filtering
+        concepts = this.removeDuplicates(concepts);
         concepts = this.filterByDictionaryType(concepts);
 
         return concepts;
