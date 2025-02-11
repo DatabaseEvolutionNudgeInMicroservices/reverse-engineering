@@ -34,6 +34,7 @@ const winkNLPLemmatizer = require('wink-lemmatizer');
 // Libraries : Natural
 
 const natural = require('natural');
+const stopwords = natural.stopwords;
 
 // Libraries : Typo-js
 
@@ -275,6 +276,10 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
     }
 
     /**
+     * Removes stop words from the given concepts.
+     * @param concepts {Array} The array of concepts to filter.
+     * @returns {Array} A filtered array of concepts without stop words.
+    /**
      * Removes reserved keywords from the given concepts based on the file type.
      * Keywords related to the file's language or libraries are filtered out.
      *
@@ -476,8 +481,6 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         try {
             const {source: fileNumberOfLinesOfCode} = sloc(fileContent, fileExtension);
             return fileNumberOfLinesOfCode;
-        }
-        catch (error) {
             return 0;
         }
     }
