@@ -279,6 +279,11 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      * Removes stop words from the given concepts.
      * @param concepts {Array} The array of concepts to filter.
      * @returns {Array} A filtered array of concepts without stop words.
+     */
+    removeStopWords(concepts) {
+        return concepts.filter(concept => !stopwords.includes(concept.toLowerCase()));
+    }
+
     /**
      * Removes reserved keywords from the given concepts based on the file type.
      * Keywords related to the file's language or libraries are filtered out.
