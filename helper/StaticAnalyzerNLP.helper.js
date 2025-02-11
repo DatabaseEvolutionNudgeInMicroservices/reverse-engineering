@@ -269,7 +269,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      * Filters out noisy concepts that are too short to be meaningful.
      * Concepts with a length greater than 1 are considered valid.
      *
-     * @param concepts {Array} The array of concepts to be filtered.
+     * @param concepts {Array} The array of concepts to filter.
      * @returns {Array} A filtered array containing only meaningful concepts.
      */
     filterNoisyConcepts(concepts) {
@@ -353,7 +353,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                 .replace(/([a-z])([A-Z])/g, '$1 $2')  // camelCase to isolated words
                 .replace(/([A-Z])([A-Z][a-z])/g, '$1 $2')  // PascalCase to isolated words
                 .toLowerCase();
-                // .split(" ");
+            // .split(" ");
         });
     }
 
@@ -368,12 +368,14 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         return concepts.map(concept =>
             concept
                 .split(' ')
-                // Reduces plural nouns and derived forms to their base form (lemma).
-                // If the word is not a recognized noun, it returns the original word.
+                // Reduces plural nouns and derived forms to their base form (lemma), same for the verbs.
+                // If the word is not a recognized noun or verb, it returns the original word.
                 // Examples: cars -> car,
                 //           libraries -> library
+                //           winning -> win
                 //           ...
                 .map(winkNLPLemmatizer.noun)
+                .map(winkNLPLemmatizer.verb)
                 .join(' ')
         );
     }
@@ -436,7 +438,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
 
         // Iterate through all files to sum up the scores of concepts
         analysisResults.forEach(file => {
-            file.tokens.forEach(({ concept, score }) => {
+            file.tokens.forEach(({concept, score}) => {
                 if (conceptScores[concept]) {
                     conceptScores[concept] += score;
                 } else {
@@ -487,6 +489,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         try {
             const {source: fileNumberOfLinesOfCode} = sloc(fileContent, fileExtension);
             return fileNumberOfLinesOfCode;
+        } catch (error) {
             return 0;
         }
     }
