@@ -5,7 +5,7 @@ const {
     TEMP_FOLDER_NAME,
 } = require('./Constant.helper.js');
 
-const FILE_EXTENSIONS_SUPPORTED_FOR_NLP_ANALYSIS = ["js"];
+const FILE_EXTENSIONS_SUPPORTED_FOR_NLP_ANALYSIS = ["js", "mjs", "cjs"];
 
 // Error
 
@@ -301,6 +301,15 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
             console.error(`Cannot filter reserved keywords for filetype: ${fileExtension}`);
             console.error("Skipping removeReservedKeywords()...");
             return concepts;
+        }
+
+        // Extends other file type
+        if ("_extends_" in fileTypeKeywords) {
+            const newExtension = fileTypeKeywords["_extends_"];
+            concepts = this.removeReservedKeywords(fileName.split(".")[0] + newExtension, concepts);
+            if (Object.keys(fileTypeKeywords).length === 1) {
+                return concepts;
+            }
         }
 
         // Combine language and library keywords into a Set for faster lookup
