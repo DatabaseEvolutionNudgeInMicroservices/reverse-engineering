@@ -44,6 +44,21 @@ module.exports = {
             ]
         }
     },
+    ".mjs": {
+        "_extends_": ".js",
+    },
+    ".cjs": {
+        "_extends_": ".js",
+    },
+    ".ts": {
+        "_extends_": ".js",
+    },
+    ".jsx": {
+        "_extends_": ".js",
+    },
+    ".tsx": {
+        "_extends_": ".js",
+    },
     ".java": {
         "language": [
             "abstract", "assert", "boolean", "break", "byte", "case", "catch", "char", "class", "const",
