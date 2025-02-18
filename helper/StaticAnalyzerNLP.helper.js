@@ -426,7 +426,6 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         return analysisResults;
     }
 
-
     /**
      * Sums and ranks concepts by their cumulative TF-IDF scores across files.
      *
@@ -450,7 +449,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         // Convert the object to an array, sort by descending score, and return the formatted results
         return Object.entries(conceptScores)
             .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
-            .map(([concept, score]) => ({ concept, totalTfIdfScore: score.toFixed(2) }));
+            .map(([concept, score]) => ({ concept, totalTfIdfScore: score }));
     }
 
     /**
