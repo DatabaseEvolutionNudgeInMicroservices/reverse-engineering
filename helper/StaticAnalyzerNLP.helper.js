@@ -216,7 +216,8 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                 // Sort and filter by TF-IDF
                 const sortedResults = this.sortAndFilterByTfIdfScores(analysisResults);
 
-                console.dir(this.getTopConcepts(sortedResults), {'maxArrayLength': null});
+                // Print metrics
+                // console.dir(this.getTopConcepts(sortedResults), {'maxArrayLength': null});
 
                 resolve(sortedResults);
 
