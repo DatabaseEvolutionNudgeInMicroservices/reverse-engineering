@@ -324,7 +324,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         // Function to check if a concept matches or is included in any reserved keyword
         const isReservedKeyword = (concept) => {
             return reservedKeywords.some(keyword =>
-                concept.toLowerCase().includes(keyword.toLowerCase())
+                concept.toLowerCase() === keyword.toLowerCase()
             );
         };
 
