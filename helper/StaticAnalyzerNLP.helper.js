@@ -190,6 +190,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                             // If it's a file, perform the analysis
                             const fileContent = fs.readFileSync(itemPath, 'utf8');
                             const fileConcepts = this.extractConceptsFromFile(item, fileContent);
+                            const fileConceptsOccurences = this.getConceptsOccurences(fileConcepts);
                             const location = `${itemPath}#L0C0-L0C0`;
 
                             const fileExtension = this.getFileExtension(itemPath);
@@ -203,7 +204,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                                 operation: null,
                                 method: null,
                                 sample: null,
-                                tokens: fileConcepts,
+                                tokens: fileConceptsOccurences,
                                 fileNumberOfLinesOfCode: fileNumberOfLinesOfCode
                             });
                         }
@@ -240,7 +241,6 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         // Filtering
         let concepts = this.extractRawConcepts(fileContent);
         concepts = this.filterNoisyConcepts(concepts);
-        concepts = this.removeStopWords(concepts);
         concepts = this.removeReservedKeywords(fileName, concepts);
 
         // Normalizing
@@ -248,7 +248,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         concepts = this.lemmatizeConcepts(concepts);
 
         // Filtering
-        concepts = this.removeDuplicates(concepts);
+        concepts = this.removeStopWords(concepts);
         concepts = this.filterByDictionaryType(concepts);
 
         return concepts;
@@ -407,6 +407,25 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
     }
 
     /**
+     * Counts the occurrences of each concept present in the given list of concepts.
+     * Each concept may contain multiple words, which are split and counted separately.
+     *
+     * @param concepts {Array} The array of concepts to analyze.
+     * @returns {Object} An object mapping each unique word to its number of occurrences.
+     */
+    getConceptsOccurences(concepts) {
+        const compteur = {};
+        // Iterate over each concept and split it into words
+        concepts.forEach(concept => {
+            concept.split(" ").forEach(conceptSplit => {
+                compteur[conceptSplit] = (compteur[conceptSplit] || 0) + 1; // This implicitly remove duplicates of concepts
+            })
+
+        });
+        return compteur;
+    }
+
+    /**
      * Sorts and filters the analysis results based on their TF-IDF scores.
      * Concepts with a TF-IDF score above a certain threshold are retained and sorted in descending order.
      *
@@ -417,7 +436,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         const IMPORTANT_CONCEPT_THRESHOLD = 1; // Threshold to filter significant concepts
 
         // Add files as documents in TF-IDF
-        analysisResults.forEach(({tokens}) => tfidf.addDocument(tokens.join(" ")));
+        analysisResults.forEach(({tokens}) => tfidf.addDocument(this.removeDuplicates(Object.keys(tokens)).join(" ")));
 
         // Filter and update significant concepts for each file
         analysisResults.forEach((analysisResult, index) => {
@@ -425,7 +444,8 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                 .filter(({tfidf}) => tfidf > IMPORTANT_CONCEPT_THRESHOLD)
                 .map(({term, tfidf}) => ({
                     concept: term,
-                    score: parseFloat(tfidf.toFixed(2))
+                    score: parseFloat(tfidf.toFixed(2)),
+                    nbOccurence: analysisResult.tokens[term]
                 }))
                 .sort((a, b) => b.score - a.score);  // Sort by descending score
 
