@@ -9,6 +9,7 @@ const FILE_EXTENSIONS_SUPPORTED_FOR_NLP_ANALYSIS = ["js", "mjs", "cjs"];
 
 // Error
 
+const NotImplemented = require('../error/NotImplemented.error');
 const BadFormat = require('../error/BadFormat.error.js');
 const AnalysisFail = require('../error/AnalysisFail.error.js');
 const {INPUT_INCORRECTLY_FORMATTED} = require('../error/Constant.error.js');
@@ -76,7 +77,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      */
     initializesByList(list, language) {
         return new Promise((resolveAll, rejectAll) => {
-            rejectAll(new Error("Not implemented"))
+            rejectAll(new NotImplemented("Method initializesByList not implemented"));
         })
     }
 
@@ -88,7 +89,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      */
     initializesByElement(element, language) {
         return new Promise((resolveAll, rejectAll) => {
-            rejectAll(new Error("Not implemented"))
+            rejectAll(new NotImplemented("Method initializesByElement not implemented"));
         })
     }
 
@@ -100,7 +101,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      */
     identifyByList(list, language) {
         return new Promise((resolveAll, rejectAll) => {
-            rejectAll(new Error("Not implemented"))
+            rejectAll(new NotImplemented("Method identifyByList not implemented"));
         })
     }
 
@@ -112,7 +113,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      */
     identifyByElement(element, language) {
         return new Promise((resolveAll, rejectAll) => {
-            rejectAll(new Error("Not implemented"))
+            rejectAll(new NotImplemented("Method identifyByElement not implemented"));
         })
     }
 
@@ -124,7 +125,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      */
     interpretByList(list, language) {
         return new Promise((resolveAll, rejectAll) => {
-            rejectAll(new Error("Not implemented"))
+            rejectAll(new NotImplemented("Method initializesByList not implemented"));
         })
     }
 
