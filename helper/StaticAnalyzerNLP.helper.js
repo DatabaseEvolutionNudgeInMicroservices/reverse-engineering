@@ -3,6 +3,7 @@
 const {
     FILE_SYSTEM_SEPARATOR,
     TEMP_FOLDER_NAME,
+    LANGUAGES_RESERVED_KEYWORDS
 } = require('./Constant.helper.js');
 
 const FILE_EXTENSIONS_SUPPORTED_FOR_NLP_ANALYSIS = ["js", "mjs", "cjs"];
@@ -53,9 +54,6 @@ nlp.learnCustomEntities(patterns);
 const TfIdf = natural.TfIdf;
 const tfidf = new TfIdf();
 
-// Languages reserved keywords
-
-const languagesReservedKeywords = require('./languages_reserved_keywords');
 
 /**
  * @overview This class represents the CodeQL static analyzer.
@@ -297,7 +295,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      */
     removeReservedKeywords(fileName, concepts) {
         const fileExtension = `.${this.getFileExtension(fileName)}`;
-        const fileTypeKeywords = languagesReservedKeywords[fileExtension];
+        const fileTypeKeywords = LANGUAGES_RESERVED_KEYWORDS[fileExtension];
 
         if (!fileTypeKeywords) {
             console.error(`Cannot filter reserved keywords for filetype: ${fileExtension}`);
