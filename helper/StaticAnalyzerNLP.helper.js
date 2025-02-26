@@ -185,25 +185,24 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                         if (stats.isDirectory()) {
                             // If it's a directory, explore recursively
                             exploreDirectory(itemPath);
-                        } else if (stats.isFile() && this.fileIsSupportedForAnalysis(itemPath)) {
+                        } else if (stats.isFile()) {
                             // If it's a file, perform the analysis
                             const fileContent = fs.readFileSync(itemPath, 'utf8');
-                            const fileConcepts = this.extractConceptsFromFile(item, fileContent);
-                            const fileConceptsOccurences = this.getConceptsOccurences(fileConcepts);
-                            const location = `${itemPath}#L0C0-L0C0`;
-
                             const fileExtension = this.getFileExtension(itemPath);
                             const fileNumberOfLinesOfCode = this.getFileNumberOfLinesOfCode(fileContent, fileExtension);
 
+                            // Extract the concepts only for files that are supported
+                            let fileConceptsOccurences;
+                            if (this.fileIsSupportedForNLPAnalysis(itemPath)) {
+                                const fileConcepts = this.extractConceptsFromFile(item, fileContent);
+                                fileConceptsOccurences = this.getConceptsOccurences(fileConcepts);
+                            }
+
+                            // Push results
                             analysisResults.push({
-                                type: null,
                                 repository: repositoryName,
                                 file: itemPath,
-                                location: location,
-                                operation: null,
-                                method: null,
-                                sample: null,
-                                tokens: fileConceptsOccurences,
+                                tokens: fileConceptsOccurences ?? [],
                                 fileNumberOfLinesOfCode: fileNumberOfLinesOfCode
                             });
                         }
@@ -213,13 +212,10 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                 // Start exploration from the root folder
                 exploreDirectory(repositoryFolder);
 
-                // Sort and filter by TF-IDF
-                const sortedResults = this.sortAndFilterByTfIdfScores(analysisResults);
+                // Filter most pertinent concepts
+                const refinedAnalysisResults = this.refineResultsByKeepingMostPertinentConceptsOnly(analysisResults);
 
-                // Print metrics
-                // console.dir(this.getTopConcepts(sortedResults), {'maxArrayLength': null});
-
-                resolve(sortedResults);
+                resolve(this.identify(refinedAnalysisResults)); // TODO appeler identify dans le router ?
 
             } catch (error) {
                 console.log(error);
@@ -429,71 +425,205 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
     }
 
     /**
-     * Sorts and filters the analysis results based on their TF-IDF scores.
-     * Concepts with a TF-IDF score above a certain threshold are retained and sorted in descending order.
+     * Refines the results by keeping only the most pertinent concepts.
+     * The function filters and sorts concepts based on relevance and then updates the results.
      *
-     * @param analysisResults {Array} The array of analysis results containing tokens to be processed.
-     * @returns {Array} The updated analysis results with filtered and sorted concepts.
+     * @param sortedResults {Array} - The list of results containing extracted concepts and their occurrences.
+     * @returns {Array} A new array with the refined concepts, keeping only the most pertinent ones.
      */
-    sortAndFilterByTfIdfScores(analysisResults) {
-        const IMPORTANT_CONCEPT_THRESHOLD = 1; // Threshold to filter significant concepts
+    refineResultsByKeepingMostPertinentConceptsOnly(sortedResults) {
+        // Filter and sort
+        const bestConceptsSorted = this.filterAndSortBestConcepts(sortedResults);
+        console.log(bestConceptsSorted);
 
-        // Add files as documents in TF-IDF
-        analysisResults.forEach(({tokens}) => tfidf.addDocument(this.removeDuplicates(Object.keys(tokens)).join(" ")));
+        // Keep only name of concepts
+        const bestConceptsSortedNameOnly = bestConceptsSorted.map(conceptObject => conceptObject.concept)
 
-        // Filter and update significant concepts for each file
-        analysisResults.forEach((analysisResult, index) => {
-            const importantConcepts = tfidf.listTerms(index)
-                .filter(({tfidf}) => tfidf > IMPORTANT_CONCEPT_THRESHOLD)
-                .map(({term, tfidf}) => ({
-                    concept: term,
-                    score: parseFloat(tfidf.toFixed(2)),
-                    nbOccurence: analysisResult.tokens[term]
-                }))
-                .sort((a, b) => b.score - a.score);  // Sort by descending score
-
-            // Update tokens with filtered concepts
-            analysisResult.tokens = importantConcepts;
+        // Return the results refined with only the best concepts
+        return sortedResults.map(item => {
+            return {
+                ...item,
+                tokens: Object.fromEntries(
+                    Object.entries(item.tokens).filter(([key, value]) => bestConceptsSortedNameOnly.includes(key))
+                )
+            };
         });
-
-        return analysisResults;
     }
 
     /**
-     * Sums and ranks concepts by their cumulative TF-IDF scores across files.
+     * Filters and sorts the most relevant concepts based on various metrics.
+     * The function calculates metrics such as TF-IDF, coefficient of variation, and dominance,
+     * then normalizes them and computes a final score to determine the most important concepts.
      *
-     * @param analysisResults {Array} List of files with tokens containing 'concept' and 'score'.
-     * @returns {Array} Sorted concepts with their total scores.
+     * @param sortedResults {Array} - The list of results containing extracted concepts and their occurrences.
+     * @returns {Array} A list of concepts with computed scores, sorted by relevance.
      */
-    getTopConcepts(analysisResults) {
-        const conceptScores = {};
+    filterAndSortBestConcepts(sortedResults) {
+        // Minimum final score required for a concept to be considered relevant
+        const MINIMUM_REQUIRED_FINAL_SCORE_METRIC = 0.25;
 
-        // Iterate through all files to sum up the scores of concepts
-        analysisResults.forEach(file => {
-            file.tokens.forEach(({concept, score}) => {
-                if (conceptScores[concept]) {
-                    conceptScores[concept] += score;
-                } else {
-                    conceptScores[concept] = score;
-                }
+        // Weight distribution of each metric in the final score calculation
+        const weights = {
+            tfidf: 0.2,               // Importance of global rarity
+            coefficientVariation: 0.6, // Importance of concentration within a file
+            maxOccurrence: 0.0,       // Importance of local density
+            dominance: 0.2
+        };
+
+        // Step 1: Compute metrics for each concept
+        let conceptsAndMetrics = [];
+        Object.entries(this.getConceptsWithFilesAndOccurences(sortedResults))
+            .forEach(([concept, occurrences]) => {
+                const numFiles = occurrences.length;
+                const occurenceList = occurrences.map(o => o.nbOccurence);
+                const sumOccurence = occurenceList.reduce((acc, val) => acc + val, 0);
+
+                // Max occurence
+                const maxOccurrence = Math.max(...occurenceList);
+
+                // Coefficient of Variation (CoV)
+                const meanOccurrence = sumOccurence / numFiles;
+                const stdDev = Math.sqrt(
+                    occurenceList.reduce((acc, val) => acc + Math.pow(val - meanOccurrence, 2), 0) / numFiles
+                );
+                const coefficientVariation = stdDev / meanOccurrence; // Dispersion relative
+
+                // TF-IDF
+                const totalFiles = sortedResults.length;
+                const idf = Math.log(totalFiles / numFiles);
+                const tfidfScores = occurrences.map(o => o.nbOccurence * idf);
+                const avgTfidf = tfidfScores.reduce((acc, val) => acc + val, 0) / numFiles;
+
+                // Dominance
+                const dominance = maxOccurrence / sumOccurence;
+
+                // Store concept with calculated metrics
+                conceptsAndMetrics.push({concept, maxOccurrence, coefficientVariation, avgTfidf,  dominance});
+            });
+
+        // Step 2: Normalize the metrics
+        function normalize(arr, key) {
+            const values = arr.map(o => o[key]);
+            const min = Math.min(...values);
+            const max = Math.max(...values);
+            return arr.map(o => ({...o, [`${key}Norm`]: (o[key] - min) / (max - min || 1)})); // Évite division par 0
+        }
+        conceptsAndMetrics = normalize(conceptsAndMetrics, "maxOccurrence");
+        conceptsAndMetrics = normalize(conceptsAndMetrics, "coefficientVariation");
+        conceptsAndMetrics = normalize(conceptsAndMetrics, "avgTfidf");
+        conceptsAndMetrics = normalize(conceptsAndMetrics, "dominance");
+
+        // Step 3: Compute final score
+        conceptsAndMetrics.forEach(c => {
+            c.finalScore =
+                weights.tfidf * c.avgTfidfNorm +
+                weights.maxOccurrence * c.maxOccurrenceNorm +
+                weights.coefficientVariation * c.coefficientVariationNorm +
+                weights.dominance * c.dominanceNorm
+        });
+
+        // Step 4: Sort concepts by descending final score
+        conceptsAndMetrics.sort((a, b) => b.finalScore - a.finalScore);
+
+        // Step 5: Keep only concepts with a final score above the minimum threshold
+        return conceptsAndMetrics.filter(concept => concept.finalScore > MINIMUM_REQUIRED_FINAL_SCORE_METRIC);
+    }
+
+
+    /**
+     * Retrieves all concepts along with the files they appear in and their occurrences.
+     * This function organizes concepts in a structure that associates them with source files
+     * and the number of times they appear in each file.
+     *
+     * @param sortedResults {Array} - The list of results containing extracted concepts and their occurrences.
+     * @returns {Object} An object mapping concepts to an array of occurrences in different source files.
+     */
+    getConceptsWithFilesAndOccurences(sortedResults) {
+        const result = {};
+
+        sortedResults.forEach(item => {
+            const sourceFile = item.file
+
+            Object.keys(item.tokens).forEach(token => {
+                const nbOccurence = item.tokens[token];
+                (result[token] ||= []).push({ sourceFile, nbOccurence });
             });
         });
 
-        // Convert the object to an array, sort by descending score, and return the formatted results
-        return Object.entries(conceptScores)
-            .sort(([, scoreA], [, scoreB]) => scoreB - scoreA)
-            .map(([concept, score]) => ({ concept, totalTfIdfScore: score }));
+        return result;
+    }
+
+    identify(extractionResults) {
+        const root = {location: `${extractionResults[0].repository}/`, directories: []};
+
+        function getOrCreateDirectory(fullPath, currentNode) {
+            const pathParts = fullPath.split("/");
+
+            let currentPath = "";
+            let currentDir = currentNode;
+
+            pathParts.forEach(part => {
+                currentPath += part + "/";
+                let dir = currentDir.directories.find(d => d.location === currentPath);
+
+                if (!dir) {
+                    dir = {location: currentPath, directories: [], files: []};
+                    currentDir.directories.push(dir);
+                }
+                currentDir = dir;
+            });
+
+            return currentDir;
+        }
+
+        extractionResults.forEach(entry => {
+            const relativePath = entry.file.split("\\TEMP\\")[1].replace(/\\/g, "/"); // Transformer en format UNIX
+            const lastSlashIndex = relativePath.lastIndexOf("/");
+            const dirPath = relativePath.substring(0, lastSlashIndex);
+
+            // Construire la hiérarchie de répertoires
+            const parentDir = getOrCreateDirectory(dirPath, root);
+
+            // Codefragments
+            const codeFragments = [{
+                location: relativePath + "#L0C0-L0C0",
+                technology: {
+                    "id": (Object.keys(entry.tokens).length === 0) ? "javascript-any-any-file" : "unknown"
+                },
+                operation: {
+                    "name": "OTHER"
+                },
+                method: {
+                    "name": " "
+                },
+                sample: {
+                    "content": " "
+                },
+                concepts: Object.keys(entry.tokens).map(token => ({"name": token})),
+                heuristics: "unknown",
+                score: "unknown"
+            }]
+
+            // Ajouter le fichier à la bonne place
+            parentDir.files.push({
+                location: relativePath,
+                linesOfCode: entry.fileNumberOfLinesOfCode,
+                codeFragments
+            });
+        });
+
+        return root;
     }
 
     /**
-     * Checks if the file is supported for analysis.
+     * Checks if the file is supported for NLP analysis.
      *
      * @param {string} filePath - The full path of the file to be analyzed.
      *                            It should include the file name and extension.
      * @returns {boolean} - Returns `true` if the file extension is supported (currently 'js' or 'java'),
      *                      otherwise returns `false`.
      */
-    fileIsSupportedForAnalysis(filePath) {
+    fileIsSupportedForNLPAnalysis(filePath) {
         return FILE_EXTENSIONS_SUPPORTED_FOR_NLP_ANALYSIS.includes(this.getFileExtension(filePath));
     }
 
