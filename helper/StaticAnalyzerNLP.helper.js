@@ -282,7 +282,24 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      * @returns {Array} A filtered array of concepts without stop words.
      */
     removeStopWords(concepts) {
-        return concepts.filter(concept => !stopwords.includes(concept.toLowerCase()));
+        concepts.forEach(concept => {
+            if (concept.includes("by")) {
+                console.log(stopwords)
+                console.log(concept, concepts.includes(concept.toLowerCase()))
+            }
+        })
+
+        console.log(concepts.map(concept => {
+            concept.split(" ")
+                .filter(conceptSplitted => !stopwords.includes(conceptSplitted.toLowerCase()))
+                .join(" ")
+        }))
+
+        return concepts.map(concept => {
+            return concept.split(" ")
+                   .filter(conceptSplitted => !stopwords.includes(conceptSplitted.toLowerCase()))
+                   .join(" ")
+        });
     }
 
     /**
