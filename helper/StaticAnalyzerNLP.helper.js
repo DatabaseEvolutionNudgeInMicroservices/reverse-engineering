@@ -384,7 +384,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                 //           winning -> win
                 //           ...
                 .map(winkNLPLemmatizer.noun)
-                .map(winkNLPLemmatizer.verb)
+                // .map(winkNLPLemmatizer.verb)
                 .join(' ')
         );
     }
