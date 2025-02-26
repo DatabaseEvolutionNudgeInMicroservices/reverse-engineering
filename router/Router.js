@@ -66,7 +66,7 @@ const handleFileUploadAndResponse = (fileMethod) => (request, response) => {
 
 router.post('/static/heuristics/language/:language/repository/zip', upload.single('file'), handleFileUploadAndResponse(controller.analyzeStaticallyHeuristics));
 
-router.post('/static/text-retrieval/language/:language/repository/zip', upload.single('file'), handleFileUploadAndResponse(controller.analyzeStaticallyTextRetrieval));
+router.post('/static/nlp/language/:language/repository/zip', upload.single('file'), handleFileUploadAndResponse(controller.analyzeStaticallyNLP));
 
 
 module.exports = router;

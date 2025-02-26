@@ -110,7 +110,7 @@ class Controller {
      * @param language {String} The targeted language for the static analysis.
      * @returns {Promise} A promise for the analysis.
      */
-    analyzeStaticallyTextRetrieval(zipTempFilePath, language) {
+    analyzeStaticallyNLP(zipTempFilePath, language) {
         return new Promise((resolve, reject) => {
 
             if (zipTempFilePath !== undefined && zipTempFilePath !== null && zipTempFilePath.length !== 0 && language !== undefined && language !== null && language.length !== 0 && LANGUAGES_SUPPORTED.includes(language)) {
