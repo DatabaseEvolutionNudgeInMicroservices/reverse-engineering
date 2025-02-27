@@ -215,7 +215,8 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                 // Filter most pertinent concepts
                 const refinedAnalysisResults = this.refineResultsByKeepingMostPertinentConceptsOnly(analysisResults);
 
-                resolve(this.identify(refinedAnalysisResults)); // TODO appeler identify dans le router ?
+                // Return the refined results in a directory tree with associated files and code fragments
+                resolve(this.buildDirectoryTreeWithFilesAndCodeFragments(refinedAnalysisResults));
 
             } catch (error) {
                 console.log(error);
@@ -542,62 +543,69 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         return result;
     }
 
-    identify(extractionResults) {
-        const root = {location: `${extractionResults[0].repository}/`, directories: []};
+    /**
+     * Constructs a hierarchical directory tree with associated files and code fragments.
+     * This function processes extracted results, organizes them into a nested directory structure,
+     * and attaches relevant code fragments to each file.
+     *
+     * @param extractionResults {Array} - The extracted results containing file metadata and token information.
+     * @returns {Object} A structured representation of directories and files with code fragments.
+     */
+    buildDirectoryTreeWithFilesAndCodeFragments(extractionResults) {
+        const root = { location: `${extractionResults[0].repository}/`, directories: [] };
 
+        /**
+         * Retrieves or creates a directory node in the hierarchical structure.
+         *
+         * @param {string} fullPath - The full directory path.
+         * @param {Object} currentNode - The current directory node.
+         * @returns {Object} The directory node.
+         */
         function getOrCreateDirectory(fullPath, currentNode) {
-            const pathParts = fullPath.split("/");
-
-            let currentPath = "";
-            let currentDir = currentNode;
-
-            pathParts.forEach(part => {
-                currentPath += part + "/";
+            return fullPath.split("/").reduce((currentDir, part, index, parts) => {
+                const currentPath = parts.slice(0, index + 1).join("/") + "/";
                 let dir = currentDir.directories.find(d => d.location === currentPath);
 
                 if (!dir) {
-                    dir = {location: currentPath, directories: [], files: []};
+                    dir = { location: currentPath, directories: [], files: [] };
                     currentDir.directories.push(dir);
                 }
-                currentDir = dir;
-            });
+                return dir;
+            }, currentNode);
+        }
 
-            return currentDir;
+        /**
+         * Creates a code fragment for a given file entry.
+         *
+         * @param {string} relativePath - The relative file path.
+         * @param {Object} entry - The file entry containing token information.
+         * @returns {Array} An array containing the code fragment object.
+         */
+        function createCodeFragments(relativePath, entry) {
+            return [{
+                location: `${relativePath}#L0C0-L0C0`,
+                technology: { id: Object.keys(entry.tokens).length === 0 ? "javascript-any-any-file" : "unknown" },
+                operation: { name: "OTHER" },
+                method: { name: " " },
+                sample: { content: " " },
+                concepts: Object.keys(entry.tokens).map(token => ({ name: token })),
+                heuristics: "unknown",
+                score: "unknown"
+            }];
         }
 
         extractionResults.forEach(entry => {
-            const relativePath = entry.file.split("\\TEMP\\")[1].replace(/\\/g, "/"); // Transformer en format UNIX
-            const lastSlashIndex = relativePath.lastIndexOf("/");
-            const dirPath = relativePath.substring(0, lastSlashIndex);
+            const relativePath = entry.file.split("\\TEMP\\")[1].replace(/\\/g, "/"); // Normalize to UNIX format
+            const dirPath = relativePath.substring(0, relativePath.lastIndexOf("/"));
 
-            // Construire la hiérarchie de répertoires
+            // Build directory hierarchy
             const parentDir = getOrCreateDirectory(dirPath, root);
 
-            // Codefragments
-            const codeFragments = [{
-                location: relativePath + "#L0C0-L0C0",
-                technology: {
-                    "id": (Object.keys(entry.tokens).length === 0) ? "javascript-any-any-file" : "unknown"
-                },
-                operation: {
-                    "name": "OTHER"
-                },
-                method: {
-                    "name": " "
-                },
-                sample: {
-                    "content": " "
-                },
-                concepts: Object.keys(entry.tokens).map(token => ({"name": token})),
-                heuristics: "unknown",
-                score: "unknown"
-            }]
-
-            // Ajouter le fichier à la bonne place
+            // Add file to the correct directory
             parentDir.files.push({
                 location: relativePath,
                 linesOfCode: entry.fileNumberOfLinesOfCode,
-                codeFragments
+                codeFragments: createCodeFragments(relativePath, entry)
             });
         });
 
