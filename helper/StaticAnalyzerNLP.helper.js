@@ -331,17 +331,6 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         return concepts.filter(concept => !isReservedKeyword(concept));
     }
 
-
-    /**
-     * Removes duplicate concepts from the array, ensuring uniqueness.
-     *
-     * @param concepts {Array} The array of concepts to remove duplicates from.
-     * @returns {Array} A new array with unique concepts.
-     */
-    removeDuplicates(concepts) {
-        return [...new Set(concepts)];
-    }
-
     /**
      * Separates concepts that contain multiple words, normalizing them into isolated words.
      * The function handles various formats like kebab-case, snake_case, CamelCase, and PascalCase.
