@@ -17,7 +17,7 @@ const exampleRepository = process.cwd() + FILE_SYSTEM_SEPARATOR + 'test' + FILE_
 
 describe('Controller', () => {
 
-    it('analyzes statically a repository', async () => {
+    it('analyzes statically a repository with heuristics', async () => {
 
         // Given
 
@@ -25,12 +25,29 @@ describe('Controller', () => {
 
         // When Then
 
-        await controller.analyzeStatically(exampleRepository, languages[0]).then((result) => {
+        await controller.analyzeStaticallyHeuristics(exampleRepository, languages[0]).then((result) => {
 
             // console.log(JSON.stringify(result));
 
             // When Then
             expect(JSON.stringify(result).includes('location":"https://github.com/example/example/tree/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/index.example.js#L0C0-L0C0"')).toBe(true);
+        });
+    });
+
+    it('analyzes statically a repository with NLP', async () => {
+
+        // Given
+
+        let controller = new Controller();
+
+        // When Then
+
+        await controller.analyzeStaticallyNLP(exampleRepository, languages[0]).then((result) => {
+
+            // console.log(JSON.stringify(result));
+
+            // When Then
+            expect(JSON.stringify(result).includes('https://github.com/example/example/tree/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/"')).toBe(true);
         });
     });
 });
