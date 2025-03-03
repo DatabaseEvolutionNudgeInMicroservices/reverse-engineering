@@ -283,7 +283,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
             return concept.split(" ")
                    .filter(conceptSplitted => !stopwords.includes(conceptSplitted.toLowerCase()))
                    .join(" ")
-        });
+        }).filter(Boolean) // Deletes empty string;
     }
 
     /**
