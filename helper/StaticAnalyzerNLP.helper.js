@@ -493,7 +493,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                 const dominance = maxOccurrence / sumOccurence;
 
                 // Store concept with calculated metrics
-                conceptsAndMetrics.push({concept, maxOccurrence, coefficientVariation, avgTfidf,  dominance});
+                conceptsAndMetrics.push({concept, coefficientVariation, avgTfidf,  dominance});
             });
 
         // Step 2: Normalize the metrics
@@ -503,7 +503,6 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
             const max = Math.max(...values);
             return arr.map(o => ({...o, [`${key}Norm`]: (o[key] - min) / (max - min || 1)})); // Évite division par 0
         }
-        conceptsAndMetrics = normalize(conceptsAndMetrics, "maxOccurrence");
         conceptsAndMetrics = normalize(conceptsAndMetrics, "coefficientVariation");
         conceptsAndMetrics = normalize(conceptsAndMetrics, "avgTfidf");
         conceptsAndMetrics = normalize(conceptsAndMetrics, "dominance");
@@ -512,7 +511,6 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         conceptsAndMetrics.forEach(c => {
             c.finalScore =
                 weights.tfidf * c.avgTfidfNorm +
-                weights.maxOccurrence * c.maxOccurrenceNorm +
                 weights.coefficientVariation * c.coefficientVariationNorm +
                 weights.dominance * c.dominanceNorm
         });
