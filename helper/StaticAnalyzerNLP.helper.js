@@ -454,11 +454,16 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
 
         // Weight distribution of each metric in the final score calculation
         const weights = {
-            tfidf: 0.2,               // Importance of global rarity
-            coefficientVariation: 0.6, // Importance of concentration within a file
-            maxOccurrence: 0.0,       // Importance of local density
+            // Measures global rarity of a concept across all files (higher = rarer and more significant).
+            tfidf: 0.2,
+
+            // Captures how concentrated a concept is within a single file (higher = more unevenly distributed).
+            coefficientVariation: 0.6,
+
+            // Measures how much a concept dominates in a file relative to others (higher = more dominant).
             dominance: 0.2
         };
+
 
         // Step 1: Compute metrics for each concept
         let conceptsAndMetrics = [];
