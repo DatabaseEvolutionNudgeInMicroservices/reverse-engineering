@@ -635,6 +635,9 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      * @returns {String} The file extension (e.g., "txt", "js", "html").
      */
     getFileExtension(filePath) {
+        if (!filePath.includes(".")) { // If file has no extension
+            return "";
+        }
         return filePath.substring(filePath.lastIndexOf(".") + 1);
     }
 
