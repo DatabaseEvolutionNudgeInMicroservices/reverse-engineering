@@ -598,8 +598,9 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         }
 
         extractionResults.forEach(entry => {
-            const relativePath = entry.file.split("\\TEMP\\")[1].replace(/\\/g, "/"); // Normalize to UNIX format
-            const dirPath = relativePath.substring(0, relativePath.lastIndexOf("/"));
+            // Normalize to UNIX format if necessary
+            const relativePath = entry.file.split("\\TEMP\\")[1].replace(/\\/g, "/"); // Normalize to UNIX format // TODO HERE REMOVE SLASH DEPENDANCE
+            const dirPath = relativePath.substring(0, relativePath.lastIndexOf("/")); // TODO HERE REMOVE SLASH DEPENDANCE
 
             // Build directory hierarchy
             const parentDir = getOrCreateDirectory(dirPath, root);
