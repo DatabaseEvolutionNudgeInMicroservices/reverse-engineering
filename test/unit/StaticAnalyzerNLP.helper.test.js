@@ -65,15 +65,8 @@ describe('NLP static analyzer', () => {
         await clean();
     });
 
-    it("test", async () => {
-        await staticAnalyzerNLP.extractByElement(repositoryList[0], languages[0]).then((result) => {
-            console.log("done")
-        });
-    });
-
     it("should extract raw concepts from text", () => {
         const concepts = staticAnalyzerNLP.extractRawConcepts(exampleJsCode);
-        console.log(concepts)
         expect(concepts).toEqual(expect.arrayContaining(["db", "require", "fetchOrders", "userId", "OrderService", "createOrder", "console", "log", "order"]));
     });
 
