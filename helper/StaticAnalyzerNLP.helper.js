@@ -498,7 +498,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
 
         // Step 2: Normalize the metrics
         function normalize(arr, key) {
-            const values = arr.map(o => o[key]);
+            const values = arr.map(o => o[key]).filter(v => !isNaN(v));
             const min = Math.min(...values);
             const max = Math.max(...values);
             return arr.map(o => ({...o, [`${key}Norm`]: (o[key] - min) / (max - min || 1)})); // Évite division par 0
@@ -532,7 +532,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      * @returns {Object} An object mapping concepts to an array of occurrences in different source files.
      */
     getConceptsWithFilesAndOccurences(sortedResults) {
-        const result = {};
+        const result = Object.create(null);
 
         sortedResults.forEach(item => {
             const sourceFile = item.file
