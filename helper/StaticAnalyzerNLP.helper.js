@@ -202,7 +202,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                             analysisResults.push({
                                 repository: repositoryName,
                                 file: itemPath,
-                                tokens: fileConceptsOccurences ?? [],
+                                tokens: fileConceptsOccurences ?? {},
                                 fileNumberOfLinesOfCode: fileNumberOfLinesOfCode
                             });
                         }
