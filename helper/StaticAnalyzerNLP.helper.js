@@ -31,6 +31,8 @@ const sloc = require('sloc');
 
 const winkNLP = require('wink-nlp');
 const model = require('wink-eng-lite-web-model');
+const vectors = require('wink-embeddings-sg-100d');
+const similarity = require('wink-nlp/utilities/similarity.js');
 const winkNLPLemmatizer = require('wink-lemmatizer');
 
 // Libraries : Natural
@@ -429,6 +431,8 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         // Keep only name of concepts
         const bestConceptsSortedNameOnly = bestConceptsSorted.map(conceptObject => conceptObject.concept)
 
+        // this.cluster(bestConceptsSortedNameOnly);
+
         // Return the results refined with only the best concepts
         return sortedResults.map(item => {
             return {
@@ -449,8 +453,10 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      * @returns {Array} A list of concepts with computed scores, sorted by relevance.
      */
     filterAndSortBestConcepts(sortedResults) {
-        // Minimum final score required for a concept to be considered relevant
-        const MINIMUM_REQUIRED_FINAL_SCORE_METRIC = 0.25;
+        // Minimum metrics for a concept to be considered relevant
+        const MINIMUM_REQUIRED_COEFF_VAR_NORM = 0;
+        const MINIMUM_REQUIRED_CENTRALITY_NORM = 0;
+        const MINIMUM_REQUIRED_FINAL_SCORE_METRIC = 0.3;
 
         // Weight distribution of each metric in the final score calculation
         const weights = {
@@ -458,10 +464,13 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
             tfidf: 0.2,
 
             // Captures how concentrated a concept is within a single file (higher = more unevenly distributed).
-            coefficientVariation: 0.6,
+            coefficientVariation: 0.4,
 
             // Measures how much a concept dominates in a file relative to others (higher = more dominant).
-            dominance: 0.2
+            dominance: 0.2,
+
+            // Reflects how strongly a concept is connected to other significant concepts (higher = more central in the concept network).
+            centrality: 0.2
         };
 
 
@@ -493,7 +502,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                 const dominance = maxOccurrence / sumOccurence;
 
                 // Store concept with calculated metrics
-                conceptsAndMetrics.push({concept, coefficientVariation, avgTfidf,  dominance});
+                conceptsAndMetrics.push({concept, coefficientVariation, avgTfidf, dominance});
             });
 
         // Step 2: Normalize the metrics
@@ -507,12 +516,33 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         conceptsAndMetrics = normalize(conceptsAndMetrics, "avgTfidf");
         conceptsAndMetrics = normalize(conceptsAndMetrics, "dominance");
 
-        // Step 3: Compute final score
+
+        // Step 3 : compute centrality metric for each concept and normalize it
+        let centralityScores = {};
+        const similarities = this.findSimilarConcepts(conceptsAndMetrics.map(x => x.concept));
+        similarities.forEach(({concept1, concept2, similarity}) => {
+            const sim = parseFloat(similarity);
+            if (sim > 0.6) { // Seulement si la similarité est significative
+                centralityScores[concept1] = (centralityScores[concept1] || 0) + sim;
+                centralityScores[concept2] = (centralityScores[concept2] || 0) + sim;
+            }
+        });
+        const maxCentrality = Math.max(...Object.values(centralityScores), 1); // Avoid 0
         conceptsAndMetrics.forEach(c => {
-            c.finalScore =
-                weights.tfidf * c.avgTfidfNorm +
-                weights.coefficientVariation * c.coefficientVariationNorm +
-                weights.dominance * c.dominanceNorm
+            c.centralityNorm = (centralityScores[c.concept] || 0) / maxCentrality;
+        });
+
+        // Step 4: Compute final score
+        conceptsAndMetrics.forEach(c => {
+            if (c.coefficientVariationNorm <= MINIMUM_REQUIRED_COEFF_VAR_NORM || c.centralityNorm <= MINIMUM_REQUIRED_CENTRALITY_NORM) {
+                c.finalScore = 0;
+            } else {
+                c.finalScore =
+                    weights.tfidf * c.avgTfidfNorm +
+                    weights.coefficientVariation * c.coefficientVariationNorm +
+                    weights.dominance * c.dominanceNorm +
+                    weights.centrality * c.centralityNorm;
+            }
         });
 
         // Step 4: Sort concepts by descending final score
@@ -545,6 +575,89 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
 
         return result;
     }
+
+    /**
+     * Computes the pairwise similarity between concepts using word embeddings.
+     * This function leverages WinkNLP and pre-trained word vectors to generate embeddings
+     * for each concept and then calculates the cosine similarity between them.
+     *
+     * @param concepts {Array<string>} - The list of concepts to compare.
+     * @returns {Array<Object>} An array of objects representing concept pairs and their similarity scores.
+     *                          Each object contains:
+     *                          - `concept1` {string} : The first concept in the comparison.
+     *                          - `concept2` {string} : The second concept in the comparison.
+     *                          - `similarity` {number} : The cosine similarity score between the two concepts.
+     */
+    findSimilarConcepts(concepts) {
+        // This code is a modified version of WinkNLP doc code, check below for mor explanations
+        // https://github.com/winkjs/wink-embeddings-sg-100d
+
+        const nlpWithVectors = winkNLP(model, ['sbd', 'pos'], vectors);
+        const its = nlpWithVectors.its;
+        const as = nlpWithVectors.as;
+
+        const v = [];
+        const similarities = [];
+        const doc = nlpWithVectors.readDoc(concepts.join("."));
+
+        // Compute each sentence's embedding and fill in "v[i]".
+        // Only use words and ignore stop words.
+        doc.sentences().each((s, k) => {
+            v[k] = s
+                .tokens()
+                .filter((t) => (t.out(its.type) === 'word' && !t.out(its.stopWordFlag)))
+                .out(its.value, as.vector);
+        })
+
+        // Compute & save similarity for all the pairs.
+        for (let i = 0; i < v.length; i += 1) {
+            for (let j = 0; j < v.length; j += 1) {
+                const concept1 = doc.sentences().itemAt(i).out().replace(".", "");
+                const concept2 = doc.sentences().itemAt(j).out().replace(".", "");
+                const similarityValue = similarity.vector.cosine(v[i], v[j]).toFixed(2);
+                if (concept1 !== concept2) {
+                    similarities.push(
+                        {
+                            concept1: `${concept1}`,
+                            concept2: `${concept2}`,
+                            similarity: `${isNaN(similarityValue) ? 0 : similarityValue}`
+                        }
+                    );
+                }
+            }
+        }
+        return similarities;
+    }
+
+//     makeClusters(similarities) {
+//
+//         const concepts = new Set();
+//         similarities.forEach(({concept1, concept2}) => {
+//             concepts.add(concept1);
+//             concepts.add(concept2);
+//         });
+//         const conceptList = Array.from(concepts);
+//
+//         const distanceMatrix = conceptList.map(conceptA =>
+//             conceptList.map(conceptB => {
+//                 if (conceptA === conceptB) return 0; // Distance nulle pour le même concept
+//                 const match = similarities.find(s =>
+//                     (s.concept1 === conceptA && s.concept2 === conceptB) ||
+//                     (s.concept1 === conceptB && s.concept2 === conceptA)
+//                 );
+//                 return match ? 1 - match.similarity : 1; // Inverser la similarité en distance
+//             })
+//         );
+//
+//         const dbscan = new DBSCAN();
+//         const clusters = dbscan.run(distanceMatrix, 1.5, 0); // epsilon = 0.7, minPts = 2
+//
+//         const clusteredConcepts = clusters.map(cluster =>
+//             cluster.map(index => conceptList[index])
+//         );
+//
+//         return clusteredConcepts;
+//     }
 
     /**
      * Constructs a hierarchical directory tree with associated files and code fragments.
