@@ -539,7 +539,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
 
             Object.keys(item.tokens).forEach(token => {
                 const nbOccurence = item.tokens[token];
-                (result[token] ||= []).push({ sourceFile, nbOccurence });
+                (result[token] ||= []).push({sourceFile, nbOccurence});
             });
         });
 
@@ -555,7 +555,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      * @returns {Object} A structured representation of directories and files with code fragments.
      */
     buildDirectoryTreeWithFilesAndCodeFragments(extractionResults) {
-        const root = { location: `${extractionResults[0].repository}/`, directories: [] };
+        const root = {location: `${extractionResults[0].repository}/`, directories: []};
 
         /**
          * Retrieves or creates a directory node in the hierarchical structure.
@@ -570,7 +570,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                 let dir = currentDir.directories.find(d => d.location === currentPath);
 
                 if (!dir) {
-                    dir = { location: currentPath, directories: [], files: [] };
+                    dir = {location: currentPath, directories: [], files: []};
                     currentDir.directories.push(dir);
                 }
                 return dir;
@@ -587,11 +587,11 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         function createCodeFragments(relativePath, entry) {
             return [{
                 location: `${relativePath}#L0C0-L0C0`,
-                technology: { id: Object.keys(entry.tokens).length === 0 ? "javascript-any-any-file" : "unknown" },
-                operation: { name: "OTHER" },
-                method: { name: " " },
-                sample: { content: " " },
-                concepts: Object.keys(entry.tokens).map(token => ({ name: token })),
+                technology: {id: Object.keys(entry.tokens).length === 0 ? "javascript-any-any-file" : "unknown"},
+                operation: {name: "OTHER"},
+                method: {name: " "},
+                sample: {content: " "},
+                concepts: Object.keys(entry.tokens).map(token => ({name: token})),
                 heuristics: "unknown",
                 score: "unknown"
             }];
