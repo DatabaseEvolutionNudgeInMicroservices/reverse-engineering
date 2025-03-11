@@ -51,11 +51,6 @@ const nlp = winkNLP(model);
 const patterns = [{name: 'concept', patterns: ['NOUN', 'PROPN']}]; // Concepts are usually represented as nouns or proper nouns.
 nlp.learnCustomEntities(patterns);
 
-// Configuration : Natural
-
-const TfIdf = natural.TfIdf;
-const tfidf = new TfIdf();
-
 
 /**
  * @overview This class represents the CodeQL static analyzer.
@@ -354,7 +349,6 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                 .replace(/([a-z])([A-Z])/g, '$1 $2')  // camelCase to isolated words
                 .replace(/([A-Z])([A-Z][a-z])/g, '$1 $2')  // PascalCase to isolated words
                 .toLowerCase();
-            // .split(" ");
         });
     }
 
@@ -430,8 +424,6 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
 
         // Keep only name of concepts
         const bestConceptsSortedNameOnly = bestConceptsSorted.map(conceptObject => conceptObject.concept)
-
-        // this.cluster(bestConceptsSortedNameOnly);
 
         // Return the results refined with only the best concepts
         return sortedResults.map(item => {
@@ -628,36 +620,6 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         }
         return similarities;
     }
-
-//     makeClusters(similarities) {
-//
-//         const concepts = new Set();
-//         similarities.forEach(({concept1, concept2}) => {
-//             concepts.add(concept1);
-//             concepts.add(concept2);
-//         });
-//         const conceptList = Array.from(concepts);
-//
-//         const distanceMatrix = conceptList.map(conceptA =>
-//             conceptList.map(conceptB => {
-//                 if (conceptA === conceptB) return 0; // Distance nulle pour le même concept
-//                 const match = similarities.find(s =>
-//                     (s.concept1 === conceptA && s.concept2 === conceptB) ||
-//                     (s.concept1 === conceptB && s.concept2 === conceptA)
-//                 );
-//                 return match ? 1 - match.similarity : 1; // Inverser la similarité en distance
-//             })
-//         );
-//
-//         const dbscan = new DBSCAN();
-//         const clusters = dbscan.run(distanceMatrix, 1.5, 0); // epsilon = 0.7, minPts = 2
-//
-//         const clusteredConcepts = clusters.map(cluster =>
-//             cluster.map(index => conceptList[index])
-//         );
-//
-//         return clusteredConcepts;
-//     }
 
     /**
      * Constructs a hierarchical directory tree with associated files and code fragments.
