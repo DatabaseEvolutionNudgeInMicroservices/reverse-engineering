@@ -281,8 +281,8 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
     removeStopWords(concepts) {
         return concepts.map(concept => {
             return concept.split(" ")
-                   .filter(conceptSplitted => !stopwords.includes(conceptSplitted.toLowerCase()))
-                   .join(" ")
+                .filter(conceptSplitted => !stopwords.includes(conceptSplitted.toLowerCase()))
+                .join(" ")
         }).filter(Boolean) // Deletes empty string;
     }
 
