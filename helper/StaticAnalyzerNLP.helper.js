@@ -212,7 +212,12 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                 // Filter most pertinent concepts
                 const refinedAnalysisResults = this.refineResultsByKeepingMostPertinentConceptsOnly(analysisResults);
 
+                // Tag files by using clustering technique (K-Means) // TODO
+                // const refinedAnalysisResultsWithTags = this.tagFilesByClustering(refinedAnalysisResults);
+                // fs.writeFileSync('clustering_results.json', JSON.stringify(refinedAnalysisResultsWithTags, null, 2), 'utf8');
+
                 // Return the refined results in a directory tree with associated files and code fragments
+                // resolve(this.buildDirectoryTreeWithFilesAndCodeFragments(refinedAnalysisResultsWithTags));
                 resolve(this.buildDirectoryTreeWithFilesAndCodeFragments(refinedAnalysisResults));
 
             } catch (error) {
@@ -221,6 +226,51 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
             }
         });
     }
+
+    // TODO
+    // tagFilesByClustering(data) {
+    //     // 🔹 Calculate the sum of concept occurrences for each file
+    //     const filesConcepts = data.map(file => Object.values(file.tokens).reduce((acc, val) => acc + val, 0));
+    //
+    //     // 🔹 Build the feature matrix (each file is represented by 1 value: the sum of occurrences)
+    //     const featureMatrix = filesConcepts.map(file => [file]); // 2D array for K-Means
+    //
+    //     // 🔹 Choose a number of clusters and execute K-Means
+    //     const numClusters = 2;
+    //     const result = kmeans.kmeans(featureMatrix, numClusters);
+    //
+    //     // 🔹Return files with their clusters
+    //     return data.map((file, i) => ({...file, cluster: result.clusters[i]}));
+    // }
+
+//     tagFilesByClustering(data) {
+//         // 🔹 Filtrer les fichiers ayant des concepts
+//         const filesConcepts = data
+//             // .filter(file => Object.keys(file.tokens).length > 0) // Exclure fichiers vides
+//             .map(file => ({
+//                 filePath: file.file,
+//                 tokens: file.tokens
+//             }));
+//
+// // 🔹 Extraire **tous les concepts uniques** (pour avoir des vecteurs de taille fixe)
+//         const allConcepts = [...new Set(filesConcepts.flatMap(file => Object.keys(file.tokens)))];
+//
+// // 🔹 Construire la matrice des features
+//         const featureMatrix = filesConcepts.map(file => {
+//             return allConcepts.map(concept => file.tokens[concept] || 0); // Si le concept est absent, mettre 0
+//         });
+//
+// // 🔹 Exécuter K-Means (choisir un nombre de clusters)
+//         const numClusters = featureMatrix[0].length + 1;
+//         const result = kmeans.kmeans(featureMatrix, numClusters);
+//
+//         // 🔹Return files with their clusters
+//         return data.map((file, i) => ({...file, cluster: result.clusters[i]}));
+//     }
+
+    // tagFilesByClustering(data) {
+    //     return data.map(file => ({...file, cluster: (Object.keys(file.tokens).length === 0) ? 0 : 1}))
+    // }
 
     /**
      * Extracts and processes concepts from a given file content.
@@ -440,41 +490,26 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      * Filters and sorts the most relevant concepts based on various metrics.
      * The function calculates metrics such as TF-IDF, coefficient of variation, and dominance,
      * then normalizes them and computes a final score to determine the most important concepts.
+     * The most important concepts are once again filtered based on the value of the centrality metric
      *
      * @param sortedResults {Array} - The list of results containing extracted concepts and their occurrences.
      * @returns {Array} A list of concepts with computed scores, sorted by relevance.
      */
     filterAndSortBestConcepts(sortedResults) {
-        // Minimum metrics for a concept to be considered relevant
-        const MINIMUM_REQUIRED_COEFF_VAR_NORM = 0;
-        const MINIMUM_REQUIRED_CENTRALITY_NORM = 0;
-        const MINIMUM_REQUIRED_FINAL_SCORE_METRIC = 0.3;
-
         // Weight distribution of each metric in the final score calculation
         const weights = {
-            // Measures global rarity of a concept across all files (higher = rarer and more significant).
-            tfidf: 0.2,
-
-            // Captures how concentrated a concept is within a single file (higher = more unevenly distributed).
-            coefficientVariation: 0.4,
-
-            // Measures how much a concept dominates in a file relative to others (higher = more dominant).
-            dominance: 0.2,
-
-            // Reflects how strongly a concept is connected to other significant concepts (higher = more central in the concept network).
-            centrality: 0.2
+            tfidf: 0.3, // Measures global rarity of a concept across all files (higher = rarer and more significant).
+            coefficientVariation: 0.6, // Captures how concentrated a concept is within a single file (higher = more unevenly distributed).
+            dominance: 0.1, // Measures how much a concept dominates in a file relative to others (higher = more dominant).
         };
 
-
-        // Step 1: Compute metrics for each concept
+        // Step 1: Compute initial metrics for each concept (without centrality)
         let conceptsAndMetrics = [];
         Object.entries(this.getConceptsWithFilesAndOccurences(sortedResults))
             .forEach(([concept, occurrences]) => {
                 const numFiles = occurrences.length;
                 const occurenceList = occurrences.map(o => o.nbOccurence);
                 const sumOccurence = occurenceList.reduce((acc, val) => acc + val, 0);
-
-                // Max occurence
                 const maxOccurrence = Math.max(...occurenceList);
 
                 // Coefficient of Variation (CoV)
@@ -482,7 +517,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                 const stdDev = Math.sqrt(
                     occurenceList.reduce((acc, val) => acc + Math.pow(val - meanOccurrence, 2), 0) / numFiles
                 );
-                const coefficientVariation = stdDev / meanOccurrence; // Dispersion relative
+                const coefficientVariation = stdDev / meanOccurrence;
 
                 // TF-IDF
                 const totalFiles = sortedResults.length;
@@ -494,54 +529,61 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                 const dominance = maxOccurrence / sumOccurence;
 
                 // Store concept with calculated metrics
-                conceptsAndMetrics.push({concept, coefficientVariation, avgTfidf, dominance});
+                conceptsAndMetrics.push({ concept, coefficientVariation, avgTfidf, dominance });
             });
 
-        // Step 2: Normalize the metrics
+        // Step 2: Normalize the initial metrics
         function normalize(arr, key) {
             const values = arr.map(o => o[key]).filter(v => !isNaN(v));
             const min = Math.min(...values);
             const max = Math.max(...values);
-            return arr.map(o => ({...o, [`${key}Norm`]: (o[key] - min) / (max - min || 1)})); // Évite division par 0
+            return arr.map(o => ({ ...o, [`${key}Norm`]: (o[key] - min) / (max - min || 1) }));
         }
         conceptsAndMetrics = normalize(conceptsAndMetrics, "coefficientVariation");
         conceptsAndMetrics = normalize(conceptsAndMetrics, "avgTfidf");
         conceptsAndMetrics = normalize(conceptsAndMetrics, "dominance");
 
+        // Step 3: Compute final scores
+        conceptsAndMetrics.forEach(c => {
+            c.finalScore =
+                weights.tfidf * c.avgTfidfNorm +
+                weights.coefficientVariation * c.coefficientVariationNorm +
+                weights.dominance * c.dominanceNorm;
+        });
 
-        // Step 3 : compute centrality metric for each concept and normalize it
+        // Step 4: First filtering pass based on the preliminary final score
+        const scores = conceptsAndMetrics.map(c => c.finalScore);
+        const mean = scores.reduce((acc, val) => acc + val, 0) / scores.length;
+        const stdDev = Math.sqrt(scores.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / scores.length);
+        const minimumRequiredFinalScoreMetric = Math.max(mean - stdDev, mean / 2);
+        conceptsAndMetrics = conceptsAndMetrics.filter(c => c.finalScore > minimumRequiredFinalScoreMetric);
+
+        // Step 5: Compute centrality
+        // Centrality - Reflects how strongly a concept is connected to other significant concepts (higher = more central in the concept network).
         let centralityScores = {};
         const similarities = this.findSimilarConcepts(conceptsAndMetrics.map(x => x.concept));
-        similarities.forEach(({concept1, concept2, similarity}) => {
+        similarities.forEach(({ concept1, concept2, similarity }) => {
             const sim = parseFloat(similarity);
-            if (sim > 0.6) { // Seulement si la similarité est significative
+            if (sim > 0.2) {
                 centralityScores[concept1] = (centralityScores[concept1] || 0) + sim;
                 centralityScores[concept2] = (centralityScores[concept2] || 0) + sim;
             }
         });
-        const maxCentrality = Math.max(...Object.values(centralityScores), 1); // Avoid 0
+
+        // Normalize centrality score
+        const maxCentrality = Math.max(...Object.values(centralityScores), 1);
         conceptsAndMetrics.forEach(c => {
             c.centralityNorm = (centralityScores[c.concept] || 0) / maxCentrality;
         });
 
-        // Step 4: Compute final score
-        conceptsAndMetrics.forEach(c => {
-            if (c.coefficientVariationNorm <= MINIMUM_REQUIRED_COEFF_VAR_NORM || c.centralityNorm <= MINIMUM_REQUIRED_CENTRALITY_NORM) {
-                c.finalScore = 0;
-            } else {
-                c.finalScore =
-                    weights.tfidf * c.avgTfidfNorm +
-                    weights.coefficientVariation * c.coefficientVariationNorm +
-                    weights.dominance * c.dominanceNorm +
-                    weights.centrality * c.centralityNorm;
-            }
-        });
+        // Step 6: Filter out concepts with low centrality score
+        conceptsAndMetrics = conceptsAndMetrics.filter(c => c.centralityNorm > 0);
 
-        // Step 4: Sort concepts by descending final score
+        // Step 7: Sort concepts by descending final score
         conceptsAndMetrics.sort((a, b) => b.finalScore - a.finalScore);
 
-        // Step 5: Keep only concepts with a final score above the minimum threshold
-        return conceptsAndMetrics.filter(concept => concept.finalScore > MINIMUM_REQUIRED_FINAL_SCORE_METRIC);
+        // Step 8: Returns concepts and their metrics
+        return conceptsAndMetrics;
     }
 
 
