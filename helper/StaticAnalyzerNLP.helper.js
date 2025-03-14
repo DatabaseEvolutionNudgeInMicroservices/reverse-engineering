@@ -3,10 +3,9 @@
 const {
     FILE_SYSTEM_SEPARATOR,
     TEMP_FOLDER_NAME,
-    LANGUAGES_RESERVED_KEYWORDS
+    LANGUAGES_RESERVED_KEYWORDS,
+    FILE_EXTENSIONS_SUPPORTED_FOR_NLP_ANALYSIS
 } = require('./Constant.helper.js');
-
-const FILE_EXTENSIONS_SUPPORTED_FOR_NLP_ANALYSIS = ["js", "mjs", "cjs"];
 
 // Error
 
@@ -18,6 +17,7 @@ const {INPUT_INCORRECTLY_FORMATTED} = require('../error/Constant.error.js');
 // Helpers
 
 const StaticAnalyzer = require('./StaticAnalyzer.helper.js');
+const evaluateFilesTags = require('./StaticAnalyzerNLPEvaluator.helper.js');
 
 // Libraries : File System
 
@@ -44,6 +44,10 @@ const stopwords = natural.stopwords;
 
 const Typo = require("typo-js");
 const dictionary = new Typo("en_US");
+
+// Libraries : Ml-kmeans
+
+const kmeans = require('ml-kmeans');
 
 // Configuration : Wink
 
@@ -167,58 +171,16 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
             }
 
             try {
-                const repositoryFolder = this.getRepositoryFolder(element);
-                const repositoryName = this.getRepositoryName(element);
-                const analysisResults = [];
+                // Perform NLP-based repository analysis and obtain files with their pertinent concepts and occurences
+                const refinedAnalysisResults = this.analyzeRepositoryWithNLP(element);
 
-                // Recursive function to explore directories
-                const exploreDirectory = (currentPath) => {
-                    const items = fs.readdirSync(currentPath);
+                // Tag files by using clustering technique
+                const refinedAnalysisResultsWithTags = this.tagFilesByClustering(refinedAnalysisResults);
+                fs.writeFileSync('clustering_results.json', JSON.stringify(refinedAnalysisResultsWithTags, null, 2), 'utf8');
+                evaluateFilesTags(element, refinedAnalysisResultsWithTags)
 
-                    items.forEach(item => {
-                        const itemPath = `${currentPath}${FILE_SYSTEM_SEPARATOR}${item}`;
-                        const stats = fs.statSync(itemPath);
-
-                        if (stats.isDirectory()) {
-                            // If it's a directory, explore recursively
-                            exploreDirectory(itemPath);
-                        } else if (stats.isFile()) {
-                            // If it's a file, perform the analysis
-                            const fileContent = fs.readFileSync(itemPath, 'utf8');
-                            const fileExtension = this.getFileExtension(itemPath);
-                            const fileNumberOfLinesOfCode = this.getFileNumberOfLinesOfCode(fileContent, fileExtension);
-
-                            // Extract the concepts only for files that are supported
-                            let fileConceptsOccurences;
-                            if (this.fileIsSupportedForNLPAnalysis(itemPath)) {
-                                const fileConcepts = this.extractConceptsFromFile(item, fileContent);
-                                fileConceptsOccurences = this.getConceptsOccurences(fileConcepts);
-                            }
-
-                            // Push results
-                            analysisResults.push({
-                                repository: repositoryName,
-                                file: itemPath,
-                                tokens: fileConceptsOccurences ?? {},
-                                fileNumberOfLinesOfCode: fileNumberOfLinesOfCode
-                            });
-                        }
-                    });
-                };
-
-                // Start exploration from the root folder
-                exploreDirectory(repositoryFolder);
-
-                // Filter most pertinent concepts
-                const refinedAnalysisResults = this.refineResultsByKeepingMostPertinentConceptsOnly(analysisResults);
-
-                // Tag files by using clustering technique (K-Means) // TODO
-                // const refinedAnalysisResultsWithTags = this.tagFilesByClustering(refinedAnalysisResults);
-                // fs.writeFileSync('clustering_results.json', JSON.stringify(refinedAnalysisResultsWithTags, null, 2), 'utf8');
-
-                // Return the refined results in a directory tree with associated files and code fragments
-                // resolve(this.buildDirectoryTreeWithFilesAndCodeFragments(refinedAnalysisResultsWithTags));
-                resolve(this.buildDirectoryTreeWithFilesAndCodeFragments(refinedAnalysisResults));
+                // Convert the analyzed data into a hierarchical directory tree structure,
+                resolve(this.buildDirectoryTreeWithFilesAndCodeFragments(refinedAnalysisResultsWithTags));
 
             } catch (error) {
                 console.log(error);
@@ -227,50 +189,59 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         });
     }
 
-    // TODO
-    // tagFilesByClustering(data) {
-    //     // 🔹 Calculate the sum of concept occurrences for each file
-    //     const filesConcepts = data.map(file => Object.values(file.tokens).reduce((acc, val) => acc + val, 0));
-    //
-    //     // 🔹 Build the feature matrix (each file is represented by 1 value: the sum of occurrences)
-    //     const featureMatrix = filesConcepts.map(file => [file]); // 2D array for K-Means
-    //
-    //     // 🔹 Choose a number of clusters and execute K-Means
-    //     const numClusters = 2;
-    //     const result = kmeans.kmeans(featureMatrix, numClusters);
-    //
-    //     // 🔹Return files with their clusters
-    //     return data.map((file, i) => ({...file, cluster: result.clusters[i]}));
-    // }
+    /**
+     * Analyzes a repository using NLP techniques to extract business-related concepts from its files.
+     * This function recursively scans all files in the repository, extracts concepts, filters the most relevant ones
+     *
+     * @param element {String}  - The repository element containing metadata needed for analysis.
+     * @returns {Array} An array of objects where each file is tagged with its extracted concepts and clustering information.
+     */
+    analyzeRepositoryWithNLP(element) {
+        const repositoryFolder = this.getRepositoryFolder(element);
+        const repositoryName = this.getRepositoryName(element);
+        const analysisResults = [];
 
-//     tagFilesByClustering(data) {
-//         // 🔹 Filtrer les fichiers ayant des concepts
-//         const filesConcepts = data
-//             // .filter(file => Object.keys(file.tokens).length > 0) // Exclure fichiers vides
-//             .map(file => ({
-//                 filePath: file.file,
-//                 tokens: file.tokens
-//             }));
-//
-// // 🔹 Extraire **tous les concepts uniques** (pour avoir des vecteurs de taille fixe)
-//         const allConcepts = [...new Set(filesConcepts.flatMap(file => Object.keys(file.tokens)))];
-//
-// // 🔹 Construire la matrice des features
-//         const featureMatrix = filesConcepts.map(file => {
-//             return allConcepts.map(concept => file.tokens[concept] || 0); // Si le concept est absent, mettre 0
-//         });
-//
-// // 🔹 Exécuter K-Means (choisir un nombre de clusters)
-//         const numClusters = featureMatrix[0].length + 1;
-//         const result = kmeans.kmeans(featureMatrix, numClusters);
-//
-//         // 🔹Return files with their clusters
-//         return data.map((file, i) => ({...file, cluster: result.clusters[i]}));
-//     }
+        // Recursive function to explore directories
+        const exploreDirectory = (currentPath) => {
+            const items = fs.readdirSync(currentPath);
 
-    // tagFilesByClustering(data) {
-    //     return data.map(file => ({...file, cluster: (Object.keys(file.tokens).length === 0) ? 0 : 1}))
-    // }
+            items.forEach(item => {
+                const itemPath = `${currentPath}${FILE_SYSTEM_SEPARATOR}${item}`;
+                const stats = fs.statSync(itemPath);
+
+                if (stats.isDirectory()) {
+                    // If it's a directory, explore recursively
+                    exploreDirectory(itemPath);
+                } else if (stats.isFile()) {
+                    // If it's a file, perform the analysis
+                    const fileContent = fs.readFileSync(itemPath, 'utf8');
+                    const fileExtension = this.getFileExtension(itemPath);
+                    const fileNumberOfLinesOfCode = this.getFileNumberOfLinesOfCode(fileContent, fileExtension);
+
+                    // Extract the concepts only for files that are supported
+                    let fileConceptsOccurences;
+                    if (this.fileIsSupportedForNLPAnalysis(itemPath)) {
+                        const fileConcepts = this.extractConceptsFromFile(item, fileContent);
+                        fileConceptsOccurences = this.getConceptsOccurences(fileConcepts);
+                    }
+
+                    // Push results
+                    analysisResults.push({
+                        repository: repositoryName,
+                        file: itemPath,
+                        tokens: fileConceptsOccurences ?? {},
+                        fileNumberOfLinesOfCode: fileNumberOfLinesOfCode
+                    });
+                }
+            });
+        };
+
+        // Start exploration from the root folder
+        exploreDirectory(repositoryFolder);
+
+        // Filter most pertinent concepts
+        return this.refineResultsByKeepingMostPertinentConceptsOnly(analysisResults);
+    }
 
     /**
      * Extracts and processes concepts from a given file content.
@@ -552,7 +523,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         });
 
         // Step 4: First filtering pass based on the preliminary final score
-        const scores = conceptsAndMetrics.map(c => c.finalScore);
+        const scores = conceptsAndMetrics.map(c => c.finalScore).filter(score => typeof score === "number" && !isNaN(score));
         const mean = scores.reduce((acc, val) => acc + val, 0) / scores.length;
         const stdDev = Math.sqrt(scores.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / scores.length);
         const minimumRequiredFinalScoreMetric = Math.max(mean - stdDev, mean / 2);
@@ -662,6 +633,40 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         }
         return similarities;
     }
+
+    /**
+     * Tags files by applying a clustering technique based on their business-related concepts.
+     * This function normalizes the extracted features and groups files into clusters using the K-Means algorithm.
+     *
+     * @param {Array} data - The list of files, each containing token occurrences and metadata.
+     * @returns {Array} The input data with an additional `cluster` attribute assigned to each file.
+     */
+    tagFilesByClustering(data) {
+        // 🔹 Extract features: density (sum of occurrences / lines of code
+        const filesConcepts = data.map(file => ({
+            density: Object.values(file.tokens).reduce((acc, val) => acc + val, 0) / (file.fileNumberOfLinesOfCode || 1),
+        }));
+
+        // 🔹 Normalize features (Min-Max Scaling)
+        function normalize(arr, key) {
+            const values = arr.map(o => o[key]);
+            const min = Math.min(...values);
+            const max = Math.max(...values);
+            return arr.map(o => ({ ...o, [`${key}Norm`]: (o[key] - min) / (max - min || 1) }));
+        }
+        let normalizedData = normalize(filesConcepts, "density");
+
+        // 🔹 Build feature matrix (2D: [density])
+        const featureMatrix = normalizedData.map(file => [file.densityNorm]);
+
+        // 🔹 Choose number of clusters & execute K-Means with a fixed seed & k-means++
+        const numClusters = 2;
+        const result = kmeans.kmeans(featureMatrix, numClusters, { initialization: 'kmeans++', seed: 42 });
+
+        // 🔹 Return files with their clusters
+        return data.map((file, i) => ({ ...file, cluster: result.clusters[i] }));
+    }
+
 
     /**
      * Constructs a hierarchical directory tree with associated files and code fragments.
