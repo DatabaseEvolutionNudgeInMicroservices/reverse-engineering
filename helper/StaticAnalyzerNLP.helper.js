@@ -528,9 +528,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
 
         // Step 4: First filtering pass based on the preliminary final score
         const scores = conceptsAndMetrics.map(c => c.finalScore).filter(score => typeof score === "number" && !isNaN(score));
-        const mean = scores.reduce((acc, val) => acc + val, 0) / scores.length;
-        const stdDev = Math.sqrt(scores.reduce((acc, val) => acc + Math.pow(val - mean, 2), 0) / scores.length);
-        const minimumRequiredFinalScoreMetric = Math.max(mean - stdDev, mean / 2);
+        const minimumRequiredFinalScoreMetric = scores.reduce((acc, val) => acc + val, 0) / scores.length; // Mean
         conceptsAndMetrics = conceptsAndMetrics.filter(c => c.finalScore > minimumRequiredFinalScoreMetric);
 
         // Step 5: Compute centrality
@@ -653,16 +651,16 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
 
         // 🔹 Extract features only for files that contain tokens
         let filesConcepts = filesWithTokens.map(file => ({
-            totalTfIdf: Object.keys(file.tokens)
-                .map(token => bestConcepts.find(x => x.concept === token)?.avgTfidfNorm || 0)
+            finalScore: Object.keys(file.tokens)
+                .map(token => bestConcepts.find(x => x.concept === token)?.finalScore || 0)
                 .reduce((acc, val) => acc + val, 0) / file.fileNumberOfLinesOfCode,
-            totalCoeffVariation: Object.keys(file.tokens)
-                .map(token => bestConcepts.find(x => x.concept === token)?.coefficientVariationNorm || 0)
-                .reduce((acc, val) => acc + val, 0) / file.fileNumberOfLinesOfCode,
+            totalCentrality: Object.keys(file.tokens)
+                .map(token => bestConcepts.find(x => x.concept === token)?.centralityNorm || 0)
+                .reduce((acc, val) => acc + val, 0) / file.fileNumberOfLinesOfCode
         }));
 
         // 🔹 Build the feature matrix
-        const featureMatrix = filesConcepts.map(file => [file.totalTfIdf, file.totalCoeffVariation]);
+        const featureMatrix = filesConcepts.map(file => [file.finalScore, file.totalCentrality]);
 
         // 🔹 Apply K-Means only to files with tokens
         const numClusters = 2;
