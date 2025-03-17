@@ -32,6 +32,15 @@ const projectsGroundTruth = {
             'user/server.js'
         ]
     },
+    "comments-api-master": {
+        "expected_db_files": [
+            "db/index.js",
+            "src/data-access/comments-db.js"
+        ],
+        "expected_api_files": [
+            "src/index.js"
+        ]
+    },
     "overleaf-main": {
         "expected_db_files": [
             "services/docstore/app/js/HealthChecker.js",
