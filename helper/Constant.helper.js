@@ -29,7 +29,7 @@ const LANGUAGES_RESERVED_KEYWORDS = {
             "if", "import", "in", "instanceof", "new", "return", "super", "switch",
             "this", "throw", "try", "typeof", "var", "void", "while", "with", "yield",
             "let", "static", "await", "enum", "implements", "package", "protected", "interface", "private", "public", "true", "false", "null",
-            "resolve", 'reject', "promise", "logger", "parser", "constructor"
+            "resolve", 'reject', "promise", "logger", "parser", "constructor", "console", "log"
         ],
         "libraries": {
             "mongoDb": [
