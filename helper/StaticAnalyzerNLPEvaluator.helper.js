@@ -85,10 +85,11 @@ const projectsGroundTruth = {
 
 /**
  * Evaluates the correctness of file clustering tags by comparing them to the ground truth.
- * This function verifies if files classified are correctly tagged and calculates error percentages
+ * This function verifies if files classified as "DB" or "API" are correctly tagged
+ * and calculates error percentages for overall files, JavaScript files, and ground truth files.
  *
- * @param project {string} - The project name, used to retrieve the ground truth classification.
- * @param clusteredData {Array} - The array containing files with their assigned cluster.
+ * @param {string} project - The project name, used to retrieve the ground truth classification.
+ * @param {Array} clusteredData - The array containing files with their assigned cluster (-1 = No Tokens, 0 = Other, 1 = DB/API).
  */
 function evaluateFilesTags(project, clusteredData) {
     if (!projectsGroundTruth[project]) {
@@ -116,10 +117,11 @@ function evaluateFilesTags(project, clusteredData) {
      * Checks whether a file is correctly classified based on its expected category.
      *
      * @param {string} filePath - The file path.
-     * @param {number} cluster - The assigned cluster (0 = Other, 1 = DB/API).
+     * @param {number} cluster - The assigned cluster (-1 = No Tokens, 0 = Other, 1 = DB/API).
      * @returns {Object} - An object with classification details.
      */
     function checkFileClassification(filePath, cluster) {
+        const isNoTokens = -1;
         const isOther = 0;
         const isDBorAPI = 1;
         const normalizedPath = normalizeFilePath(filePath);
@@ -129,6 +131,9 @@ function evaluateFilesTags(project, clusteredData) {
                 ? { file: normalizedPath, expected: isDBorAPI, found: cluster, status: '❌ Incorrect (false negative)' }
                 : { file: normalizedPath, expected: cluster, found: cluster, status: '✅ Correct' };
         } else {
+            if (cluster === isNoTokens) {
+                return { file: normalizedPath, expected: isOther, found: cluster, status: '✅ Correct (No Tokens)' };
+            }
             return cluster !== isOther
                 ? { file: normalizedPath, expected: isOther, found: cluster, status: '❌ Incorrect (false positive)' }
                 : { file: normalizedPath, expected: cluster, found: cluster, status: '✅ Correct' };

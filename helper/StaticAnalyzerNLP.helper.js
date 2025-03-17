@@ -172,15 +172,10 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
 
             try {
                 // Perform NLP-based repository analysis and obtain files with their pertinent concepts and occurences
-                const refinedAnalysisResults = this.analyzeRepositoryWithNLP(element);
-
-                // Tag files by using clustering technique
-                const refinedAnalysisResultsWithTags = this.tagFilesByClustering(refinedAnalysisResults);
-                fs.writeFileSync('clustering_results.json', JSON.stringify(refinedAnalysisResultsWithTags, null, 2), 'utf8');
-                evaluateFilesTags(element, refinedAnalysisResultsWithTags)
+                const analysisResults = this.analyzeRepositoryWithNLP(element);
 
                 // Convert the analyzed data into a hierarchical directory tree structure,
-                resolve(this.buildDirectoryTreeWithFilesAndCodeFragments(refinedAnalysisResultsWithTags));
+                resolve(this.buildDirectoryTreeWithFilesAndCodeFragments(analysisResults));
 
             } catch (error) {
                 console.log(error);
@@ -240,7 +235,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         exploreDirectory(repositoryFolder);
 
         // Filter most pertinent concepts
-        return this.refineResultsByKeepingMostPertinentConceptsOnly(analysisResults);
+        return this.refineResultsAndTagFiles(element, analysisResults);
     }
 
     /**
@@ -434,11 +429,13 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
     /**
      * Refines the results by keeping only the most pertinent concepts.
      * The function filters and sorts concepts based on relevance and then updates the results.
+     * It also tag files (DbOrApi or Other)
      *
+     * @param element {String}  - The repository element containing metadata needed for analysis.
      * @param sortedResults {Array} - The list of results containing extracted concepts and their occurrences.
      * @returns {Array} A new array with the refined concepts, keeping only the most pertinent ones.
      */
-    refineResultsByKeepingMostPertinentConceptsOnly(sortedResults) {
+    refineResultsAndTagFiles(element, sortedResults) {
         // Filter and sort
         const bestConceptsSorted = this.filterAndSortBestConcepts(sortedResults);
         console.log(bestConceptsSorted);
@@ -446,8 +443,8 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         // Keep only name of concepts
         const bestConceptsSortedNameOnly = bestConceptsSorted.map(conceptObject => conceptObject.concept)
 
-        // Return the results refined with only the best concepts
-        return sortedResults.map(item => {
+        // Make the results refined with only the best concepts
+        const refinedResults = sortedResults.map(item => {
             return {
                 ...item,
                 tokens: Object.fromEntries(
@@ -455,6 +452,13 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                 )
             };
         });
+
+        // Tag files by using clustering technique
+        const refinedAnalysisResultsWithTags = this.tagFilesByClustering(refinedResults, bestConceptsSorted);
+        fs.writeFileSync('clustering_results.json', JSON.stringify(refinedAnalysisResultsWithTags, null, 2), 'utf8');
+        evaluateFilesTags(element, refinedAnalysisResultsWithTags)
+
+        return refinedAnalysisResultsWithTags;
     }
 
     /**
@@ -638,33 +642,37 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      * Tags files by applying a clustering technique based on their business-related concepts.
      * This function normalizes the extracted features and groups files into clusters using the K-Means algorithm.
      *
-     * @param {Array} data - The list of files, each containing token occurrences and metadata.
+     * @param refinedResults {Array} - The list of files, each containing token occurrences and metadata.
+     * @param bestConcepts {Array} - A list of concepts with computed scores
      * @returns {Array} The input data with an additional `cluster` attribute assigned to each file.
      */
-    tagFilesByClustering(data) {
-        // 🔹 Extract features: density (sum of occurrences / lines of code
-        const filesConcepts = data.map(file => ({
-            density: Object.values(file.tokens).reduce((acc, val) => acc + val, 0) / (file.fileNumberOfLinesOfCode || 1),
+    tagFilesByClustering(refinedResults, bestConcepts) {
+        // 🔹 Separate files with and without tokens
+        const filesWithTokens = refinedResults.filter(file => Object.keys(file.tokens).length > 0 && file.fileNumberOfLinesOfCode > 0);
+        const filesWithoutTokens = refinedResults.filter(file => Object.keys(file.tokens).length === 0 || file.fileNumberOfLinesOfCode === 0);
+
+        // 🔹 Extract features only for files that contain tokens
+        let filesConcepts = filesWithTokens.map(file => ({
+            totalTfIdf: Object.keys(file.tokens)
+                .map(token => bestConcepts.find(x => x.concept === token)?.avgTfidfNorm || 0)
+                .reduce((acc, val) => acc + val, 0) / file.fileNumberOfLinesOfCode,
+            totalCoeffVariation: Object.keys(file.tokens)
+                .map(token => bestConcepts.find(x => x.concept === token)?.coefficientVariationNorm || 0)
+                .reduce((acc, val) => acc + val, 0) / file.fileNumberOfLinesOfCode,
         }));
 
-        // 🔹 Normalize features (Min-Max Scaling)
-        function normalize(arr, key) {
-            const values = arr.map(o => o[key]);
-            const min = Math.min(...values);
-            const max = Math.max(...values);
-            return arr.map(o => ({ ...o, [`${key}Norm`]: (o[key] - min) / (max - min || 1) }));
-        }
-        let normalizedData = normalize(filesConcepts, "density");
+        // 🔹 Build the feature matrix
+        const featureMatrix = filesConcepts.map(file => [file.totalTfIdf, file.totalCoeffVariation]);
 
-        // 🔹 Build feature matrix (2D: [density])
-        const featureMatrix = normalizedData.map(file => [file.densityNorm]);
-
-        // 🔹 Choose number of clusters & execute K-Means with a fixed seed & k-means++
+        // 🔹 Apply K-Means only to files with tokens
         const numClusters = 2;
         const result = kmeans.kmeans(featureMatrix, numClusters, { initialization: 'kmeans++', seed: 42 });
 
-        // 🔹 Return files with their clusters
-        return data.map((file, i) => ({ ...file, cluster: result.clusters[i] }));
+        // 🔹 Merge results with empty files (assigning cluster `-1`)
+        const clusteredFilesWithTokens = filesWithTokens.map((file, i) => ({ ...file, cluster: result.clusters[i] }));
+        const clusteredFilesWithoutTokens = filesWithoutTokens.map(file => ({ ...file, cluster: -1 }));
+
+        return [...clusteredFilesWithTokens, ...clusteredFilesWithoutTokens];
     }
 
 
