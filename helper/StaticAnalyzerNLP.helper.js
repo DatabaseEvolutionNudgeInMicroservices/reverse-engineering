@@ -651,16 +651,15 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
 
         // 🔹 Extract features only for files that contain tokens
         let filesConcepts = filesWithTokens.map(file => ({
-            finalScore: Object.keys(file.tokens)
-                .map(token => bestConcepts.find(x => x.concept === token)?.finalScore || 0)
+            significantCentrality: Object.keys(file.tokens)
+                .map(token => ({token, centrality: bestConcepts.find(x => x.concept === token)?.centralityNorm}))
+                .filter(({token, centrality}) => centrality >= 0.5)
+                .map(({token, centrality}) => centrality)
                 .reduce((acc, val) => acc + val, 0) / file.fileNumberOfLinesOfCode,
-            totalCentrality: Object.keys(file.tokens)
-                .map(token => bestConcepts.find(x => x.concept === token)?.centralityNorm || 0)
-                .reduce((acc, val) => acc + val, 0) / file.fileNumberOfLinesOfCode
         }));
 
         // 🔹 Build the feature matrix
-        const featureMatrix = filesConcepts.map(file => [file.finalScore, file.totalCentrality]);
+        const featureMatrix = filesConcepts.map(file => [file.significantCentrality]);
 
         // 🔹 Apply K-Means only to files with tokens
         const numClusters = 2;
