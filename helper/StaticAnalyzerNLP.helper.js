@@ -17,7 +17,7 @@ const {INPUT_INCORRECTLY_FORMATTED} = require('../error/Constant.error.js');
 // Helpers
 
 const StaticAnalyzer = require('./StaticAnalyzer.helper.js');
-const evaluateFilesTags = require('./StaticAnalyzerNLPEvaluator.helper.js');
+const {tagWithKMeans, clusterWithPythonHDBScan} = require('./StaticAnalyzerNLP_DbClustering.helper.js');
 
 // Libraries : File System
 
@@ -44,10 +44,6 @@ const stopwords = natural.stopwords;
 
 const Typo = require("typo-js");
 const dictionary = new Typo("en_US");
-
-// Libraries : Ml-kmeans
-
-const kmeans = require('ml-kmeans');
 
 // Configuration : Wink
 
@@ -453,12 +449,13 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
             };
         });
 
-        // Tag files by using clustering technique
-        const refinedAnalysisResultsWithTags = this.tagFilesByClustering(refinedResults, bestConceptsSorted);
-        fs.writeFileSync('clustering_results.json', JSON.stringify(refinedAnalysisResultsWithTags, null, 2), 'utf8');
-        evaluateFilesTags(element, refinedAnalysisResultsWithTags)
+        // Tag files by using KMeans
+        const refinedResultsWithTags = tagWithKMeans(element, refinedResults, bestConceptsSorted);
+        // or
+        // Cluster files by using HDBScan
+        // const refinedResultsClustered = clusterWithPythonHDBScan(refinedResults, bestConceptsSorted);
 
-        return refinedAnalysisResultsWithTags;
+        return refinedResultsWithTags;
     }
 
     /**
@@ -504,7 +501,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                 const dominance = maxOccurrence / sumOccurence;
 
                 // Store concept with calculated metrics
-                conceptsAndMetrics.push({ concept, coefficientVariation, avgTfidf, dominance });
+                conceptsAndMetrics.push({concept, coefficientVariation, avgTfidf, dominance});
             });
 
         // Step 2: Normalize the initial metrics
@@ -512,7 +509,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
             const values = arr.map(o => o[key]).filter(v => !isNaN(v));
             const min = Math.min(...values);
             const max = Math.max(...values);
-            return arr.map(o => ({ ...o, [`${key}Norm`]: (o[key] - min) / (max - min || 1) }));
+            return arr.map(o => ({...o, [`${key}Norm`]: (o[key] - min) / (max - min || 1)}));
         }
         conceptsAndMetrics = normalize(conceptsAndMetrics, "coefficientVariation");
         conceptsAndMetrics = normalize(conceptsAndMetrics, "avgTfidf");
@@ -535,7 +532,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         // Centrality - Reflects how strongly a concept is connected to other significant concepts (higher = more central in the concept network).
         let centralityScores = {};
         const similarities = this.findSimilarConcepts(conceptsAndMetrics.map(x => x.concept));
-        similarities.forEach(({ concept1, concept2, similarity }) => {
+        similarities.forEach(({concept1, concept2, similarity}) => {
             const sim = parseFloat(similarity);
             if (sim > 0.2) {
                 centralityScores[concept1] = (centralityScores[concept1] || 0) + sim;
@@ -637,43 +634,6 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
     }
 
     /**
-     * Tags files by applying a clustering technique based on their business-related concepts.
-     * This function normalizes the extracted features and groups files into clusters using the K-Means algorithm.
-     *
-     * @param refinedResults {Array} - The list of files, each containing token occurrences and metadata.
-     * @param bestConcepts {Array} - A list of concepts with computed scores
-     * @returns {Array} The input data with an additional `cluster` attribute assigned to each file.
-     */
-    tagFilesByClustering(refinedResults, bestConcepts) {
-        // 🔹 Separate files with and without tokens
-        const filesWithTokens = refinedResults.filter(file => Object.keys(file.tokens).length > 0 && file.fileNumberOfLinesOfCode > 0);
-        const filesWithoutTokens = refinedResults.filter(file => Object.keys(file.tokens).length === 0 || file.fileNumberOfLinesOfCode === 0);
-
-        // 🔹 Extract features only for files that contain tokens
-        let filesConcepts = filesWithTokens.map(file => ({
-            significantCentrality: Object.keys(file.tokens)
-                .map(token => ({token, centrality: bestConcepts.find(x => x.concept === token)?.centralityNorm}))
-                .filter(({token, centrality}) => centrality >= 0.5)
-                .map(({token, centrality}) => centrality)
-                .reduce((acc, val) => acc + val, 0) / file.fileNumberOfLinesOfCode,
-        }));
-
-        // 🔹 Build the feature matrix
-        const featureMatrix = filesConcepts.map(file => [file.significantCentrality]);
-
-        // 🔹 Apply K-Means only to files with tokens
-        const numClusters = 2;
-        const result = kmeans.kmeans(featureMatrix, numClusters, { initialization: 'kmeans++', seed: 42 });
-
-        // 🔹 Merge results with empty files (assigning cluster `-1`)
-        const clusteredFilesWithTokens = filesWithTokens.map((file, i) => ({ ...file, cluster: result.clusters[i] }));
-        const clusteredFilesWithoutTokens = filesWithoutTokens.map(file => ({ ...file, cluster: -1 }));
-
-        return [...clusteredFilesWithTokens, ...clusteredFilesWithoutTokens];
-    }
-
-
-    /**
      * Constructs a hierarchical directory tree with associated files and code fragments.
      * This function processes extracted results, organizes them into a nested directory structure,
      * and attaches relevant code fragments to each file.
@@ -736,7 +696,8 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
             parentDir.files.push({
                 location: relativePath,
                 linesOfCode: entry.fileNumberOfLinesOfCode,
-                codeFragments: createCodeFragments(relativePath, entry)
+                codeFragments: createCodeFragments(relativePath, entry),
+                cluster: entry?.cluster
             });
         });
 
