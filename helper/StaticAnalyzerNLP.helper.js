@@ -375,7 +375,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         return concepts.map(concept =>
             concept
                 .split(' ')
-                // Reduces plural nouns and derived forms to their base form (lemma), same for the verbs.
+                // Reduces plural nouns and derived forms to their base form (lemma).
                 // If the word is not a recognized noun or verb, it returns the original word.
                 // Examples: cars -> car,
                 //           libraries -> library
@@ -534,7 +534,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         const similarities = this.findSimilarConcepts(conceptsAndMetrics.map(x => x.concept));
         similarities.forEach(({concept1, concept2, similarity}) => {
             const sim = parseFloat(similarity);
-            if (sim > 0.2) {
+            if (sim > 0.2) { // If similarity is significant
                 centralityScores[concept1] = (centralityScores[concept1] || 0) + sim;
                 centralityScores[concept2] = (centralityScores[concept2] || 0) + sim;
             }
