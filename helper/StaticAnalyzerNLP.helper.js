@@ -168,10 +168,13 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
 
             try {
                 // Perform NLP-based repository analysis and obtain files with their pertinent concepts and occurences
-                const analysisResults = this.analyzeRepositoryWithNLP(element);
+                const filesAndTheirConcepts = this.analyzeRepositoryWithNLP(element);
+
+                // Identify the exact lines in each file where the concepts appear
+                const filesAndTheirConceptsWithLinesSpecified = this.findLinesForEachConcepts(filesAndTheirConcepts);
 
                 // Convert the analyzed data into a hierarchical directory tree structure,
-                resolve(this.buildDirectoryTreeWithFilesAndCodeFragments(analysisResults));
+                resolve(this.buildDirectoryTreeWithFilesAndCodeFragments(filesAndTheirConceptsWithLinesSpecified));
 
             } catch (error) {
                 console.log(error);
@@ -210,17 +213,17 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                     const fileNumberOfLinesOfCode = this.getFileNumberOfLinesOfCode(fileContent, fileExtension);
 
                     // Extract the concepts only for files that are supported
-                    let fileConceptsOccurences;
+                    let fileConceptsDetails;
                     if (this.fileIsSupportedForNLPAnalysis(itemPath)) {
                         const fileConcepts = this.extractConceptsFromFile(item, fileContent);
-                        fileConceptsOccurences = this.getConceptsOccurences(fileConcepts);
+                        fileConceptsDetails = this.getConceptsDetails(fileConcepts);
                     }
 
                     // Push results
                     analysisResults.push({
                         repository: repositoryName,
                         file: itemPath,
-                        tokens: fileConceptsOccurences ?? {},
+                        tokens: fileConceptsDetails ?? {},
                         fileNumberOfLinesOfCode: fileNumberOfLinesOfCode
                     });
                 }
@@ -410,16 +413,20 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      * @param concepts {Array} The array of concepts to analyze.
      * @returns {Object} An object mapping each unique word to its number of occurrences.
      */
-    getConceptsOccurences(concepts) {
-        const compteur = {};
-        // Iterate over each concept and split it into words
-        concepts.forEach(concept => {
-            concept.split(" ").forEach(conceptSplit => {
-                compteur[conceptSplit] = (compteur[conceptSplit] || 0) + 1; // This implicitly remove duplicates of concepts
-            })
+    getConceptsDetails(concepts) {
+        const counter = {};
 
+        concepts.forEach(concept => {
+            const words = concept.split(/\s+/).filter(Boolean); // Handles multiple spaces
+            words.forEach(word => {
+                if (!counter[word]) {
+                    counter[word] = { numberOfOccurence: 0 };
+                }
+                counter[word].numberOfOccurence += 1;
+            });
         });
-        return compteur;
+
+        return counter;
     }
 
     /**
@@ -573,7 +580,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
             const sourceFile = item.file
 
             Object.keys(item.tokens).forEach(token => {
-                const nbOccurence = item.tokens[token];
+                const nbOccurence = item.tokens[token].numberOfOccurence;
                 (result[token] ||= []).push({sourceFile, nbOccurence});
             });
         });
@@ -635,6 +642,42 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
     }
 
     /**
+     * Enhances analysis results by identifying the exact lines where each concept appears in its corresponding file.
+     *
+     * @param analysisResults {Array} - An array of analysis result objects, where each object contains the file path
+     *                                  and a `tokens` map associating concepts to their metadata.
+     * @returns {Array} The updated analysisResults array, where each concept includes the list of line numbers it appears on.
+     */
+    findLinesForEachConcepts(analysisResults) {
+        analysisResults.forEach(result => {
+            const lines = fs.readFileSync(result.file, 'utf-8').split('\n');
+            const tokens = Object.keys(result.tokens);
+
+            // Iterate over each line in the file
+            lines.forEach((line, index) => {
+
+                // Get all concepts of the current line
+                const lineConcepts = this.extractConceptsFromFile(result.file, line)
+                    .flatMap(entry => entry.split(/\s+/))
+                    .filter(Boolean);
+
+                // Check whether any token is on that line
+                tokens.forEach(token => {
+                    if (lineConcepts.includes(token)) {
+                        const tokenData = result.tokens[token] ?? result.tokens[Object.keys(result.tokens).find(k => k.toLowerCase() === token)];
+                        if (!tokenData.lines) {
+                            tokenData.lines = [];
+                        }
+                        tokenData.lines.push(index + 1);
+                    }
+                });
+            });
+        });
+
+        return analysisResults;
+    }
+
+    /**
      * Constructs a hierarchical directory tree with associated files and code fragments.
      * This function processes extracted results, organizes them into a nested directory structure,
      * and attaches relevant code fragments to each file.
@@ -673,16 +716,42 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
          * @returns {Array} An array containing the code fragment object.
          */
         function createCodeFragments(relativePath, entry) {
-            return [{
-                location: `${relativePath}#L0C0-L0C0`,
-                technology: {id: Object.keys(entry.tokens).length === 0 ? "javascript-any-any-file" : "unknown"},
-                operation: {name: "OTHER"},
-                method: {name: " "},
-                sample: {content: " "},
-                concepts: Object.keys(entry.tokens).map(token => ({name: token})),
-                heuristics: "unknown",
-                score: "unknown"
-            }];
+            // If file has no concept
+            if (Object.keys(entry.tokens).length === 0) {
+                return [{
+                    location: `${relativePath}#L0C0-L0C0`,
+                    technology: { id: "javascript-any-any-file" },
+                    operation: {name: "OTHER"},
+                    method: {name: " "},
+                    sample: {content: " "},
+                    concepts: [],
+                    heuristics: "unknown",
+                    score: "unknown"
+                }];
+            }
+
+            // If file has at least one concept
+            const lineMap = new Map();
+            Object.keys(entry.tokens).forEach(token => {
+                entry.tokens[token].lines.forEach(line => {
+                    const key = `${relativePath}#L${line}`;
+                    if (!lineMap.has(key)) {
+                        lineMap.set(key, {
+                            location: key,
+                            technology: { id: "unknown" },
+                            operation: { name: "OTHER" },
+                            method: { name: " " },
+                            sample: { content: " " },
+                            concepts: [],
+                            heuristics: "unknown",
+                            score: "unknown"
+                        });
+                    }
+                    lineMap.get(key).concepts.push({ name: token });
+                });
+            });
+
+            return Array.from(lineMap.values());
         }
 
         extractionResults.forEach(entry => {
