@@ -449,13 +449,14 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
             };
         });
 
+        // (OPTIONAL)
         // Tag files by using KMeans
-        const refinedResultsWithTags = tagWithKMeans(element, refinedResults, bestConceptsSorted);
+        // const refinedResultsWithTags = tagWithKMeans(element, refinedResults, bestConceptsSorted);
         // or
         // Cluster files by using HDBScan
         // const refinedResultsClustered = clusterWithPythonHDBScan(refinedResults, bestConceptsSorted);
 
-        return refinedResultsWithTags;
+        return refinedResults;
     }
 
     /**
