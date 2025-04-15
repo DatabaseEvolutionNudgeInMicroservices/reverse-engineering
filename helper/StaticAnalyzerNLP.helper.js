@@ -17,7 +17,7 @@ const {INPUT_INCORRECTLY_FORMATTED} = require('../error/Constant.error.js');
 // Helpers
 
 const StaticAnalyzer = require('./StaticAnalyzer.helper.js');
-const {tagWithKMeans, clusterWithPythonHDBScan} = require('./StaticAnalyzerNLP_DbClustering.helper.js');
+const {tagWithKMeans} = require('./StaticAnalyzerNLP_DbClustering.helper.js');
 
 // Libraries : File System
 
