@@ -292,7 +292,7 @@ function exportFeatureMatrix(refinedResults, bestConcepts) {
     const featureMatrix = refinedResults
         .filter(file => Object.keys(file.tokens).length > 0 && file.fileNumberOfLinesOfCode > 0) // Keep only files with tokens
         // .map(file => conceptsList.map(concept => concept in file.tokens ? 1 : 0));
-        .map(file => conceptsList.map(concept => (file.tokens[concept] / file.fileNumberOfLinesOfCode) || 0));
+        .map(file => conceptsList.map(concept => (file.tokens[concept].numberOfOccurence / file.fileNumberOfLinesOfCode) || 0));
 
     // 🔹 Save the matrix as a JSON file
     fs.writeFileSync('features.json', JSON.stringify(featureMatrix, null, 2), 'utf8');
