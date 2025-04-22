@@ -88,7 +88,7 @@ describe('NLP static analyzer', () => {
     it('should remove reserved keywords based on file type', () => {
         jest.spyOn(staticAnalyzerNLP, 'getFileExtension').mockReturnValue("js");
         const concepts = ["function", "hello", "var", "world"];
-        const result = staticAnalyzerNLP.removeReservedKeywords("test.js", concepts);
+        const result = staticAnalyzerNLP.removeReservedKeywords(concepts, "test.js");
         expect(result).toEqual(["hello", "world"]);
     });
 

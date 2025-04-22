@@ -327,7 +327,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         // Extends other file type
         if ("_extends_" in fileTypeKeywords) {
             const newExtension = fileTypeKeywords["_extends_"];
-            concepts = this.removeReservedKeywords(fileName.split(".")[0] + newExtension, concepts);
+            concepts = this.removeReservedKeywords(concepts, fileName.split(".")[0] + newExtension);
             if (Object.keys(fileTypeKeywords).length === 1) {
                 return concepts;
             }
