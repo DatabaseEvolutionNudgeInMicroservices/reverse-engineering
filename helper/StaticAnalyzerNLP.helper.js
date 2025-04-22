@@ -17,7 +17,7 @@ const {INPUT_INCORRECTLY_FORMATTED} = require('../error/Constant.error.js');
 // Helpers
 
 const StaticAnalyzer = require('./StaticAnalyzer.helper.js');
-const {tagWithKMeans, clusterWithPythonHDBScan} = require('./StaticAnalyzerNLP_DbClustering.helper.js');
+const {tagFilesWithHeuristics, clusterFilesWithPythonHDBScan} = require('./StaticAnalyzerNLP_DbClustering.helper.js');
 
 // Libraries : File System
 
@@ -128,15 +128,16 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      * Extracts an analysis by list.
      * @param list {[String]} The given list.
      * @param language {String} The targeted language by the analysis.
+     * @param dbConcepts {Object} An object mapping repository names to arrays of database-related concepts.
      * @returns {Promise} A promise for the extraction.
      */
-    extractByList(list, language) {
+    extractByList(list, language, dbConcepts) {
         return new Promise((resolveAll, rejectAll) => {
             if (list !== undefined && list !== null && list.length !== 0) {
                 let promises = [];
                 list.forEach(element => {
                     promises.push(new Promise((resolve, reject) => {
-                        this.extractByElement(element, language).then(result => {
+                        this.extractByElement(element, language, dbConcepts ? dbConcepts[element] : undefined).then(result => {
                             resolve(result);
                         }).catch(error => {
                             reject(error);
@@ -158,9 +159,10 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      * Extracts an analysis by element.
      * @param element {String} The given element.
      * @param language {String} The targeted language by the analysis.
+     * @param dbConcepts {Array} - List of database-related concepts.
      * @returns {Promise} A promise for the extraction.
      */
-    extractByElement(element, language) {
+    extractByElement(element, language, dbConcepts) {
         return new Promise((resolve, reject) => {
             if (!(element && element.length > 0 && language && language !== '')) {
                 return reject(new BadFormat(INPUT_INCORRECTLY_FORMATTED));
@@ -168,13 +170,21 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
 
             try {
                 // Perform NLP-based repository analysis and obtain files with their pertinent concepts and occurences
-                const filesAndTheirConcepts = this.analyzeRepositoryWithNLP(element);
+                let filesAndTheirConcepts = this.analyzeRepositoryWithNLP(element);
 
                 // Identify the exact lines in each file where the concepts appear
-                const filesAndTheirConceptsWithLinesSpecified = this.findLinesForEachConcepts(filesAndTheirConcepts);
+                filesAndTheirConcepts = this.findLinesForEachConcepts(filesAndTheirConcepts);
+
+                // Check if a list of database-related concepts has been provided
+                if (dbConcepts) {
+                    // Normalize and tokenize the DB concepts using the same method as for concepts in source files
+                    dbConcepts = this.extractConcepts(dbConcepts.join(" "));
+                    // Tag each file based on the presence of DB-related concepts using heuristics
+                    filesAndTheirConcepts = tagFilesWithHeuristics(element, filesAndTheirConcepts, dbConcepts);
+                }
 
                 // Convert the analyzed data into a hierarchical directory tree structure,
-                resolve(this.buildDirectoryTreeWithFilesAndCodeFragments(filesAndTheirConceptsWithLinesSpecified));
+                resolve(this.buildDirectoryTreeWithFilesAndCodeFragments(filesAndTheirConcepts));
 
             } catch (error) {
                 console.log(error);
@@ -215,7 +225,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                     // Extract the concepts only for files that are supported
                     let fileConceptsDetails;
                     if (this.fileIsSupportedForNLPAnalysis(itemPath)) {
-                        const fileConcepts = this.extractConceptsFromFile(item, fileContent);
+                        const fileConcepts = this.extractConcepts(fileContent, item);
                         fileConceptsDetails = this.getConceptsDetails(fileConcepts);
                     }
 
@@ -238,18 +248,18 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
     }
 
     /**
-     * Extracts and processes concepts from a given file content.
+     * Extracts and processes concepts from a given file content or string of tokens.
      * The function filters, normalizes, and refines the concepts before returning them.
      *
+     * @param content {String} The content of the file.
      * @param fileName {String} The name of the file from which concepts are extracted.
-     * @param fileContent {String} The content of the file.
      * @returns {Array} An array of processed concepts after filtering and normalization.
      */
-    extractConceptsFromFile(fileName, fileContent) {
+    extractConcepts(content, fileName="") {
         // Filtering
-        let concepts = this.extractRawConcepts(fileContent);
+        let concepts = this.extractRawConcepts(content);
         concepts = this.filterNoisyConcepts(concepts);
-        concepts = this.removeReservedKeywords(fileName, concepts);
+        concepts = this.removeReservedKeywords(concepts, fileName);
 
         // Normalizing
         concepts = this.separateMultipleWordsConcepts(concepts);
@@ -302,17 +312,15 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      * Removes reserved keywords from the given concepts based on the file type.
      * Keywords related to the file's language or libraries are filtered out.
      *
-     * @param fileName {String} The name of the file being processed.
      * @param concepts {Array} The array of concepts to filter.
+     * @param fileName {String} The name of the file being processed.
      * @returns {Array} A filtered array of concepts without reserved keywords.
      */
-    removeReservedKeywords(fileName, concepts) {
+    removeReservedKeywords(concepts, fileName) {
         const fileExtension = `.${this.getFileExtension(fileName)}`;
         const fileTypeKeywords = LANGUAGES_RESERVED_KEYWORDS[fileExtension];
 
         if (!fileTypeKeywords) {
-            console.error(`Cannot filter reserved keywords for filetype: ${fileExtension}`);
-            console.error("Skipping removeReservedKeywords()...");
             return concepts;
         }
 
@@ -432,7 +440,6 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
     /**
      * Refines the results by keeping only the most pertinent concepts.
      * The function filters and sorts concepts based on relevance and then updates the results.
-     * It also tag files (DbOrApi or Other)
      *
      * @param element {String}  - The repository element containing metadata needed for analysis.
      * @param sortedResults {Array} - The list of results containing extracted concepts and their occurrences.
@@ -455,13 +462,6 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                 )
             };
         });
-
-        // (OPTIONAL)
-        // Tag files by using KMeans
-        // const refinedResultsWithTags = tagWithKMeans(element, refinedResults, bestConceptsSorted);
-        // or
-        // Cluster files by using HDBScan
-        // const refinedResultsClustered = clusterWithPythonHDBScan(refinedResults, bestConceptsSorted);
 
         return refinedResults;
     }
@@ -657,7 +657,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
             lines.forEach((line, index) => {
 
                 // Get all concepts of the current line
-                const lineConcepts = this.extractConceptsFromFile(result.file, line)
+                const lineConcepts = this.extractConcepts(line, result.file)
                     .flatMap(entry => entry.split(/\s+/))
                     .filter(Boolean);
 

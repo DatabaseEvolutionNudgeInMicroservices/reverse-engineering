@@ -101,13 +101,22 @@ const projectsGroundTruthForEvaluation = {
 /*
  *
  *
- * CLUSTERING WITH KMEANS
+ * CLUSTERING WITH HEURISTICS
  *
  *
  */
 
-function tagWithKMeans(element, refinedResults, bestConceptsSorted) {
-    const refinedAnalysisResultsWithTags = tagFilesByClusteringWithKMeans(refinedResults, bestConceptsSorted);
+/**
+ * Tags each file in the analysis results as DB-related using heuristics,
+ * writes the clustering results to a file, and evaluates the tagging accuracy.
+ *
+ * @param {string} element - The repository name, used for evaluation.
+ * @param {Array} refinedResults - Array of files with token metadata.
+ * @param {Array} dbConcepts - List of database-related concepts.
+ * @returns {Array} The tagged analysis results with cluster values.
+ */
+function tagFilesWithHeuristics(element, refinedResults, dbConcepts) {
+    const refinedAnalysisResultsWithTags = tagFilesByClusteringWithHeuristics(refinedResults, dbConcepts);
     fs.writeFileSync('clustering_results.json', JSON.stringify(refinedAnalysisResultsWithTags, null, 2), 'utf8');
     evaluateFilesTags(element, refinedAnalysisResultsWithTags)
 
@@ -116,38 +125,57 @@ function tagWithKMeans(element, refinedResults, bestConceptsSorted) {
 
 
 /**
- * Tags files by applying a clustering technique based on their business-related concepts.
- * This function normalizes the extracted features and groups files into clusters using the K-Means algorithm.
+ * Tags files as database-related or not using a hybrid heuristic.
  *
- * @param refinedResults {Array} - The list of files, each containing token occurrences and metadata.
- * @param bestConcepts {Array} - A list of concepts with computed scores
- * @returns {Array} The input data with an additional `cluster` attribute assigned to each file.
+ * A file is considered DB-related (cluster = 1) if:
+ * - It contains at least THRESHOLD_OCCURRENCE database-related concepts, OR
+ * - The density of DB-related concepts (occurrences / lines of code) is >= THRESHOLD_DENSITY.
+ *
+ * Files with no tokens or zero lines of code are marked with cluster = -1.
+ *
+ * @param refinedResults {Array} - List of files with token data and metadata.
+ * @param dbConcepts {Array} - List of database-related concepts.
+ * @returns {Array} Files with a `cluster` field: 1 (DB-related), 0 (not DB-related), -1 (unusable).
  */
-function tagFilesByClusteringWithKMeans(refinedResults, bestConcepts) {
-    // 🔹 Separate files with and without tokens
-    const filesWithTokens = refinedResults.filter(file => Object.keys(file.tokens).length > 0 && file.fileNumberOfLinesOfCode > 0);
-    const filesWithoutTokens = refinedResults.filter(file => Object.keys(file.tokens).length === 0 || file.fileNumberOfLinesOfCode === 0);
+function tagFilesByClusteringWithHeuristics(refinedResults, dbConcepts) {
+    // Separate files with and without token information
+    const filesWithTokens = refinedResults.filter(file =>
+        Object.keys(file.tokens).length > 0 && file.fileNumberOfLinesOfCode > 0
+    );
+    const filesWithoutTokens = refinedResults.filter(file =>
+        Object.keys(file.tokens).length === 0 || file.fileNumberOfLinesOfCode === 0
+    );
 
-    // 🔹 Extract features only for files that contain tokens
-    let filesConcepts = filesWithTokens.map(file => ({
-        significantCentrality: Object.keys(file.tokens)
-            .map(token => ({token, centrality: bestConcepts.find(x => x.concept === token)?.centralityNorm}))
-            .filter(({token, centrality}) => centrality >= 0.5)
-            .map(({token, centrality}) => centrality)
-            .reduce((acc, val) => acc + val, 0) / file.fileNumberOfLinesOfCode,
+    // Heuristic thresholds
+    const THRESHOLD_OCCURRENCE = 3;    // Minimum total occurrences of DB concepts
+    const THRESHOLD_DENSITY = 0.05;   // Minimum concept density
+
+    // Apply heuristic on files with tokens
+    const clusteredFilesWithTokens = filesWithTokens.map(file => {
+        const fileTokens = file.tokens;
+
+        // Count how many DB-related concept occurrences are in this file
+        const dbConceptOccurrences = Object.entries(fileTokens)
+            .filter(([token]) => dbConcepts.includes(token))
+            .reduce((sum, [, data]) => sum + data.numberOfOccurence, 0);
+
+        // Calculate concept density relative to lines of code
+        const dbConceptDensity = dbConceptOccurrences / file.fileNumberOfLinesOfCode;
+
+        // Tag file as DB-related (1) or not (0) based on heuristics
+        return {
+            ...file,
+            cluster: dbConceptOccurrences >= THRESHOLD_OCCURRENCE || dbConceptDensity >= THRESHOLD_DENSITY ? 1 : 0
+        };
+    });
+
+    // Tag files without tokens or code as unusable
+    const clusteredFilesWithoutTokens = filesWithoutTokens.map(file => ({
+        ...file,
+        cluster: -1
     }));
 
-    // 🔹 Build the feature matrix
-    const featureMatrix = filesConcepts.map(file => [file.significantCentrality]);
-
-    // 🔹 Apply K-Means only to files with tokens
-    const numClusters = 2;
-    const result = kmeans.kmeans(featureMatrix, numClusters, {initialization: 'kmeans++', seed: 42});
-
-    // 🔹 Merge results with empty files (assigning cluster `-1`)
-    const clusteredFilesWithTokens = filesWithTokens.map((file, i) => ({...file, cluster: result.clusters[i]}));
-    const clusteredFilesWithoutTokens = filesWithoutTokens.map(file => ({...file, cluster: -1}));
-
+    // Return all tagged files
     return [...clusteredFilesWithTokens, ...clusteredFilesWithoutTokens];
 }
 
@@ -268,7 +296,15 @@ function getFileExtension(filePath) {
  *
  */
 
-function clusterWithPythonHDBScan(refinedResults, bestConceptsSorted) {
+/**
+ * Clusters files using HDBSCAN based on a feature matrix of concept occurrences.
+ * Exports features, calls the clustering logic, assigns cluster labels, and generates a summary.
+ *
+ * @param {Array} refinedResults - List of files with their associated concepts.
+ * @param {Array} bestConceptsSorted - List of relevant concepts with their scores.
+ * @returns {Array} List of files with assigned cluster labels.
+ */
+function clusterFilesWithPythonHDBScan(refinedResults, bestConceptsSorted) {
     exportFeatureMatrix(refinedResults, bestConceptsSorted);
     // Call python script // TODO implement python script call inside javascript if this technique is kept
     const finalResults = assignClustersToFiles(refinedResults);
@@ -284,17 +320,17 @@ function clusterWithPythonHDBScan(refinedResults, bestConceptsSorted) {
  * @param {Array} bestConcepts - List of relevant concepts with their scores.
  */
 function exportFeatureMatrix(refinedResults, bestConcepts) {
-    // 🔹 Extract the list of concepts
+    // Extract the list of concepts
     const conceptsList = bestConcepts.map(c => c.concept);
     // const conceptsList = bestConcepts.map(c => c.concept).filter(c => ["cinema", "movie", "payment", "ticket", "booking"].includes(c));
 
-    // 🔹 Build the feature matrix
+    // Build the feature matrix
     const featureMatrix = refinedResults
         .filter(file => Object.keys(file.tokens).length > 0 && file.fileNumberOfLinesOfCode > 0) // Keep only files with tokens
         // .map(file => conceptsList.map(concept => concept in file.tokens ? 1 : 0));
         .map(file => conceptsList.map(concept => (file.tokens[concept].numberOfOccurence / file.fileNumberOfLinesOfCode) || 0));
 
-    // 🔹 Save the matrix as a JSON file
+    // Save the matrix as a JSON file
     fs.writeFileSync('features.json', JSON.stringify(featureMatrix, null, 2), 'utf8');
 
     console.log("✅ Features exported to features.json");
@@ -310,7 +346,7 @@ function exportFeatureMatrix(refinedResults, bestConcepts) {
 function assignClustersToFiles(refinedResults) {
     const clusters = JSON.parse(fs.readFileSync('clusters.json', 'utf8'));
 
-    // 🔹 Associate each file with its cluster
+    // Associate each file with its cluster
     return refinedResults
         .filter(file => Object.keys(file.tokens).length > 0 && file.fileNumberOfLinesOfCode > 0) // Keep only files with tokens
         .map((file, i) => ({
@@ -321,7 +357,7 @@ function assignClustersToFiles(refinedResults) {
 
 
 function generateMarkdown(clusteredData) {
-    // 🔹 Group files by cluster
+    // Group files by cluster
     const clustersMap = new Map();
 
     clusteredData.forEach(({ file, cluster }) => {
@@ -331,7 +367,7 @@ function generateMarkdown(clusteredData) {
         clustersMap.get(cluster).push(file);
     });
 
-    // 🔹 Build the Markdown content
+    // Build the Markdown content
     let markdownContent = "# File Clustering\n\n";
     clustersMap.forEach((files, cluster) => {
         markdownContent += `## Cluster ${cluster}\n\n`;
@@ -341,10 +377,10 @@ function generateMarkdown(clusteredData) {
         markdownContent += "\n"; // Blank line for spacing
     });
 
-    // 🔹 Save to a `clusters.md` file
+    // Save to a `clusters.md` file
     fs.writeFileSync('clusters.md', markdownContent, 'utf8');
 
     console.log("✅ File clusters.md successfully generated!");
 }
 
-module.exports = {tagWithKMeans, clusterWithPythonHDBScan};
+module.exports = {tagFilesWithHeuristics, clusterFilesWithPythonHDBScan};

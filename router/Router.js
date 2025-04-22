@@ -9,6 +9,7 @@ const CleaningFail = require('../error/CleaningFail.error.js');
 const {DOWNLOAD_FAIL, INPUT_INCORRECTLY_FORMATTED} = require('../error/Constant.error');
 const {FILE_SYSTEM_SEPARATOR} = require("../helper/Constant.helper");
 const multer = require('multer');
+const {readFileSync} = require("fs");
 
 // Configuration
 
@@ -30,9 +31,10 @@ const upload = multer({
 // Helper function for handling file uploads and responses
 
 const handleFileUploadAndResponse = (fileMethod) => (request, response) => {
-    if (request.file) {
-        const {path: zipTempFilePath, originalname: originalFileName} = request.file;
-        fileMethod.call(controller, zipTempFilePath, request.params.language)
+    if (request.files.file) {
+        const {path: zipTempFilePath, originalname: originalFileName} = request.files.file[0];
+        const db_concepts = request.files.db_concepts ? JSON.parse(readFileSync(request.files.db_concepts[0].path, 'utf-8')) : undefined;
+        fileMethod.call(controller, zipTempFilePath, request.params.language, db_concepts)
             .then((result) => {
                 response.status(200);
                 response.json(result);
@@ -66,7 +68,10 @@ const handleFileUploadAndResponse = (fileMethod) => (request, response) => {
 
 router.post('/static/heuristics/language/:language/repository/zip', upload.single('file'), handleFileUploadAndResponse(controller.analyzeStaticallyHeuristics));
 
-router.post('/static/nlp/language/:language/repository/zip', upload.single('file'), handleFileUploadAndResponse(controller.analyzeStaticallyNLP));
+router.post('/static/nlp/language/:language/repository/zip', upload.fields([
+    {name: 'file'},
+    {name: 'db_concepts', maxCount: 1}
+]), handleFileUploadAndResponse(controller.analyzeStaticallyNLP));
 
 
 module.exports = router;
