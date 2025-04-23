@@ -124,22 +124,26 @@ describe('NLP static analyzer', () => {
 
     it('should count the occurrences of each word in the concepts list', () => {
         const concepts = ["hello world", "hello", "great world"];
-        const result = staticAnalyzerNLP.getConceptsOccurences(concepts);
-        expect(result).toEqual({ "hello": 2, "world": 2, "great": 1 });
+        const result = staticAnalyzerNLP.getConceptsDetails(concepts);
+        expect(result).toEqual({
+            "hello": {numberOfOccurence: 2},
+            "world": {numberOfOccurence: 2},
+            "great": {numberOfOccurence: 1}
+        });
     });
 
     it('should return an empty object for an empty concepts list', () => {
-        const result = staticAnalyzerNLP.getConceptsOccurences([]);
+        const result = staticAnalyzerNLP.getConceptsDetails([]);
         expect(result).toEqual({});
     });
 
     it('should refine concepts by keeping only the most relevant ones', () => {
 
-        const sortedResults =    [
+        const sortedResults = [
             {
                 repository: 'example',
                 file: 'C:\\Users\\user\\reverse-engineering-text-retrieval\\TEMP\\example-microservice\\config.js',
-                tokens: { process: 1, dialect: 1, logging: 1, module: 1, export: 1 },
+                tokens: {process: 1, dialect: 1, logging: 1, module: 1, export: 1},
                 fileNumberOfLinesOfCode: 7
             },
             {
@@ -240,23 +244,33 @@ describe('NLP static analyzer', () => {
 
     it('should correctly organize concepts with their occurrences and files', () => {
         const sortedResults = [
-            { file: 'file1', tokens: { conceptA: 3, conceptB: 2 } },
-            { file: 'file2', tokens: { conceptB: 5, conceptC: 1 } }
+            {file: 'file1', tokens: {conceptA: {numberOfOccurence: 3}, conceptB: {numberOfOccurence: 2}}},
+            {file: 'file2', tokens: {conceptB: {numberOfOccurence: 5}, conceptC: {numberOfOccurence: 1}}}
         ];
 
         const concepts = staticAnalyzerNLP.getConceptsWithFilesAndOccurences(sortedResults);
 
         expect(concepts).toEqual({
-            conceptA: [{ sourceFile: 'file1', nbOccurence: 3 }],
-            conceptB: [{ sourceFile: 'file1', nbOccurence: 2 }, { sourceFile: 'file2', nbOccurence: 5 }],
-            conceptC: [{ sourceFile: 'file2', nbOccurence: 1 }]
+            conceptA: [{sourceFile: 'file1', nbOccurence: 3}],
+            conceptB: [{sourceFile: 'file1', nbOccurence: 2}, {sourceFile: 'file2', nbOccurence: 5}],
+            conceptC: [{sourceFile: 'file2', nbOccurence: 1}]
         });
     });
 
     it('should build a correct directory tree with files and code fragments', () => {
         const extractionResults = [
-            { file: 'repo\\TEMP\\file1.js', fileNumberOfLinesOfCode: 10, tokens: { token1: 1, token2: 2 }, repository: "repo" },
-            { file: 'repo\\TEMP\\dir1\\file2.js', fileNumberOfLinesOfCode: 20, tokens: { token3: 3 }, repository: "repo" }
+            {
+                file: 'repo\\TEMP\\file1.js',
+                fileNumberOfLinesOfCode: 10,
+                tokens: {token1: {numberOfOccurence: 1, lines: [9]}, token2: {numberOfOccurence: 2, lines: [4, 9]}},
+                repository: "repo"
+            },
+            {
+                file: 'repo\\TEMP\\dir1\\file2.js',
+                fileNumberOfLinesOfCode: 20,
+                tokens: {token3: {numberOfOccurence: 3, lines: [5]}},
+                repository: "repo"
+            }
         ];
 
         const result = staticAnalyzerNLP.buildDirectoryTreeWithFilesAndCodeFragments(extractionResults);
