@@ -1,6 +1,14 @@
 const fs = require('fs');
-const kmeans = require("ml-kmeans");
+const path = require('path');
 
+
+/**
+ * Ground truth data for evaluating file classifications across different projects.
+ * This object contains the expected DB and API files for various projects.
+ * Each project has two arrays:
+ * 1. `expected_db_files` - List of files that are expected to be DB files.
+ * 2. `expected_api_files` - List of files that are expected to be API files.
+ */
 const projectsGroundTruthForEvaluation = {
     "cinema-microservice-master": {
         "expected_db_files": [
@@ -89,22 +97,39 @@ const projectsGroundTruthForEvaluation = {
             "services/history-v1/app.js",
             "services/project-history/app.js",
         ]
+    },
+    "cloudboost-master": {
+        "expected_db_files": [
+            "data-service/cron/expire.js",
+            "data-service/database-connect/keyService.js",
+            "data-service/databases/mongo.js",
+            "data-service/helpers/mongo.js",
+            "data-service/services/app.js",
+            "data-service/services/cloudObject.js",
+            "data-service/services/table.js",
+            "data-service/database-connect/apiTracker.js",
+            "data-service/helpers/session.js",
+            "data-service/helpers/socketQuery.js",
+            "data-service/helpers/socketSession.js",
+        ],
+        "expected_api_files": [
+            "data-service/api/app/Admin.js",
+            "data-service/api/app/App.js",
+            "data-service/api/app/AppFiles.js",
+            "data-service/api/app/AppSettings.js",
+            "data-service/api/db/mongo.js",
+            "data-service/api/email/CloudEmail.js",
+            "data-service/api/file/CloudFiles.js",
+            "data-service/api/pages/Page.js",
+            "data-service/api/server/Server.js",
+            "data-service/api/tables/CloudObject.js",
+            "data-service/api/tables/CloudUser.js",
+            "data-service/helpers/github.js",
+            "data-service/routes.js",
+        ]
     }
 }
 
-
-
-
-
-
-
-/*
- *
- *
- * CLUSTERING WITH HEURISTICS
- *
- *
- */
 
 /**
  * Tags each file in the analysis results as DB-related using heuristics,
@@ -116,26 +141,34 @@ const projectsGroundTruthForEvaluation = {
  * @returns {Array} The tagged analysis results with cluster values.
  */
 function tagFilesWithHeuristics(element, refinedResults, dbConcepts) {
+    // Ensure that the directory for storing evaluation results exists
+    if (!fs.existsSync(getEvaluationResultsPath(element))) {
+        fs.mkdirSync(getEvaluationResultsPath(element),  { recursive: true });
+    }
+
+    // Tag the files using clustering heuristics based on database concepts and save results
     const refinedAnalysisResultsWithTags = tagFilesByClusteringWithHeuristics(refinedResults, dbConcepts);
-    fs.writeFileSync('clustering_results.json', JSON.stringify(refinedAnalysisResultsWithTags, null, 2), 'utf8');
-    evaluateFilesTags(element, refinedAnalysisResultsWithTags)
+    fs.writeFileSync(`${getEvaluationResultsPath(element)}/clustering_results.json`, JSON.stringify(refinedAnalysisResultsWithTags, null, 2), 'utf8');
+
+    // If ground truth data is available for the project, evaluate the tagging results
+    if (Object.keys(projectsGroundTruthForEvaluation).includes(element)) {
+        evaluateFilesTags(element, refinedAnalysisResultsWithTags)
+    }
 
     return refinedAnalysisResultsWithTags;
 }
 
 
 /**
- * Tags files as database-related or not using a hybrid heuristic.
+ * Tags files as database-related or not using heuristics.
  *
  * A file is considered DB-related (cluster = 1) if:
  * - It contains at least THRESHOLD_OCCURRENCE database-related concepts, OR
  * - The density of DB-related concepts (occurrences / lines of code) is >= THRESHOLD_DENSITY.
  *
- * Files with no tokens or zero lines of code are marked with cluster = -1.
- *
  * @param refinedResults {Array} - List of files with token data and metadata.
  * @param dbConcepts {Array} - List of database-related concepts.
- * @returns {Array} Files with a `cluster` field: 1 (DB-related), 0 (not DB-related), -1 (unusable).
+ * @returns {Array} Files with a `cluster` field: 1 (DB-related), 0 (not DB-related).
  */
 function tagFilesByClusteringWithHeuristics(refinedResults, dbConcepts) {
     // Separate files with and without token information
@@ -172,7 +205,7 @@ function tagFilesByClusteringWithHeuristics(refinedResults, dbConcepts) {
     // Tag files without tokens or code as unusable
     const clusteredFilesWithoutTokens = filesWithoutTokens.map(file => ({
         ...file,
-        cluster: -1
+        cluster: 0
     }));
 
     // Return all tagged files
@@ -214,11 +247,10 @@ function evaluateFilesTags(project, clusteredData) {
      * Checks whether a file is correctly classified based on its expected category.
      *
      * @param {string} filePath - The file path.
-     * @param {number} cluster - The assigned cluster (-1 = No Tokens, 0 = Other, 1 = DB/API).
+     * @param {number} cluster - The assigned cluster (0 = Other, 1 = DB/API).
      * @returns {Object} - An object with classification details.
      */
     function checkFileClassification(filePath, cluster) {
-        const isNoTokens = -1;
         const isOther = 0;
         const isDBorAPI = 1;
         const normalizedPath = normalizeFilePath(filePath);
@@ -228,9 +260,6 @@ function evaluateFilesTags(project, clusteredData) {
                 ? { file: normalizedPath, expected: isDBorAPI, found: cluster, status: '❌ Incorrect (false negative)' }
                 : { file: normalizedPath, expected: cluster, found: cluster, status: '✅ Correct' };
         } else {
-            if (cluster === isNoTokens) {
-                return { file: normalizedPath, expected: isOther, found: cluster, status: '✅ Correct (No Tokens)' };
-            }
             return cluster !== isOther
                 ? { file: normalizedPath, expected: isOther, found: cluster, status: '❌ Incorrect (false positive)' }
                 : { file: normalizedPath, expected: cluster, found: cluster, status: '✅ Correct' };
@@ -240,147 +269,50 @@ function evaluateFilesTags(project, clusteredData) {
     // Evaluate classification for all files
     const classificationResults = clusteredData.map(({ file, cluster }) => checkFileClassification(file, cluster));
 
-    // Identify incorrectly classified files
-    const incorrectFiles = classificationResults.filter(result => result.status.includes('Incorrect'));
-
-    // Display classification results
-    console.log('🔍 Classification errors summary:');
-    console.table(incorrectFiles.length ? incorrectFiles : [{ status: '✅ All files are correctly classified!' }]);
-
-    // Calculate error percentages
-    const totalFiles = clusteredData.length;
-    const totalJsFiles = clusteredData.filter(x => getFileExtension(x.file) === "js").length;
-    const totalGroundTruthFiles = dbAndApiFiles.size;
-
-    function calculateErrorPercentage(errorCount, total) {
-        return total > 0 ? ((errorCount / total) * 100).toFixed(2) + "%" : "N/A";
-    }
-
-    console.log("Error percentage (all files):", calculateErrorPercentage(incorrectFiles.length, totalFiles));
-    console.log("Error percentage (JS files only):", calculateErrorPercentage(
-        incorrectFiles.filter(x => getFileExtension(x.file) === "js").length, totalJsFiles
-    ));
-    console.log("Error percentage (ground truth files only):", calculateErrorPercentage(
-        incorrectFiles.filter(x => dbAndApiFiles.has(x.file)).length, totalGroundTruthFiles
-    ));
+    // Compute evaluation metrics
+    const evaluationMetrics = computeEvaluationMetrics(classificationResults);
 
     // Save detailed results
-    fs.writeFileSync('classification_check.json', JSON.stringify(classificationResults, null, 2), 'utf8');
-    console.log('📄 Detailed results saved in classification_check.json');
+    fs.writeFileSync(`${getEvaluationResultsPath(project)}/classification_metrics.json`, JSON.stringify(evaluationMetrics, null, 2), 'utf8');
+    fs.writeFileSync(`${getEvaluationResultsPath(project)}/classification_check.json`, JSON.stringify(classificationResults, null, 2), 'utf8');
+    console.log(`Detailed results saved in folder : ${getEvaluationResultsPath(project)}`);
 }
 
-/**
- * Extracts the file extension from a given file path.
- *
- * @param {string} filePath - The file path.
- * @returns {string} - The file extension (e.g., "js"), or an empty string if none.
- */
-function getFileExtension(filePath) {
-    return filePath.includes(".") ? filePath.split('.').pop() : "";
-}
+function computeEvaluationMetrics(classificationResults) {
+    let TP = 0, TN = 0, FP = 0, FN = 0;
 
-
-
-
-
-
-
-
-
-
-/*
- *
- *
- * CLUSTERING WITH HDBSCAN (uses a python script)
- *
- *
- */
-
-/**
- * Clusters files using HDBSCAN based on a feature matrix of concept occurrences.
- * Exports features, calls the clustering logic, assigns cluster labels, and generates a summary.
- *
- * @param {Array} refinedResults - List of files with their associated concepts.
- * @param {Array} bestConceptsSorted - List of relevant concepts with their scores.
- * @returns {Array} List of files with assigned cluster labels.
- */
-function clusterFilesWithPythonHDBScan(refinedResults, bestConceptsSorted) {
-    exportFeatureMatrix(refinedResults, bestConceptsSorted);
-    // Call python script // TODO implement python script call inside javascript if this technique is kept
-    const finalResults = assignClustersToFiles(refinedResults);
-
-    generateMarkdown(finalResults);
-    return finalResults;
-}
-
-/**
- * Exports files as a feature matrix for HDBSCAN.
- *
- * @param {Array} refinedResults - List of files with their associated concepts.
- * @param {Array} bestConcepts - List of relevant concepts with their scores.
- */
-function exportFeatureMatrix(refinedResults, bestConcepts) {
-    // Extract the list of concepts
-    const conceptsList = bestConcepts.map(c => c.concept);
-    // const conceptsList = bestConcepts.map(c => c.concept).filter(c => ["cinema", "movie", "payment", "ticket", "booking"].includes(c));
-
-    // Build the feature matrix
-    const featureMatrix = refinedResults
-        .filter(file => Object.keys(file.tokens).length > 0 && file.fileNumberOfLinesOfCode > 0) // Keep only files with tokens
-        // .map(file => conceptsList.map(concept => concept in file.tokens ? 1 : 0));
-        .map(file => conceptsList.map(concept => (file.tokens[concept].numberOfOccurence / file.fileNumberOfLinesOfCode) || 0));
-
-    // Save the matrix as a JSON file
-    fs.writeFileSync('features.json', JSON.stringify(featureMatrix, null, 2), 'utf8');
-
-    console.log("✅ Features exported to features.json");
-}
-
-
-/**
- * Loads the clusters found by HDBSCAN and associates them with the files.
- *
- * @param {Array} refinedResults - List of analyzed files.
- * @returns {Array} List of files with their assigned clusters.
- */
-function assignClustersToFiles(refinedResults) {
-    const clusters = JSON.parse(fs.readFileSync('clusters.json', 'utf8'));
-
-    // Associate each file with its cluster
-    return refinedResults
-        .filter(file => Object.keys(file.tokens).length > 0 && file.fileNumberOfLinesOfCode > 0) // Keep only files with tokens
-        .map((file, i) => ({
-            ...file,
-            cluster: clusters.find(x => x.file === i).cluster // Assign the cluster found by HDBSCAN
-        }));
-}
-
-
-function generateMarkdown(clusteredData) {
-    // Group files by cluster
-    const clustersMap = new Map();
-
-    clusteredData.forEach(({ file, cluster }) => {
-        if (!clustersMap.has(cluster)) {
-            clustersMap.set(cluster, []);
-        }
-        clustersMap.get(cluster).push(file);
+    classificationResults.forEach(({ expected, found }) => {
+        if (expected === 1 && found === 1) TP++;
+        else if (expected === 0 && found === 0) TN++;
+        else if (expected === 0 && found === 1) FP++;
+        else if (expected === 1 && found === 0) FN++;
     });
 
-    // Build the Markdown content
-    let markdownContent = "# File Clustering\n\n";
-    clustersMap.forEach((files, cluster) => {
-        markdownContent += `## Cluster ${cluster}\n\n`;
-        files.forEach(file => {
-            markdownContent += `- \`${file}\`\n`;
-        });
-        markdownContent += "\n"; // Blank line for spacing
-    });
+    const total = TP + TN + FP + FN;
 
-    // Save to a `clusters.md` file
-    fs.writeFileSync('clusters.md', markdownContent, 'utf8');
+    const accuracy = (TP + TN) / total;
+    const precision = TP + FP > 0 ? TP / (TP + FP) : 0;
+    const recall = TP + FN > 0 ? TP / (TP + FN) : 0;
+    const f1 = (precision + recall) > 0 ? 2 * (precision * recall) / (precision + recall) : 0;
 
-    console.log("✅ File clusters.md successfully generated!");
+    return {
+        accuracy: (accuracy * 100).toFixed(2) + '%',
+        precision: (precision * 100).toFixed(2) + '%',
+        recall: (recall * 100).toFixed(2) + '%',
+        f1Score: (f1 * 100).toFixed(2) + '%',
+        rawCounts: { TP, TN, FP, FN }
+    };
 }
 
-module.exports = {tagFilesWithHeuristics, clusterFilesWithPythonHDBScan};
+
+/**
+ * Returns the path to the evaluation results folder for a given project.
+ *
+ * @param {string} project - Project name.
+ * @returns {string} - Absolute path to the project's evaluation results.
+ */
+function getEvaluationResultsPath(project) {
+    return path.join(__dirname, 'StaticAnalyzerNLP_DbClustering_EvalResults', project);
+}
+
+module.exports = {tagFilesWithHeuristics};

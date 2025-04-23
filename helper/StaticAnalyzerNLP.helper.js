@@ -175,7 +175,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                 // Identify the exact lines in each file where the concepts appear
                 filesAndTheirConcepts = this.findLinesForEachConcepts(filesAndTheirConcepts);
 
-                // Check if a list of database-related concepts has been provided
+                // Check if a list of database-related concepts has been provided for the element
                 if (dbConcepts) {
                     // Normalize and tokenize the DB concepts using the same method as for concepts in source files
                     dbConcepts = this.extractConcepts(dbConcepts.join(" "));
