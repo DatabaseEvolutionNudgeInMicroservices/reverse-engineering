@@ -17,7 +17,7 @@ const {INPUT_INCORRECTLY_FORMATTED} = require('../error/Constant.error.js');
 // Helpers
 
 const StaticAnalyzer = require('./StaticAnalyzer.helper.js');
-const {tagFilesWithHeuristics, clusterFilesWithPythonHDBScan} = require('./StaticAnalyzerNLP_DbClustering.helper.js');
+const {tagFilesSemiAutomated, tagFilesFullyAutomated} = require('./StaticAnalyzerNLP_DbClustering.helper.js');
 
 // Libraries : File System
 
@@ -180,7 +180,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                     // Normalize and tokenize the DB concepts using the same method as for concepts in source files
                     dbConcepts = this.extractConcepts(dbConcepts.join(" "));
                     // Tag each file based on the presence of DB-related concepts using heuristics
-                    filesAndTheirConcepts = tagFilesWithHeuristics(element, filesAndTheirConcepts, dbConcepts);
+                    filesAndTheirConcepts = tagFilesSemiAutomated(element, filesAndTheirConcepts, dbConcepts);
                 }
 
                 // Convert the analyzed data into a hierarchical directory tree structure,
@@ -243,8 +243,8 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         // Start exploration from the root folder
         exploreDirectory(repositoryFolder);
 
-        // Filter most pertinent concepts
-        return this.refineResultsAndTagFiles(element, analysisResults);
+        // Refine results by filtering most pertinent concepts
+        return this.refineResults(element, analysisResults);
     }
 
     /**
@@ -445,7 +445,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      * @param sortedResults {Array} - The list of results containing extracted concepts and their occurrences.
      * @returns {Array} A new array with the refined concepts, keeping only the most pertinent ones.
      */
-    refineResultsAndTagFiles(element, sortedResults) {
+    refineResults(element, sortedResults) {
         // Filter and sort
         const bestConceptsSorted = this.filterAndSortBestConcepts(sortedResults);
         console.log(bestConceptsSorted);
@@ -463,7 +463,8 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
             };
         });
 
-        return refinedResults;
+        // TODO : remove method call "tagFilesFullyAutomated" after evaluation and return directly refinedResults
+        return tagFilesFullyAutomated(element, refinedResults, bestConceptsSorted);
     }
 
     /**

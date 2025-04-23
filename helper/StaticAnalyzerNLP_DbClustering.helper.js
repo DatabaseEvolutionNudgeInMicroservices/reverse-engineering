@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const kmeans = require("ml-kmeans");
 
 
 /**
@@ -131,6 +132,115 @@ const projectsGroundTruthForEvaluation = {
 }
 
 
+
+
+
+
+/**
+ *
+ *
+ *
+ *
+ * FULLY AUTOMATED
+ *
+ *
+ *
+ *
+ */
+
+
+/**
+ * Tags each file in the analysis results as DB-related using K-Means,
+ * writes the clustering results to a file, and evaluates the tagging accuracy.
+ *
+ * @param {string} element - The repository name, used for evaluation.
+ * @param {Array} refinedResults - Array of files with token metadata.
+ * @param bestConcepts {Array} - A list of concepts with computed scores
+ * @returns {Array} The tagged analysis results with cluster values.
+ */
+function tagFilesFullyAutomated(element, refinedResults, bestConcepts) {
+    // Ensure that the directory for storing evaluation results exists
+    const fullyAutomatedEvaluationResultsPath = getEvaluationResultsPath(element, true);
+    if (!fs.existsSync(fullyAutomatedEvaluationResultsPath)) {
+        fs.mkdirSync(fullyAutomatedEvaluationResultsPath,  { recursive: true });
+    }
+
+    // Tag the files using clustering heuristics based on database concepts and save results
+    const refinedAnalysisResultsWithTags = tagFilesByClusteringWithKMeans(refinedResults, bestConcepts);
+    fs.writeFileSync(`${fullyAutomatedEvaluationResultsPath}/clustering_results.json`, JSON.stringify(refinedAnalysisResultsWithTags, null, 2), 'utf8');
+
+    // If ground truth data is available for the project, evaluate the tagging results
+    if (Object.keys(projectsGroundTruthForEvaluation).includes(element)) {
+        evaluateFilesTags(element, refinedAnalysisResultsWithTags, fullyAutomatedEvaluationResultsPath)
+    }
+
+    return refinedAnalysisResultsWithTags;
+}
+
+
+/**
+ * Tags files by applying a clustering technique based on their business-related concepts.
+ * This function normalizes the extracted features and groups files into clusters using the K-Means algorithm.
+ *
+ * @param refinedResults {Array} - The list of files, each containing token occurrences and metadata.
+ * @param bestConcepts {Array} - A list of concepts with computed scores
+ * @returns {Array} The input data with an additional `cluster` attribute assigned to each file.
+ */
+function tagFilesByClusteringWithKMeans(refinedResults, bestConcepts) {
+    // 🔹 Separate files with and without tokens
+    const filesWithTokens = refinedResults.filter(file => Object.keys(file.tokens).length > 0 && file.fileNumberOfLinesOfCode > 0);
+    const filesWithoutTokens = refinedResults.filter(file => Object.keys(file.tokens).length === 0 || file.fileNumberOfLinesOfCode === 0);
+
+    // 🔹 Extract features only for files that contain tokens
+    let filesConcepts = filesWithTokens.map(file => ({
+        significantCentrality: Object.keys(file.tokens)
+            .map(token => ({token, centrality: bestConcepts.find(x => x.concept === token)?.centralityNorm}))
+            .filter(({token, centrality}) => centrality >= 0.5)
+            .map(({token, centrality}) => centrality)
+            .reduce((acc, val) => acc + val, 0) / file.fileNumberOfLinesOfCode,
+    }));
+
+    // 🔹 Build the feature matrix
+    const featureMatrix = filesConcepts.map(file => [file.significantCentrality]);
+
+    // 🔹 Apply K-Means only to files with tokens
+    const numClusters = 2;
+    const result = kmeans.kmeans(featureMatrix, numClusters, {initialization: 'kmeans++', seed: 42});
+
+    // 🔹 Merge results with empty files (assigning cluster `-1`)
+    const clusteredFilesWithTokens = filesWithTokens.map((file, i) => ({...file, cluster: result.clusters[i]}));
+    const clusteredFilesWithoutTokens = filesWithoutTokens.map(file => ({...file, cluster: -1}));
+
+    return [...clusteredFilesWithTokens, ...clusteredFilesWithoutTokens];
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/**
+ *
+ *
+ *
+ *
+ * SEMI-AUTOMATED
+ *
+ *
+ *
+ *
+ */
+
+
 /**
  * Tags each file in the analysis results as DB-related using heuristics,
  * writes the clustering results to a file, and evaluates the tagging accuracy.
@@ -140,19 +250,20 @@ const projectsGroundTruthForEvaluation = {
  * @param {Array} dbConcepts - List of database-related concepts.
  * @returns {Array} The tagged analysis results with cluster values.
  */
-function tagFilesWithHeuristics(element, refinedResults, dbConcepts) {
+function tagFilesSemiAutomated(element, refinedResults, dbConcepts) {
     // Ensure that the directory for storing evaluation results exists
-    if (!fs.existsSync(getEvaluationResultsPath(element))) {
-        fs.mkdirSync(getEvaluationResultsPath(element),  { recursive: true });
+    const semiAutomatedEvaluationResultsPath = getEvaluationResultsPath(element, false);
+    if (!fs.existsSync(semiAutomatedEvaluationResultsPath)) {
+        fs.mkdirSync(semiAutomatedEvaluationResultsPath,  { recursive: true });
     }
 
     // Tag the files using clustering heuristics based on database concepts and save results
     const refinedAnalysisResultsWithTags = tagFilesByClusteringWithHeuristics(refinedResults, dbConcepts);
-    fs.writeFileSync(`${getEvaluationResultsPath(element)}/clustering_results.json`, JSON.stringify(refinedAnalysisResultsWithTags, null, 2), 'utf8');
+    fs.writeFileSync(`${semiAutomatedEvaluationResultsPath}/clustering_results.json`, JSON.stringify(refinedAnalysisResultsWithTags, null, 2), 'utf8');
 
     // If ground truth data is available for the project, evaluate the tagging results
     if (Object.keys(projectsGroundTruthForEvaluation).includes(element)) {
-        evaluateFilesTags(element, refinedAnalysisResultsWithTags)
+        evaluateFilesTags(element, refinedAnalysisResultsWithTags, semiAutomatedEvaluationResultsPath)
     }
 
     return refinedAnalysisResultsWithTags;
@@ -317,6 +428,24 @@ function tagFilesByClusteringWithHeuristics(refinedResults, dbConcepts) {
 // }
 
 
+
+
+
+
+
+
+
+
+/**
+ *
+ *
+ * EVALUATION
+ *
+ *
+ *
+ */
+
+
 /**
  * Evaluates the correctness of file clustering tags by comparing them to the ground truth.
  * This function verifies if files classified as "DB" or "API" are correctly tagged
@@ -324,8 +453,9 @@ function tagFilesByClusteringWithHeuristics(refinedResults, dbConcepts) {
  *
  * @param {string} project - The project name, used to retrieve the ground truth classification.
  * @param {Array} clusteredData - The array containing files with their assigned cluster (-1 = No Tokens, 0 = Other, 1 = DB/API).
+ * @param {string} evaluationResultsPath - The path where the evaluation results should be saved.
  */
-function evaluateFilesTags(project, clusteredData) {
+function evaluateFilesTags(project, clusteredData, evaluationResultsPath) {
     if (!projectsGroundTruthForEvaluation[project]) {
         throw new Error(`Project '${project}' is not supported for file tags evaluation`);
     }
@@ -377,11 +507,30 @@ function evaluateFilesTags(project, clusteredData) {
     const evaluationMetrics = computeEvaluationMetrics(classificationResults);
 
     // Save detailed results
-    fs.writeFileSync(`${getEvaluationResultsPath(project)}/classification_metrics.json`, JSON.stringify(evaluationMetrics, null, 2), 'utf8');
-    fs.writeFileSync(`${getEvaluationResultsPath(project)}/classification_check.json`, JSON.stringify(classificationResults, null, 2), 'utf8');
-    console.log(`Detailed results saved in folder : ${getEvaluationResultsPath(project)}`);
+    fs.writeFileSync(`${evaluationResultsPath}/classification_metrics.json`, JSON.stringify(evaluationMetrics, null, 2), 'utf8');
+    fs.writeFileSync(`${evaluationResultsPath}/classification_check.json`, JSON.stringify(classificationResults, null, 2), 'utf8');
+    console.log(`Detailed results saved in folder : ${evaluationResultsPath}`);
 }
 
+/**
+ * Computes evaluation metrics
+ * based on classification results comparing predicted and expected labels.
+ *
+ * @param {Array<Object>} classificationResults - List of classification results, each containing:
+ *   - expected {number} Expected label (0 or 1)
+ *   - found {number} Predicted label (0 or 1)
+ *
+ * @returns {Object} An object containing:
+ *   - accuracy {string} Proportion of correctly classified samples among all samples (as a percentage).
+ *   - precision {string} Proportion of true positives among all predicted positives (as a percentage).
+ *   - recall {string} Proportion of true positives among all actual positives (as a percentage).
+ *   - f1Score {string} Harmonic mean of precision and recall, balancing both (as a percentage).
+ *   - rawCounts {Object} Raw counts of:
+ *     - TP {number} True Positives
+ *     - TN {number} True Negatives
+ *     - FP {number} False Positives
+ *     - FN {number} False Negatives
+ */
 function computeEvaluationMetrics(classificationResults) {
     let TP = 0, TN = 0, FP = 0, FN = 0;
 
@@ -413,10 +562,11 @@ function computeEvaluationMetrics(classificationResults) {
  * Returns the path to the evaluation results folder for a given project.
  *
  * @param {string} project - Project name.
+ * @param {boolean} fullyAutomated - Evaluation is for fully automated tag files mode
  * @returns {string} - Absolute path to the project's evaluation results.
  */
-function getEvaluationResultsPath(project) {
-    return path.join(__dirname, 'StaticAnalyzerNLP_DbClustering_EvalResults', project);
+function getEvaluationResultsPath(project, fullyAutomated) {
+    return path.join(__dirname, 'StaticAnalyzerNLP_DbClustering_EvalResults', fullyAutomated ? 'FullyAutomated' : 'SemiAutomated', project);
 }
 
-module.exports = {tagFilesWithHeuristics};
+module.exports = {tagFilesSemiAutomated, tagFilesFullyAutomated};
