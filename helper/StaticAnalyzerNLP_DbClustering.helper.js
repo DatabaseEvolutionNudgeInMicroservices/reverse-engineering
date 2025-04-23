@@ -158,13 +158,14 @@ function tagFilesWithHeuristics(element, refinedResults, dbConcepts) {
     return refinedAnalysisResultsWithTags;
 }
 
+// TODO : evaluate and choose between the 3 options below
 
+// TODO : option : using density heuristics
 /**
- * Tags files as database-related or not using heuristics.
+ * Tags files as database-related or not using density heuristic.
  *
- * A file is considered DB-related (cluster = 1) if:
- * - It contains at least THRESHOLD_OCCURRENCE database-related concepts, OR
- * - The density of DB-related concepts (occurrences / lines of code) is >= THRESHOLD_DENSITY.
+ * A file is considered DB-related (cluster = 1) if
+ * the density of DB-related concepts (occurrences / lines of code) is >= THRESHOLD_DENSITY.
  *
  * @param refinedResults {Array} - List of files with token data and metadata.
  * @param dbConcepts {Array} - List of database-related concepts.
@@ -179,9 +180,8 @@ function tagFilesByClusteringWithHeuristics(refinedResults, dbConcepts) {
         Object.keys(file.tokens).length === 0 || file.fileNumberOfLinesOfCode === 0
     );
 
-    // Heuristic thresholds
-    const THRESHOLD_OCCURRENCE = 3;    // Minimum total occurrences of DB concepts
-    const THRESHOLD_DENSITY = 0.05;   // Minimum concept density
+    // Heuristic threshold
+    const THRESHOLD_DENSITY = 0.05;
 
     // Apply heuristic on files with tokens
     const clusteredFilesWithTokens = filesWithTokens.map(file => {
@@ -198,7 +198,7 @@ function tagFilesByClusteringWithHeuristics(refinedResults, dbConcepts) {
         // Tag file as DB-related (1) or not (0) based on heuristics
         return {
             ...file,
-            cluster: dbConceptOccurrences >= THRESHOLD_OCCURRENCE || dbConceptDensity >= THRESHOLD_DENSITY ? 1 : 0
+            cluster:  dbConceptDensity >= THRESHOLD_DENSITY ? 1 : 0
         };
     });
 
@@ -211,6 +211,110 @@ function tagFilesByClusteringWithHeuristics(refinedResults, dbConcepts) {
     // Return all tagged files
     return [...clusteredFilesWithTokens, ...clusteredFilesWithoutTokens];
 }
+
+// TODO : option : count of occurrences of DB and non DB concepts in files (this option should be bad I think)
+// /**
+//  * Tags source files as database-related (1) or not (0) using a heuristic:
+//  * if the number of DB concept occurrences is greater than or equal to the
+//  * number of non-DB concept occurrences, the file is considered database-related.
+//  *
+//  * @param refinedResults {Array} - List of refined file analysis results, each containing token info and line counts.
+//  * @param dbConcepts {Array} - List of concepts considered database-related.
+//  * @returns {Array} - The same input files, each tagged with a 'cluster' value: 1 (DB-related) or 0 (not DB-related).
+//  */
+// function tagFilesByClusteringWithHeuristics(refinedResults, dbConcepts) {
+//     // Separate files with and without token information
+//     const filesWithTokens = refinedResults.filter(file =>
+//         Object.keys(file.tokens).length > 0 && file.fileNumberOfLinesOfCode > 0
+//     );
+//     const filesWithoutTokens = refinedResults.filter(file =>
+//         Object.keys(file.tokens).length === 0 || file.fileNumberOfLinesOfCode === 0
+//     );
+//
+//     // Apply heuristic on files with tokens
+//     const clusteredFilesWithTokens = filesWithTokens.map(file => {
+//         const fileTokens = file.tokens;
+//
+//         let dbCount = 0;
+//         let nonDbCount = 0;
+//
+//         // Count occurrences of DB-related concepts and non-DB-related concepts
+//         for (const [token, data] of Object.entries(fileTokens)) {
+//             if (dbConcepts.includes(token)) {
+//                 dbCount += data.numberOfOccurence;
+//             } else {
+//                 nonDbCount += data.numberOfOccurence;
+//             }
+//         }
+//
+//         // Tag file as DB-related (1) or not (0) based on heuristics
+//         return {
+//             ...file,
+//             cluster: dbCount >= nonDbCount ? 1 : 0
+//         };
+//     });
+//
+//     // Tag files without tokens or code as unusable
+//     const clusteredFilesWithoutTokens = filesWithoutTokens.map(file => ({
+//         ...file,
+//         cluster: 0
+//     }));
+//
+//     // Return all tagged files
+//     return [...clusteredFilesWithTokens, ...clusteredFilesWithoutTokens];
+// }
+
+// TODO : option : count of DB and non DB concepts in files
+// /**
+//  * Tags source files as database-related (1) or not (0) using a heuristic:
+//  * if the number of DB concepts in the file is greater than or equal to the
+//  * number of non-DB concepts, the file is considered database-related.
+//  *
+//  * @param refinedResults {Array} - List of refined file analysis results, each containing token info and line counts.
+//  * @param dbConcepts {Array} - List of concepts considered database-related.
+//  * @returns {Array} - The same input files, each tagged with a 'cluster' value: 1 (DB-related) or 0 (not DB-related).
+//  */
+// function tagFilesByClusteringWithHeuristics(refinedResults, dbConcepts) {
+//     // Separate files with and without token information
+//     const filesWithTokens = refinedResults.filter(file =>
+//         Object.keys(file.tokens).length > 0 && file.fileNumberOfLinesOfCode > 0
+//     );
+//     const filesWithoutTokens = refinedResults.filter(file =>
+//         Object.keys(file.tokens).length === 0 || file.fileNumberOfLinesOfCode === 0
+//     );
+//
+//     // Apply heuristic on files with tokens
+//     const clusteredFilesWithTokens = filesWithTokens.map(file => {
+//         const fileTokens = file.tokens;
+//
+//         let dbConceptsInFile = 0;
+//         let nonDbConceptsInFile = 0;
+//
+//         // Count number of unique DB and non-DB concepts present in the file
+//         for (const token of Object.keys(fileTokens)) {
+//             if (dbConcepts.includes(token)) {
+//                 dbConceptsInFile++;
+//             } else {
+//                 nonDbConceptsInFile++;
+//             }
+//         }
+//
+//         // Tag file as DB-related (1) if there are more or equal DB concepts than non-DB
+//         return {
+//             ...file,
+//             cluster: dbConceptsInFile >= nonDbConceptsInFile ? 1 : 0
+//         };
+//     });
+//
+//     // Tag files without tokens or code as non-DB-related (0)
+//     const clusteredFilesWithoutTokens = filesWithoutTokens.map(file => ({
+//         ...file,
+//         cluster: 0
+//     }));
+//
+//     // Return all tagged files
+//     return [...clusteredFilesWithTokens, ...clusteredFilesWithoutTokens];
+// }
 
 
 /**
