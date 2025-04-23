@@ -23,3 +23,6 @@ TEMP
 # Lib directory
 lib/codeql-cli
 lib/codeql-lib
+
+# DB files clustering evaluation results
+/helper/StaticAnalyzerNLP_DbClustering_EvalResults/
