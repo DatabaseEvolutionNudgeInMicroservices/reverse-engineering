@@ -463,7 +463,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
             };
         });
 
-        // TODO : remove method call "tagFilesFullyAutomated" after evaluation and return directly refinedResults
+        // TODO : remove method call "tagFilesFullyAutomated" after evaluation and return directly refinedResults (if we dont want automatic tagging when no db file is uploaded)
         return tagFilesFullyAutomated(element, refinedResults, bestConceptsSorted);
     }
 
