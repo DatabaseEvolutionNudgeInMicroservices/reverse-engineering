@@ -31,19 +31,12 @@ const sloc = require('sloc');
 
 const winkNLP = require('wink-nlp');
 const model = require('wink-eng-lite-web-model');
-const vectors = require('wink-embeddings-sg-100d');
-const similarity = require('wink-nlp/utilities/similarity.js');
 const winkNLPLemmatizer = require('wink-lemmatizer');
 
 // Libraries : Natural
 
 const natural = require('natural');
 const stopwords = natural.stopwords;
-
-// Libraries : Typo-js
-
-const Typo = require("typo-js");
-const dictionary = new Typo("en_US");
 
 // Configuration : Wink
 
@@ -128,16 +121,16 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      * Extracts an analysis by list.
      * @param list {[String]} The given list.
      * @param language {String} The targeted language by the analysis.
-     * @param dbConcepts {Object} An object mapping repository names to arrays of database-related concepts.
+     * @param dbDetails {Object} An object mapping repository names to arrays of database-related information.
      * @returns {Promise} A promise for the extraction.
      */
-    extractByList(list, language, dbConcepts) {
+    extractByList(list, language, dbDetails) {
         return new Promise((resolveAll, rejectAll) => {
             if (list !== undefined && list !== null && list.length !== 0) {
                 let promises = [];
                 list.forEach(element => {
                     promises.push(new Promise((resolve, reject) => {
-                        this.extractByElement(element, language, dbConcepts ? dbConcepts[element] : undefined).then(result => {
+                        this.extractByElement(element, language, dbDetails ? dbDetails[element] : undefined).then(result => {
                             resolve(result);
                         }).catch(error => {
                             reject(error);
@@ -159,28 +152,28 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      * Extracts an analysis by element.
      * @param element {String} The given element.
      * @param language {String} The targeted language by the analysis.
-     * @param dbConcepts {Array} - List of database-related concepts.
+     * @param dbDetails {Object} - List of database-related concepts and optionnally anchor points concepts.
      * @returns {Promise} A promise for the extraction.
      */
-    extractByElement(element, language, dbConcepts) {
+    extractByElement(element, language, dbDetails) {
         return new Promise((resolve, reject) => {
             if (!(element && element.length > 0 && language && language !== '')) {
                 return reject(new BadFormat(INPUT_INCORRECTLY_FORMATTED));
             }
 
             try {
-                // Perform NLP-based repository analysis and obtain files with their pertinent concepts and occurences
-                let filesAndTheirConcepts = this.analyzeRepositoryWithNLP(element);
+                // Perform NLP-based repository analysis and obtain files with their pertinent concepts and occurrences
+                let filesAndTheirConcepts = this.analyzeRepositoryWithNLP(element, !dbDetails);
 
                 // Identify the exact lines in each file where the concepts appear
                 filesAndTheirConcepts = this.findLinesForEachConcepts(filesAndTheirConcepts);
 
                 // Check if a list of database-related concepts has been provided for the element
-                if (dbConcepts) {
+                if (dbDetails) {
                     // Normalize and tokenize the DB concepts using the same method as for concepts in source files
-                    dbConcepts = this.extractConcepts(dbConcepts.join(" "));
+                    dbDetails["data_concepts"] = this.extractConcepts(dbDetails["data_concepts"].join(" ")).flatMap(concept => concept.split(" "));
                     // Tag each file based on the presence of DB-related concepts using heuristics
-                    filesAndTheirConcepts = tagFilesSemiAutomated(element, filesAndTheirConcepts, dbConcepts);
+                    filesAndTheirConcepts = tagFilesSemiAutomated(element, filesAndTheirConcepts, dbDetails);
                 }
 
                 // Convert the analyzed data into a hierarchical directory tree structure,
@@ -198,9 +191,10 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      * This function recursively scans all files in the repository, extracts concepts, filters the most relevant ones
      *
      * @param element {String}  - The repository element containing metadata needed for analysis.
+     * @param automaticTaggingEnabled {boolean} - Whether the file should be automatically tagged as DB-related using heuristics
      * @returns {Array} An array of objects where each file is tagged with its extracted concepts and clustering information.
      */
-    analyzeRepositoryWithNLP(element) {
+    analyzeRepositoryWithNLP(element, automaticTaggingEnabled) {
         const repositoryFolder = this.getRepositoryFolder(element);
         const repositoryName = this.getRepositoryName(element);
         const analysisResults = [];
@@ -243,8 +237,8 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         // Start exploration from the root folder
         exploreDirectory(repositoryFolder);
 
-        // Refine results by filtering most pertinent concepts
-        return this.refineResults(element, analysisResults);
+        // Refine results by filtering most pertinent concepts and optionally tag files as DB-related
+        return this.refineResults(element, analysisResults, automaticTaggingEnabled);
     }
 
     /**
@@ -267,7 +261,6 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
 
         // Filtering
         concepts = this.removeStopWords(concepts);
-        concepts = this.filterByDictionaryType(concepts);
 
         return concepts;
     }
@@ -399,22 +392,6 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
     }
 
     /**
-     * Filters the concepts by checking if each word in the concept is a valid dictionary word.
-     * Only concepts composed of at least one common dictionary words are retained.
-     *
-     * @param concepts {Array} The array of concepts to filter.
-     * @returns {Array} A filtered array containing only valid concepts.
-     */
-    filterByDictionaryType(concepts) {
-        // Check if some parts of a concept are common words
-        return concepts.filter(concept =>
-            // The dictionary check is based on the default english dictionary of the Typo.js libray
-            // See https://github.com/cfinke/Typo.js/tree/master/typo/dictionaries/en_US
-            concept.split(" ").some(word => dictionary.check(word)) //
-        );
-    }
-
-    /**
      * Counts the occurrences of each concept present in the given list of concepts.
      * Each concept may contain multiple words, which are split and counted separately.
      *
@@ -440,12 +417,14 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
     /**
      * Refines the results by keeping only the most pertinent concepts.
      * The function filters and sorts concepts based on relevance and then updates the results.
+     * It also tags each file automatically as DB-related using heuristics,
      *
      * @param element {String}  - The repository element containing metadata needed for analysis.
      * @param sortedResults {Array} - The list of results containing extracted concepts and their occurrences.
+     * @param automaticTaggingEnabled {boolean} - Whether the file should be automatically tagged as DB-related using heuristics
      * @returns {Array} A new array with the refined concepts, keeping only the most pertinent ones.
      */
-    refineResults(element, sortedResults) {
+    refineResults(element, sortedResults, automaticTaggingEnabled) {
         // Filter and sort
         const bestConceptsSorted = this.filterAndSortBestConcepts(sortedResults);
         console.log(bestConceptsSorted);
@@ -454,7 +433,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         const bestConceptsSortedNameOnly = bestConceptsSorted.map(conceptObject => conceptObject.concept)
 
         // Make the results refined with only the best concepts
-        const refinedResults = sortedResults.map(item => {
+        let refinedResults = sortedResults.map(item => {
             return {
                 ...item,
                 tokens: Object.fromEntries(
@@ -463,8 +442,12 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
             };
         });
 
-        // TODO : remove method call "tagFilesFullyAutomated" after evaluation and return directly refinedResults (if we dont want automatic tagging when no db file is uploaded)
-        return tagFilesFullyAutomated(element, refinedResults, bestConceptsSorted);
+        // If automatic tagging is enabled, tag files as DB-related using heuristics
+        if (automaticTaggingEnabled) {
+            refinedResults = tagFilesFullyAutomated(element, refinedResults, bestConceptsSorted);
+        }
+
+        return refinedResults;
     }
 
     /**
@@ -537,31 +520,10 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         const minimumRequiredFinalScoreMetric = scores.reduce((acc, val) => acc + val, 0) / scores.length; // Mean
         conceptsAndMetrics = conceptsAndMetrics.filter(c => c.finalScore > minimumRequiredFinalScoreMetric);
 
-        // Step 5: Compute centrality
-        // Centrality - Reflects how strongly a concept is connected to other significant concepts (higher = more central in the concept network).
-        let centralityScores = {};
-        const similarities = this.findSimilarConcepts(conceptsAndMetrics.map(x => x.concept));
-        similarities.forEach(({concept1, concept2, similarity}) => {
-            const sim = parseFloat(similarity);
-            if (sim > 0.2) { // If similarity is significant
-                centralityScores[concept1] = (centralityScores[concept1] || 0) + sim;
-                centralityScores[concept2] = (centralityScores[concept2] || 0) + sim;
-            }
-        });
-
-        // Normalize centrality score
-        const maxCentrality = Math.max(...Object.values(centralityScores), 1);
-        conceptsAndMetrics.forEach(c => {
-            c.centralityNorm = (centralityScores[c.concept] || 0) / maxCentrality;
-        });
-
-        // Step 6: Filter out concepts with low centrality score
-        conceptsAndMetrics = conceptsAndMetrics.filter(c => c.centralityNorm > 0);
-
-        // Step 7: Sort concepts by descending final score
+        // Step 5: Sort concepts by descending final score
         conceptsAndMetrics.sort((a, b) => b.finalScore - a.finalScore);
 
-        // Step 8: Returns concepts and their metrics
+        // Step 6: Returns concepts and their metrics
         return conceptsAndMetrics;
     }
 
@@ -587,59 +549,6 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         });
 
         return result;
-    }
-
-    /**
-     * Computes the pairwise similarity between concepts using word embeddings.
-     * This function leverages WinkNLP and pre-trained word vectors to generate embeddings
-     * for each concept and then calculates the cosine similarity between them.
-     *
-     * @param concepts {Array<string>} - The list of concepts to compare.
-     * @returns {Array<Object>} An array of objects representing concept pairs and their similarity scores.
-     *                          Each object contains:
-     *                          - `concept1` {string} : The first concept in the comparison.
-     *                          - `concept2` {string} : The second concept in the comparison.
-     *                          - `similarity` {number} : The cosine similarity score between the two concepts.
-     */
-    findSimilarConcepts(concepts) {
-        // This code is a modified version of WinkNLP doc code, check below for mor explanations
-        // https://github.com/winkjs/wink-embeddings-sg-100d
-
-        const nlpWithVectors = winkNLP(model, ['sbd', 'pos'], vectors);
-        const its = nlpWithVectors.its;
-        const as = nlpWithVectors.as;
-
-        const v = [];
-        const similarities = [];
-        const doc = nlpWithVectors.readDoc(concepts.join("."));
-
-        // Compute each sentence's embedding and fill in "v[i]".
-        // Only use words and ignore stop words.
-        doc.sentences().each((s, k) => {
-            v[k] = s
-                .tokens()
-                .filter((t) => (t.out(its.type) === 'word' && !t.out(its.stopWordFlag)))
-                .out(its.value, as.vector);
-        })
-
-        // Compute & save similarity for all the pairs.
-        for (let i = 0; i < v.length; i += 1) {
-            for (let j = 0; j < v.length; j += 1) {
-                const concept1 = doc.sentences().itemAt(i).out().replace(".", "");
-                const concept2 = doc.sentences().itemAt(j).out().replace(".", "");
-                const similarityValue = similarity.vector.cosine(v[i], v[j]).toFixed(2);
-                if (concept1 !== concept2) {
-                    similarities.push(
-                        {
-                            concept1: `${concept1}`,
-                            concept2: `${concept2}`,
-                            similarity: `${isNaN(similarityValue) ? 0 : similarityValue}`
-                        }
-                    );
-                }
-            }
-        }
-        return similarities;
     }
 
     /**

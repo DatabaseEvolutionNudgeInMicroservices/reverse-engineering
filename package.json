@@ -33,7 +33,6 @@
     "sloc": "^0.3.2",
     "swagger-autogen": "^2.22.0",
     "swagger-ui-express": "^4.6.0",
-    "typo-js": "^1.2.5",
     "wink-embeddings-sg-100d": "^1.1.0",
     "wink-eng-lite-web-model": "^1.7.1",
     "wink-lemmatizer": "^3.0.4",

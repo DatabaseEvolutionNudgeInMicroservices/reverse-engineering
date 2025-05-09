@@ -110,18 +110,6 @@ describe('NLP static analyzer', () => {
         expect(result).toEqual(["computer", "world"]);
     });
 
-    it('should keep concepts that contain at least one dictionary word', () => {
-        const concepts = ["hello world", "xyz abc", "great day"];
-        const result = staticAnalyzerNLP.filterByDictionaryType(concepts);
-        expect(result).toEqual(["hello world", "great day"]);
-    });
-
-    it('should remove concepts with no dictionary words', () => {
-        const concepts = ["xyz abc", "notarealword", "car"];
-        const result = staticAnalyzerNLP.filterByDictionaryType(concepts);
-        expect(result).toEqual(["car"]);
-    });
-
     it('should count the occurrences of each word in the concepts list', () => {
         const concepts = ["hello world", "hello", "great world"];
         const result = staticAnalyzerNLP.getConceptsDetails(concepts);

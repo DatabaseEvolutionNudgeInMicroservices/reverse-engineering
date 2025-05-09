@@ -108,10 +108,10 @@ class Controller {
      * Analyzes statically with text retrieval techniques
      * @param zipTempFilePath {String} A zip temp file path.
      * @param language {String} The targeted language for the static analysis.
-     * @param dbConcepts {Object} An object mapping repository names to arrays of database-related concepts.
+     * @param dbDetails {Object} An object mapping repository names to arrays of database-related information.
      * @returns {Promise} A promise for the analysis.
      */
-    analyzeStaticallyNLP(zipTempFilePath, language, dbConcepts) {
+    analyzeStaticallyNLP(zipTempFilePath, language, dbDetails) {
         return new Promise((resolve, reject) => {
 
             if (zipTempFilePath !== undefined && zipTempFilePath !== null && zipTempFilePath.length !== 0 && language !== undefined && language !== null && language.length !== 0 && LANGUAGES_SUPPORTED.includes(language)) {
@@ -120,7 +120,7 @@ class Controller {
                     this.downloaderZip.downloadByElement(zipTempFilePath).then((downloadedRepositoryList) => {
 
                         // 2. Extraction
-                        this.staticAnalyzerNLP.extractByList(downloadedRepositoryList, language, dbConcepts).then((result) => {
+                        this.staticAnalyzerNLP.extractByList(downloadedRepositoryList, language, dbDetails).then((result) => {
 
                             // 3. Presentation
                             let finalResult = result;

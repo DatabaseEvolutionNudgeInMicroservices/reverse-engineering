@@ -33,8 +33,8 @@ const upload = multer({
 const handleFileUploadAndResponse = (fileMethod) => (request, response) => {
     if (request.files.file) {
         const {path: zipTempFilePath, originalname: originalFileName} = request.files.file[0];
-        const db_concepts = request.files.db_concepts ? JSON.parse(readFileSync(request.files.db_concepts[0].path, 'utf-8')) : undefined;
-        fileMethod.call(controller, zipTempFilePath, request.params.language, db_concepts)
+        const db_details = request.files.db_details ? JSON.parse(readFileSync(request.files.db_details[0].path, 'utf-8')) : undefined;
+        fileMethod.call(controller, zipTempFilePath, request.params.language, db_details)
             .then((result) => {
                 response.status(200);
                 response.json(result);
@@ -70,7 +70,7 @@ router.post('/static/heuristics/language/:language/repository/zip', upload.singl
 
 router.post('/static/nlp/language/:language/repository/zip', upload.fields([
     {name: 'file'},
-    {name: 'db_concepts', maxCount: 1}
+    {name: 'db_details', maxCount: 1}
 ]), handleFileUploadAndResponse(controller.analyzeStaticallyNLP));
 
 

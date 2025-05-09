@@ -128,117 +128,185 @@ const projectsGroundTruthForEvaluation = {
             "data-service/helpers/github.js",
             "data-service/routes.js",
         ]
+    },
+    "wise-old-man-master": {
+        "expected_db_files": [
+            'server/__tests__/suites/integration/achievements.test.ts',
+            'server/__tests__/suites/integration/competitions.test.ts',
+            'server/__tests__/suites/integration/deltas.test.ts',
+            'server/__tests__/suites/integration/efficiency.test.ts',
+            'server/__tests__/suites/integration/general.test.ts',
+            'server/__tests__/suites/integration/groups.test.ts',
+            'server/__tests__/suites/integration/names.test.ts',
+            'server/__tests__/suites/integration/patrons.test.ts',
+            'server/__tests__/suites/integration/players.test.ts',
+            'server/__tests__/suites/integration/records.test.ts',
+            'server/src/api/modules/achievements/services/FindGroupAchievementsService.ts',
+            'server/src/api/modules/achievements/services/FindPlayerAchievementProgressService.ts',
+            'server/src/api/modules/achievements/services/FindPlayerAchievementsService.ts',
+            'server/src/api/modules/achievements/services/ReevaluatePlayerAchievementsService.ts',
+            'server/src/api/modules/competitions/competition.events.ts',
+            'server/src/api/modules/competitions/services/AddParticipantsService.ts',
+            'server/src/api/modules/competitions/services/AddTeamsService.ts',
+            'server/src/api/modules/competitions/services/AddToGroupCompetitionsService.ts',
+            'server/src/api/modules/competitions/services/CreateCompetitionService.ts',
+            'server/src/api/modules/competitions/services/DeleteCompetitionService.ts',
+            'server/src/api/modules/competitions/services/EditCompetitionService.ts',
+            'server/src/api/modules/competitions/services/FetchCompetitionDetailsService.ts',
+            'server/src/api/modules/competitions/services/FetchTop5ProgressService.ts',
+            'server/src/api/modules/competitions/services/FindGroupCompetitionsService.ts',
+            'server/src/api/modules/competitions/services/FindPlayerParticipationsService.ts',
+            'server/src/api/modules/competitions/services/FindPlayerParticipationsStandings2Service.ts',
+            'server/src/api/modules/competitions/services/RemoveFromGroupCompetitionsService.ts',
+            'server/src/api/modules/competitions/services/RemoveParticipantsService.ts',
+            'server/src/api/modules/competitions/services/RemoveTeamsService.ts',
+            'server/src/api/modules/competitions/services/ResetCompetitionCodeService.ts',
+            'server/src/api/modules/competitions/services/SearchCompetitionsService.ts',
+            'server/src/api/modules/competitions/services/UpdateAllParticipantsService.ts',
+            'server/src/api/modules/deltas/services/FindDeltaLeaderboardsService.ts',
+            'server/src/api/modules/deltas/services/FindGroupDeltasService.ts',
+            'server/src/api/modules/deltas/services/FindPlayerDeltasService.ts',
+            'server/src/api/modules/efficiency/services/ComputeEfficiencyRankService.ts',
+            'server/src/api/modules/efficiency/services/FindEfficiencyLeaderboardsService.ts',
+            'server/src/api/modules/general/services/AllowUserActionsService.ts',
+            'server/src/api/modules/general/services/BlockUserActionsService.ts',
+            'server/src/api/modules/general/services/CreateAPIKeyService.ts',
+            'server/src/api/modules/general/services/FetchTableCountsService.ts',
+            'server/src/api/modules/groups/group.events.ts',
+            'server/src/api/modules/groups/services/AddMembersService.ts',
+            'server/src/api/modules/groups/services/ChangeMemberRoleService.ts',
+            'server/src/api/modules/groups/services/CreateGroupService.ts',
+            'server/src/api/modules/groups/services/DeleteGroupService.ts',
+            'server/src/api/modules/groups/services/EditGroupService.ts',
+            'server/src/api/modules/groups/services/FetchGroupActivityService.ts',
+            'server/src/api/modules/groups/services/FetchGroupDetailsService.ts',
+            'server/src/api/modules/groups/services/FetchGroupHiscoresService.ts',
+            'server/src/api/modules/groups/services/FetchGroupStatisticsService.ts',
+            'server/src/api/modules/groups/services/FetchMembersCSVService.ts',
+            'server/src/api/modules/groups/services/FindPlayerMembershipsService.ts',
+            'server/src/api/modules/groups/services/RemoveMembersService.ts',
+            'server/src/api/modules/groups/services/ResetGroupCodeService.ts',
+            'server/src/api/modules/groups/services/SearchGroupsService.ts',
+            'server/src/api/modules/groups/services/UpdateAllMembersService.ts',
+            'server/src/api/modules/groups/services/VerifyGroupService.ts',
+            'server/src/api/modules/name-changes/services/ApproveNameChangeService.ts',
+            'server/src/api/modules/name-changes/services/ClearNameChangeHistoryService.ts',
+            'server/src/api/modules/name-changes/services/DenyNameChangeService.ts',
+            'server/src/api/modules/name-changes/services/FetchNameChangeDetailsService.ts',
+            'server/src/api/modules/name-changes/services/FindGroupNameChangesService.ts',
+            'server/src/api/modules/name-changes/services/FindPlayerNameChangesService.ts',
+            'server/src/api/modules/name-changes/services/SearchNameChangesService.ts',
+            'server/src/api/modules/name-changes/services/SubmitNameChangeService.ts',
+            'server/src/api/modules/patrons/services/ClaimPatreonBenefitsService.ts',
+            'server/src/api/modules/players/player.router.ts',
+            'server/src/api/modules/players/player.utils.ts',
+            'server/src/api/modules/players/services/ArchivePlayerService.ts',
+            'server/src/api/modules/players/services/AssertPlayerTypeService.ts',
+            'server/src/api/modules/players/services/ChangePlayerCountryService.ts',
+            'server/src/api/modules/players/services/CreateAnnotationService.ts',
+            'server/src/api/modules/players/services/DeleteAnnotationService.ts',
+            'server/src/api/modules/players/services/DeletePlayerService.ts',
+            'server/src/api/modules/players/services/FetchPlayerDetailsService.ts',
+            'server/src/api/modules/players/services/FindOrCreatePlayersService.ts',
+            'server/src/api/modules/players/services/FindPlayerArchivesService.ts',
+            'server/src/api/modules/players/services/ImportPlayerHistoryService.ts',
+            'server/src/api/modules/players/services/SearchPlayersService.ts',
+            'server/src/api/modules/players/services/UpdatePlayerService.ts',
+            'server/src/api/modules/records/services/FindGroupRecordsService.ts',
+            'server/src/api/modules/records/services/FindPlayerRecordsService.ts',
+            'server/src/api/modules/records/services/FindRecordLeaderboardsService.ts',
+            'server/src/api/modules/snapshots/services/FindGroupSnapshotsService.ts',
+            'server/src/api/modules/snapshots/services/FindPlayerSnapshotsService.ts',
+            'server/src/api/modules/snapshots/services/FindPlayerSnapshotTimelineService.ts',
+            'server/src/api/modules/snapshots/services/RollbackCollectionLogService.ts',
+            'server/src/api/modules/snapshots/services/RollbackSnapshotsService.ts',
+            'server/src/api/services/external/discord.service.ts',
+            'server/src/api/util/middlewares.ts',
+            'server/src/jobs-new/handlers/assert-player-type.job.ts',
+            'server/src/jobs-new/handlers/calculate-computed-rank-tables.job.ts',
+            'server/src/jobs-new/handlers/check-creation-spam.job.ts',
+            'server/src/jobs-new/handlers/check-inappropriate-content.job.ts',
+            'server/src/jobs-new/handlers/check-player-banned.job.ts',
+            'server/src/jobs-new/handlers/check-player-ranked.job.ts',
+            'server/src/jobs-new/handlers/invalidate-deltas.job.ts',
+            'server/src/jobs-new/handlers/review-name-change.job.ts',
+            'server/src/jobs-new/handlers/schedule-banned-player-checks.job.ts',
+            'server/src/jobs-new/handlers/schedule-competition-events.job.ts',
+            'server/src/jobs-new/handlers/schedule-competition-score-updates.job.ts',
+            'server/src/jobs-new/handlers/schedule-flagged-player-review.job.ts',
+            'server/src/jobs-new/handlers/schedule-group-score-updates.job.ts',
+            'server/src/jobs-new/handlers/schedule-name-change-reviews.job.ts',
+            'server/src/jobs-new/handlers/schedule-patron-group-updates.job.ts',
+            'server/src/jobs-new/handlers/schedule-patron-player-updates.job.ts',
+            'server/src/jobs-new/handlers/sync-api-keys.job.ts',
+            'server/src/jobs-new/handlers/sync-patrons.job.ts',
+            'server/src/jobs-new/handlers/sync-player-achievements.job.ts',
+            'server/src/jobs-new/handlers/sync-player-competition-participations.job.ts',
+            'server/src/jobs-new/handlers/sync-player-deltas.job.ts',
+            'server/src/jobs-new/handlers/sync-player-records.job.ts',
+            'server/src/jobs-new/handlers/update-competition-score.job.ts',
+            'server/src/jobs-new/handlers/update-group-score.job.ts',
+            'server/src/jobs-new/handlers/update-player.job.ts',
+            'server/src/prisma/index.ts'
+        ],
+        "expected_api_files": [
+            "server/src/api/routing.ts",
+            "server/src/api/modules/competitions/competition.router.ts",
+            "server/src/api/modules/deltas/delta.router.ts",
+            "server/src/api/modules/efficiency/efficiency.router.ts",
+            "server/src/api/modules/general/general.router.ts",
+            "server/src/api/modules/groups/group.router.ts",
+            "server/src/api/modules/name-changes/name-change.router.ts",
+            "server/src/api/modules/patrons/patron.router.ts",
+            "server/src/api/modules/players/player.router.ts",
+            "server/src/api/modules/records/record.router.ts"
+        ]
+    },
+    "postiz-app-main": {
+        "expected_db_files": [
+            "libraries/nestjs-libraries/src/database/prisma/agencies/agencies.repository.ts",
+            "libraries/nestjs-libraries/src/database/prisma/autopost/autopost.repository.ts",
+            "libraries/nestjs-libraries/src/database/prisma/integrations/integration.repository.ts",
+            "libraries/nestjs-libraries/src/database/prisma/marketplace/item.user.repository.ts",
+            "libraries/nestjs-libraries/src/database/prisma/marketplace/messages.repository.ts",
+            "libraries/nestjs-libraries/src/database/prisma/media/media.repository.ts",
+            "libraries/nestjs-libraries/src/database/prisma/notifications/notifications.repository.ts",
+            "libraries/nestjs-libraries/src/database/prisma/organizations/organization.repository.ts",
+            "libraries/nestjs-libraries/src/database/prisma/posts/posts.repository.ts",
+            "libraries/nestjs-libraries/src/database/prisma/signatures/signature.repository.ts",
+            "libraries/nestjs-libraries/src/database/prisma/stars/stars.repository.ts",
+            "libraries/nestjs-libraries/src/database/prisma/subscriptions/subscription.repository.ts",
+            "libraries/nestjs-libraries/src/database/prisma/users/users.repository.ts",
+            "libraries/nestjs-libraries/src/database/prisma/webhooks/webhooks.repository.ts"
+        ],
+        "expected_api_files": [
+            "apps/backend/src/api/routes/agencies.controller.ts",
+            "apps/backend/src/api/routes/analytics.controller.ts",
+            "apps/backend/src/api/routes/auth.controller.ts",
+            "apps/backend/src/api/routes/autopost.controller.ts",
+            "apps/backend/src/api/routes/billing.controller.ts",
+            "apps/backend/src/api/routes/copilot.controller.ts",
+            "apps/backend/src/api/routes/integrations.controller.ts",
+            "apps/backend/src/api/routes/marketplace.controller.ts",
+            "apps/backend/src/api/routes/mcp.controller.ts",
+            "apps/backend/src/api/routes/media.controller.ts",
+            "apps/backend/src/api/routes/messages.controller.ts",
+            "apps/backend/src/api/routes/notifications.controller.ts",
+            "apps/backend/src/api/routes/posts.controller.ts",
+            "apps/backend/src/api/routes/public.controller.ts",
+            "apps/backend/src/api/routes/root.controller.ts",
+            "apps/backend/src/api/routes/settings.controller.ts",
+            "apps/backend/src/api/routes/signature.controller.ts",
+            "apps/backend/src/api/routes/stripe.controller.ts",
+            "apps/backend/src/api/routes/users.controller.ts",
+            "apps/backend/src/api/routes/webhooks.controller.ts",
+            "apps/backend/src/public-api/routes/v1/public.integrations.controller.ts",
+            "apps/workers/src/app/plugs.controller.ts",
+            "apps/workers/src/app/posts.controller.ts",
+            "apps/workers/src/app/stars.controller.ts"
+        ]
     }
 }
-
-
-
-
-
-
-/**
- *
- *
- *
- *
- * FULLY AUTOMATED
- *
- *
- *
- *
- */
-
-
-/**
- * Tags each file in the analysis results as DB-related using K-Means,
- * writes the clustering results to a file, and evaluates the tagging accuracy.
- *
- * @param {string} element - The repository name, used for evaluation.
- * @param {Array} refinedResults - Array of files with token metadata.
- * @param bestConcepts {Array} - A list of concepts with computed scores
- * @returns {Array} The tagged analysis results with cluster values.
- */
-function tagFilesFullyAutomated(element, refinedResults, bestConcepts) {
-    // Ensure that the directory for storing evaluation results exists
-    const fullyAutomatedEvaluationResultsPath = getEvaluationResultsPath(element, true);
-    if (!fs.existsSync(fullyAutomatedEvaluationResultsPath)) {
-        fs.mkdirSync(fullyAutomatedEvaluationResultsPath,  { recursive: true });
-    }
-
-    // Tag the files using clustering heuristics based on database concepts and save results
-    const refinedAnalysisResultsWithTags = tagFilesByClusteringWithKMeans(refinedResults, bestConcepts);
-    fs.writeFileSync(`${fullyAutomatedEvaluationResultsPath}/clustering_results.json`, JSON.stringify(refinedAnalysisResultsWithTags, null, 2), 'utf8');
-
-    // If ground truth data is available for the project, evaluate the tagging results
-    if (Object.keys(projectsGroundTruthForEvaluation).includes(element)) {
-        evaluateFilesTags(element, refinedAnalysisResultsWithTags, fullyAutomatedEvaluationResultsPath)
-    }
-
-    return refinedAnalysisResultsWithTags;
-}
-
-
-/**
- * Tags files by applying a clustering technique based on their business-related concepts.
- * This function normalizes the extracted features and groups files into clusters using the K-Means algorithm.
- *
- * @param refinedResults {Array} - The list of files, each containing token occurrences and metadata.
- * @param bestConcepts {Array} - A list of concepts with computed scores
- * @returns {Array} The input data with an additional `cluster` attribute assigned to each file.
- */
-function tagFilesByClusteringWithKMeans(refinedResults, bestConcepts) {
-    // 🔹 Separate files with and without tokens
-    const filesWithTokens = refinedResults.filter(file => Object.keys(file.tokens).length > 0 && file.fileNumberOfLinesOfCode > 0);
-    const filesWithoutTokens = refinedResults.filter(file => Object.keys(file.tokens).length === 0 || file.fileNumberOfLinesOfCode === 0);
-
-    // 🔹 Extract features only for files that contain tokens
-    let filesConcepts = filesWithTokens.map(file => ({
-        significantCentrality: Object.keys(file.tokens)
-            .map(token => ({token, centrality: bestConcepts.find(x => x.concept === token)?.centralityNorm}))
-            .filter(({token, centrality}) => centrality >= 0.5)
-            .map(({token, centrality}) => centrality)
-            .reduce((acc, val) => acc + val, 0) / file.fileNumberOfLinesOfCode,
-    }));
-
-    // 🔹 Build the feature matrix
-    const featureMatrix = filesConcepts.map(file => [file.significantCentrality]);
-
-    // 🔹 Apply K-Means only to files with tokens
-    const numClusters = 2;
-    const result = kmeans.kmeans(featureMatrix, numClusters, {initialization: 'kmeans++', seed: 42});
-
-    // 🔹 Merge results with empty files (assigning cluster `-1`)
-    const clusteredFilesWithTokens = filesWithTokens.map((file, i) => ({...file, cluster: result.clusters[i]}));
-    const clusteredFilesWithoutTokens = filesWithoutTokens.map(file => ({...file, cluster: -1}));
-
-    return [...clusteredFilesWithTokens, ...clusteredFilesWithoutTokens];
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/**
- *
- *
- *
- *
- * SEMI-AUTOMATED
- *
- *
- *
- *
- */
 
 
 /**
@@ -247,31 +315,54 @@ function tagFilesByClusteringWithKMeans(refinedResults, bestConcepts) {
  *
  * @param {string} element - The repository name, used for evaluation.
  * @param {Array} refinedResults - Array of files with token metadata.
- * @param {Array} dbConcepts - List of database-related concepts.
+ * @param bestConcepts {Array} - A list of concepts with computed scores
  * @returns {Array} The tagged analysis results with cluster values.
  */
-function tagFilesSemiAutomated(element, refinedResults, dbConcepts) {
+function tagFilesFullyAutomated(element, refinedResults, bestConcepts) {
+    return tagFiles(element, refinedResults, {data_concepts: bestConcepts.map(x => x.concept).slice(0, 30)}, getEvaluationResultsPath(element, true));
+}
+
+/**
+ * Tags each file in the analysis results as DB-related using heuristics,
+ * writes the clustering results to a file, and evaluates the tagging accuracy.
+ *
+ * @param {string} element - The repository name, used for evaluation.
+ * @param {Array} refinedResults - Array of files with token metadata.
+ * @param {Object} dbDetails - List of database-related concepts and optionnally anchor points concepts.
+ * @returns {Array} The tagged analysis results with cluster values.
+ */
+function tagFilesSemiAutomated(element, refinedResults, dbDetails) {
+    return tagFiles(element, refinedResults, dbDetails, getEvaluationResultsPath(element, false));
+}
+
+/**
+ * Tags each file in the analysis results as DB-related using heuristics,
+ * writes the clustering results to a file, and evaluates the tagging accuracy.
+ *
+ * @param {string} element - The repository name, used for evaluation.
+ * @param {Array} refinedResults - Array of files with token metadata.
+ * @param {Object} dataConcepts - List of database-related concepts and optionnally anchor points concepts.
+ * @param {string} evaluationResultsPath - The evaluation results directory path
+ * @returns {Array} The tagged analysis results with cluster values.
+ */
+function tagFiles(element, refinedResults, dataConcepts, evaluationResultsPath) {
     // Ensure that the directory for storing evaluation results exists
-    const semiAutomatedEvaluationResultsPath = getEvaluationResultsPath(element, false);
-    if (!fs.existsSync(semiAutomatedEvaluationResultsPath)) {
-        fs.mkdirSync(semiAutomatedEvaluationResultsPath,  { recursive: true });
+    if (!fs.existsSync(evaluationResultsPath)) {
+        fs.mkdirSync(evaluationResultsPath, {recursive: true});
     }
 
     // Tag the files using clustering heuristics based on database concepts and save results
-    const refinedAnalysisResultsWithTags = tagFilesByClusteringWithHeuristics(refinedResults, dbConcepts);
-    fs.writeFileSync(`${semiAutomatedEvaluationResultsPath}/clustering_results.json`, JSON.stringify(refinedAnalysisResultsWithTags, null, 2), 'utf8');
+    const refinedAnalysisResultsWithTags = tagFilesByClusteringWithHeuristics(refinedResults, dataConcepts);
+    fs.writeFileSync(`${evaluationResultsPath}/clustering_results.json`, JSON.stringify(refinedAnalysisResultsWithTags, null, 2), 'utf8');
 
     // If ground truth data is available for the project, evaluate the tagging results
     if (Object.keys(projectsGroundTruthForEvaluation).includes(element)) {
-        evaluateFilesTags(element, refinedAnalysisResultsWithTags, semiAutomatedEvaluationResultsPath)
+        evaluateFilesTags(element, refinedAnalysisResultsWithTags, evaluationResultsPath)
     }
 
     return refinedAnalysisResultsWithTags;
 }
 
-// TODO : evaluate and choose between the 3 options below
-
-// TODO : option : using density heuristics
 /**
  * Tags files as database-related or not using density heuristic.
  *
@@ -279,10 +370,10 @@ function tagFilesSemiAutomated(element, refinedResults, dbConcepts) {
  * the density of DB-related concepts (occurrences / lines of code) is >= THRESHOLD_DENSITY.
  *
  * @param refinedResults {Array} - List of files with token data and metadata.
- * @param dbConcepts {Array} - List of database-related concepts.
+ * @param dbDetails {Object}  - List of database-related concepts and optionnally anchor points concepts.
  * @returns {Array} Files with a `cluster` field: 1 (DB-related), 0 (not DB-related).
  */
-function tagFilesByClusteringWithHeuristics(refinedResults, dbConcepts) {
+function tagFilesByClusteringWithHeuristics(refinedResults, dbDetails) {
     // Separate files with and without token information
     const filesWithTokens = refinedResults.filter(file =>
         Object.keys(file.tokens).length > 0 && file.fileNumberOfLinesOfCode > 0
@@ -292,15 +383,14 @@ function tagFilesByClusteringWithHeuristics(refinedResults, dbConcepts) {
     );
 
     // Heuristic threshold
-    const THRESHOLD_DENSITY = 0.05;
+    const THRESHOLD_DENSITY = 0.2;
 
     // Apply heuristic on files with tokens
     const clusteredFilesWithTokens = filesWithTokens.map(file => {
-        const fileTokens = file.tokens;
 
         // Count how many DB-related concept occurrences are in this file
-        const dbConceptOccurrences = Object.entries(fileTokens)
-            .filter(([token]) => dbConcepts.includes(token))
+        const dbConceptOccurrences = Object.entries(file.tokens)
+            .filter(([token]) => dbDetails["data_concepts"].includes(token))
             .reduce((sum, [, data]) => sum + data.numberOfOccurence, 0);
 
         // Calculate concept density relative to lines of code
@@ -309,7 +399,9 @@ function tagFilesByClusteringWithHeuristics(refinedResults, dbConcepts) {
         // Tag file as DB-related (1) or not (0) based on heuristics
         return {
             ...file,
-            cluster:  dbConceptDensity >= THRESHOLD_DENSITY ? 1 : 0
+            cluster: dbDetails["anchor_points"]
+                ? (Object.keys(file.tokens).some(item => dbDetails["anchor_points"].includes(item.toLowerCase())) && dbConceptDensity >= THRESHOLD_DENSITY) ? 1 : 0
+                : dbConceptDensity >= THRESHOLD_DENSITY ? 1 : 0
         };
     });
 
@@ -322,118 +414,6 @@ function tagFilesByClusteringWithHeuristics(refinedResults, dbConcepts) {
     // Return all tagged files
     return [...clusteredFilesWithTokens, ...clusteredFilesWithoutTokens];
 }
-
-// TODO : option : count of occurrences of DB and non DB concepts in files (this option should be bad I think)
-// /**
-//  * Tags source files as database-related (1) or not (0) using a heuristic:
-//  * if the number of DB concept occurrences is greater than or equal to the
-//  * number of non-DB concept occurrences, the file is considered database-related.
-//  *
-//  * @param refinedResults {Array} - List of refined file analysis results, each containing token info and line counts.
-//  * @param dbConcepts {Array} - List of concepts considered database-related.
-//  * @returns {Array} - The same input files, each tagged with a 'cluster' value: 1 (DB-related) or 0 (not DB-related).
-//  */
-// function tagFilesByClusteringWithHeuristics(refinedResults, dbConcepts) {
-//     // Separate files with and without token information
-//     const filesWithTokens = refinedResults.filter(file =>
-//         Object.keys(file.tokens).length > 0 && file.fileNumberOfLinesOfCode > 0
-//     );
-//     const filesWithoutTokens = refinedResults.filter(file =>
-//         Object.keys(file.tokens).length === 0 || file.fileNumberOfLinesOfCode === 0
-//     );
-//
-//     // Apply heuristic on files with tokens
-//     const clusteredFilesWithTokens = filesWithTokens.map(file => {
-//         const fileTokens = file.tokens;
-//
-//         let dbCount = 0;
-//         let nonDbCount = 0;
-//
-//         // Count occurrences of DB-related concepts and non-DB-related concepts
-//         for (const [token, data] of Object.entries(fileTokens)) {
-//             if (dbConcepts.includes(token)) {
-//                 dbCount += data.numberOfOccurence;
-//             } else {
-//                 nonDbCount += data.numberOfOccurence;
-//             }
-//         }
-//
-//         // Tag file as DB-related (1) or not (0) based on heuristics
-//         return {
-//             ...file,
-//             cluster: dbCount >= nonDbCount ? 1 : 0
-//         };
-//     });
-//
-//     // Tag files without tokens or code as unusable
-//     const clusteredFilesWithoutTokens = filesWithoutTokens.map(file => ({
-//         ...file,
-//         cluster: 0
-//     }));
-//
-//     // Return all tagged files
-//     return [...clusteredFilesWithTokens, ...clusteredFilesWithoutTokens];
-// }
-
-// TODO : option : count of DB and non DB concepts in files
-// /**
-//  * Tags source files as database-related (1) or not (0) using a heuristic:
-//  * if the number of DB concepts in the file is greater than or equal to the
-//  * number of non-DB concepts, the file is considered database-related.
-//  *
-//  * @param refinedResults {Array} - List of refined file analysis results, each containing token info and line counts.
-//  * @param dbConcepts {Array} - List of concepts considered database-related.
-//  * @returns {Array} - The same input files, each tagged with a 'cluster' value: 1 (DB-related) or 0 (not DB-related).
-//  */
-// function tagFilesByClusteringWithHeuristics(refinedResults, dbConcepts) {
-//     // Separate files with and without token information
-//     const filesWithTokens = refinedResults.filter(file =>
-//         Object.keys(file.tokens).length > 0 && file.fileNumberOfLinesOfCode > 0
-//     );
-//     const filesWithoutTokens = refinedResults.filter(file =>
-//         Object.keys(file.tokens).length === 0 || file.fileNumberOfLinesOfCode === 0
-//     );
-//
-//     // Apply heuristic on files with tokens
-//     const clusteredFilesWithTokens = filesWithTokens.map(file => {
-//         const fileTokens = file.tokens;
-//
-//         let dbConceptsInFile = 0;
-//         let nonDbConceptsInFile = 0;
-//
-//         // Count number of unique DB and non-DB concepts present in the file
-//         for (const token of Object.keys(fileTokens)) {
-//             if (dbConcepts.includes(token)) {
-//                 dbConceptsInFile++;
-//             } else {
-//                 nonDbConceptsInFile++;
-//             }
-//         }
-//
-//         // Tag file as DB-related (1) if there are more or equal DB concepts than non-DB
-//         return {
-//             ...file,
-//             cluster: dbConceptsInFile >= nonDbConceptsInFile ? 1 : 0
-//         };
-//     });
-//
-//     // Tag files without tokens or code as non-DB-related (0)
-//     const clusteredFilesWithoutTokens = filesWithoutTokens.map(file => ({
-//         ...file,
-//         cluster: 0
-//     }));
-//
-//     // Return all tagged files
-//     return [...clusteredFilesWithTokens, ...clusteredFilesWithoutTokens];
-// }
-
-
-
-
-
-
-
-
 
 
 /**
@@ -491,17 +471,17 @@ function evaluateFilesTags(project, clusteredData, evaluationResultsPath) {
 
         if (dbAndApiFiles.has(normalizedPath)) {
             return cluster !== isDBorAPI
-                ? { file: normalizedPath, expected: isDBorAPI, found: cluster, status: '❌ Incorrect (false negative)' }
-                : { file: normalizedPath, expected: cluster, found: cluster, status: '✅ Correct' };
+                ? {file: normalizedPath, expected: isDBorAPI, found: cluster, status: '❌ Incorrect (false negative)'}
+                : {file: normalizedPath, expected: cluster, found: cluster, status: '✅ Correct'};
         } else {
             return cluster !== isOther
-                ? { file: normalizedPath, expected: isOther, found: cluster, status: '❌ Incorrect (false positive)' }
-                : { file: normalizedPath, expected: cluster, found: cluster, status: '✅ Correct' };
+                ? {file: normalizedPath, expected: isOther, found: cluster, status: '❌ Incorrect (false positive)'}
+                : {file: normalizedPath, expected: cluster, found: cluster, status: '✅ Correct'};
         }
     }
 
     // Evaluate classification for all files
-    const classificationResults = clusteredData.map(({ file, cluster }) => checkFileClassification(file, cluster));
+    const classificationResults = clusteredData.map(({file, cluster}) => checkFileClassification(file, cluster));
 
     // Compute evaluation metrics
     const evaluationMetrics = computeEvaluationMetrics(classificationResults);
@@ -534,7 +514,7 @@ function evaluateFilesTags(project, clusteredData, evaluationResultsPath) {
 function computeEvaluationMetrics(classificationResults) {
     let TP = 0, TN = 0, FP = 0, FN = 0;
 
-    classificationResults.forEach(({ expected, found }) => {
+    classificationResults.forEach(({expected, found}) => {
         if (expected === 1 && found === 1) TP++;
         else if (expected === 0 && found === 0) TN++;
         else if (expected === 0 && found === 1) FP++;
@@ -553,7 +533,7 @@ function computeEvaluationMetrics(classificationResults) {
         precision: (precision * 100).toFixed(2) + '%',
         recall: (recall * 100).toFixed(2) + '%',
         f1Score: (f1 * 100).toFixed(2) + '%',
-        rawCounts: { TP, TN, FP, FN }
+        rawCounts: {TP, TN, FP, FN}
     };
 }
 
