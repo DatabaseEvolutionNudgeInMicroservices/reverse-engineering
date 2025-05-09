@@ -427,7 +427,6 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
     refineResults(element, sortedResults, automaticTaggingEnabled) {
         // Filter and sort
         const bestConceptsSorted = this.filterAndSortBestConcepts(sortedResults);
-        console.log(bestConceptsSorted);
 
         // Keep only name of concepts
         const bestConceptsSortedNameOnly = bestConceptsSorted.map(conceptObject => conceptObject.concept)
