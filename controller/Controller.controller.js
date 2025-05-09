@@ -105,7 +105,7 @@ class Controller {
     }
 
     /**
-     * Analyzes statically with text retrieval techniques
+     * Analyzes statically with text retrieval and NLP techniques
      * @param zipTempFilePath {String} A zip temp file path.
      * @param language {String} The targeted language for the static analysis.
      * @param dbDetails {Object} An object mapping repository names to arrays of database-related information.
