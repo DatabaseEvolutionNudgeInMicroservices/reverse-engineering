@@ -50,6 +50,63 @@ describe('Controller', () => {
             expect(JSON.stringify(result).includes('https://github.com/example/example/tree/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/"')).toBe(true);
         });
     });
+
+    it('analyzes statically a repository with NLP and with given dbDetails', async () => {
+
+        // Given
+
+        let controller = new Controller();
+
+        // When Then
+
+        await controller.analyzeStaticallyNLP(exampleRepository, languages[0], {
+            "cinema-microservice-master": {
+                "data_concepts": [
+                    "cinema",
+                    "movie",
+                    "payment",
+                    "ticket",
+                    "booking"
+                ]
+            },
+            "wise-old-man-master": {
+                "anchor_points": [
+                    "prisma",
+                    "express"
+                ],
+                "data_concepts": [
+                    "Base_Achievement",
+                    "playerId",
+                    "name",
+                    "accuracy",
+                    "createdAt",
+                    "MemberActivity",
+                    "groupId",
+                    "playerId",
+                    "type",
+                    "role",
+                    "createdAt",
+                    "PlayerAnnotation",
+                    "playerId",
+                    "type",
+                    "createdAt",
+                    "PlayerArchive",
+                    "playerId",
+                    "previousUsername",
+                    "archiveUsername",
+                    "restoredUsername",
+                    "createdAt",
+                    "restoredAt",
+                ]
+            }
+        }).then((result) => {
+
+            // console.log(JSON.stringify(result));
+
+            // When Then
+            expect(JSON.stringify(result).includes('https://github.com/example/example/tree/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/"')).toBe(true);
+        });
+    })
 });
 
 // Failure cases test suite
