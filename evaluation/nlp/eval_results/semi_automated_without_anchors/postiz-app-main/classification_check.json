@@ -1,0 +1,3818 @@
+[
+  {
+    "file": "apps/backend/jest.config.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/backend/src/api/api.module.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/backend/src/api/routes/agencies.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/api/routes/analytics.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/api/routes/auth.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/api/routes/autopost.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/api/routes/billing.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/api/routes/copilot.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/api/routes/integrations.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/api/routes/marketplace.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/api/routes/mcp.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/api/routes/media.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/api/routes/messages.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/api/routes/notifications.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/api/routes/posts.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/api/routes/public.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/api/routes/root.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/api/routes/settings.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/api/routes/signature.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/api/routes/stripe.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/api/routes/users.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/api/routes/webhooks.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/app.module.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/backend/src/main.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/mcp/main.mcp.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/backend/src/mcp/mcp.module.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/public-api/public.api.module.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/backend/src/public-api/routes/v1/public.integrations.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/services/auth/auth.middleware.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/backend/src/services/auth/auth.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/backend/src/services/auth/permissions/permissions.ability.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/backend/src/services/auth/permissions/permissions.guard.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/backend/src/services/auth/permissions/permissions.service.test.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/backend/src/services/auth/permissions/permissions.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/backend/src/services/auth/permissions/subscription.exception.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/backend/src/services/auth/providers/farcaster.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/backend/src/services/auth/providers/github.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/backend/src/services/auth/providers/google.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/backend/src/services/auth/providers/oauth.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/backend/src/services/auth/providers/providers.factory.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/backend/src/services/auth/providers/wallet.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/backend/src/services/auth/providers.interface.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/backend/src/services/auth/public.auth.middleware.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/backend/webpack.config.js",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/commands/jest.config.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/commands/src/command.module.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/commands/src/main.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/commands/src/tasks/agent.run.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/commands/src/tasks/check.stars.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/commands/src/tasks/configuration.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/commands/src/tasks/refresh.tokens.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/commands/webpack.config.js",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/cron/jest.config.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/cron/src/cron.module.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/cron/src/main.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/cron/src/tasks/check.stars.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/cron/src/tasks/sync.trending.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/cron/webpack.config.js",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/index.d.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/frontend/jest.config.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/next.config.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/frontend/postcss.config.js",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/f.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/frontend/src/app/api/uploads/[[...path]]/route.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/frontend/src/components/analytics/stars.and.forks.interface.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/helpers/use.custom.provider.function.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/helpers/use.formatting.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/helpers/use.integration.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/helpers/use.values.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/web3/web3.provider.interface.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/frontend/src/components/plugs/plugs.context.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/frontend/src/middleware.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/frontend/tailwind.config.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/workers/jest.config.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/workers/src/app/app.module.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "apps/workers/src/app/plugs.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/workers/src/app/posts.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/workers/src/app/stars.controller.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/workers/src/main.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/workers/webpack.config.js",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "build.plugins.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "jest.config.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "jest.preset.js",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/helpers/src/auth/auth.service.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/helpers/src/configuration/configuration.checker.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/helpers/src/decorators/plug.decorator.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/helpers/src/decorators/post.plug.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/helpers/src/subdomain/all.two.level.subdomain.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/helpers/src/subdomain/subdomain.management.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/helpers/src/swagger/load.swagger.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/helpers/src/utils/count.length.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/helpers/src/utils/custom.fetch.func.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/helpers/src/utils/internal.fetch.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/helpers/src/utils/is.dev.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/helpers/src/utils/is.general.server.side.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/helpers/src/utils/linkedin.company.prevent.remove.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/helpers/src/utils/read.or.fetch.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/helpers/src/utils/remove.markdown.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/helpers/src/utils/timer.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/helpers/src/utils/use.fire.events.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/agent/agent.categories.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/agent/agent.graph.insert.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/agent/agent.graph.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/agent/agent.module.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/agent/agent.topics.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/bull-mq-transport-new/bull.mq.module.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/bull-mq-transport-new/client.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/bull-mq-transport-new/strategy.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/crypto/nowpayments.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/agencies/agencies.repository.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/agencies/agencies.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/autopost/autopost.repository.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/autopost/autopost.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/database.module.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/integrations/integration.repository.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/integrations/integration.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/marketplace/item.user.repository.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/marketplace/item.user.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/marketplace/messages.repository.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/marketplace/messages.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/marketplace/tags.list.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/media/media.repository.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/media/media.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/notifications/notification.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/notifications/notifications.repository.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/organizations/organization.repository.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/organizations/organization.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/posts/posts.repository.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/posts/posts.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/prisma.service.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/signatures/signature.repository.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/signatures/signature.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/stars/stars.repository.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/stars/stars.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/subscriptions/pricing.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/subscriptions/subscription.repository.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/subscriptions/subscription.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/users/users.repository.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/users/users.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/webhooks/webhooks.repository.ts",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/webhooks/webhooks.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/agencies/create.agency.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/analytics/stars.list.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/auth/create.org.user.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/auth/forgot-return.password.dto.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/auth/forgot.password.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/auth/login.user.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/autopost/autopost.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/billing/billing.subscribe.dto.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/comments/add.comment.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/generator/create.generated.posts.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/generator/generator.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/integrations/api.key.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/integrations/connect.integration.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/integrations/integration.function.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/integrations/integration.time.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/marketplace/add.remove.item.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/marketplace/audience.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/marketplace/change.active.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/marketplace/create.offer.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/marketplace/items.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/marketplace/new.conversation.dto.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/media/media.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/messages/add.message.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/plugs/plug.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/posts/create.post.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/posts/create.tag.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/posts/get.posts.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/posts/lemmy.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/posts/providers-settings/all.providers.settings.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/posts/providers-settings/dev.to.settings.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/posts/providers-settings/dev.to.tags.settings.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/posts/providers-settings/discord.dto.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/posts/providers-settings/dribbble.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/posts/providers-settings/hashnode.settings.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/posts/providers-settings/instagram.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/posts/providers-settings/medium.settings.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/posts/providers-settings/pinterest.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/posts/providers-settings/reddit.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/posts/providers-settings/slack.dto.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/posts/providers-settings/tiktok.dto.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/posts/providers-settings/youtube.settings.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/settings/add.team.member.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/signature/signature.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/users/user.details.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/dtos/webhooks/webhooks.dto.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/emails/email.interface.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/emails/empty.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/emails/node.mailer.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/emails/resend.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/article/article.integrations.interface.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/article/dev.to.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/article/hashnode.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/article/hashnode.tags.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/article/medium.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/integration.manager.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/integration.missing.scopes.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/bluesky.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/discord.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/dribbble.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/facebook.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/farcaster.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/instagram.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/instagram.standalone.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/lemmy.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/linkedin.page.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/linkedin.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/mastodon.custom.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/mastodon.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/nostr.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/pinterest.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/reddit.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/slack.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/social.integrations.interface.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/telegram.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/threads.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/tiktok.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/vk.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/x.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social/youtube.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/integrations/social.abstract.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/mcp/mcp.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/mcp/mcp.settings.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/mcp/mcp.tool.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/mcp/mcp.transport.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/mcp/mcp.types.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/openai/extract.content.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/openai/openai.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/redis/redis.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/services/codes.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/services/email.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/services/exception.filter.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/services/make.is.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/services/newsletter.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/services/stripe.country.list.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/services/stripe.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/services/trending.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/services/trending.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/short-linking/providers/dub.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/short-linking/providers/empty.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/short-linking/providers/short.io.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/short-linking/short-linking.interface.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/short-linking/short.link.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/throttler/throttler.provider.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/track/track.service.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/upload/cloudflare.storage.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/upload/custom.upload.validation.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/upload/local.storage.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/upload/r2.uploader.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/upload/upload.factory.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/upload/upload.interface.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/upload/upload.module.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/user/org.from.request.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/user/track.enum.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/user/user.agent.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/user/user.from.request.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/plugins/src/plugin.module.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/helpers/inter.font.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/helpers/uppy.upload.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/helpers/use.media.directory.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/helpers/use.state.callback.ts",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": ".devcontainer/devcontainer.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".dockerignore",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".env.example",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".eslintignore",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".eslintrc.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".github/assets/gitroom-darkmode-logo.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".github/assets/gitroom-lightmode-logo.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".github/assets/gitroom-main-youtube.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".github/assets/screen-002.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".github/assets/screen-003.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".github/assets/screen-004.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".github/Dependabot.yml",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".github/ISSUE_TEMPLATE/01_installation.prolem.yml",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".github/ISSUE_TEMPLATE/02_bug_report.yml",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".github/ISSUE_TEMPLATE/03_feature_request.yml",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".github/PULL_REQUEST_TEMPLATE.md",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".github/workflows/build-containers-enterprise.yml",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".github/workflows/build-containers.yml",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".github/workflows/build.yaml",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".github/workflows/codeql.yml",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".github/workflows/eslint",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".github/workflows/issue-label-triggers.yml",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".github/workflows/pr-docker-build",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".github/workflows/stale.yml",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".gitignore",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".gitmodules",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".prettierignore",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".prettierrc",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/.eslintrc.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/project.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/src/assets/.gitkeep",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/tsconfig.app.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/tsconfig.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/backend/tsconfig.spec.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/commands/.eslintrc.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/commands/project.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/commands/tsconfig.app.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/commands/tsconfig.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/commands/tsconfig.spec.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/cron/.eslintrc.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/cron/project.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/cron/tsconfig.app.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/cron/tsconfig.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/cron/tsconfig.spec.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/.eslintrc.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/next-env.d.ts",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/project.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/.gitkeep",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/auth/bg-login.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/auth/login-box.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/favicon.ico",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/favicon.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/form/checked.svg",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/generic-oauth.svg",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/github.svg",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/bluesky.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/devto.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/discord.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/dribbble.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/facebook.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/hashnode.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/instagram-standalone.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/instagram.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/lemmy.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/linkedin-page.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/linkedin.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/mastodon-custom.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/mastodon.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/medium.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/nostr.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/pinterest.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/reddit.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/slack.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/telegram.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/threads.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/tiktok.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/vk.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/wrapcast.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/x.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/youtube.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/platforms/youtube.svg",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/star-circle.svg",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/icons/trending.svg",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/logo.svg",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/magic.svg",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/no-picture.jpg",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/peoplemarketplace.svg",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/postiz-fav.png",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/postiz-text.svg",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/postiz.svg",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/public/success.svg",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/(preview)/p/[id]/layout.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/(preview)/p/[id]/page.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/(site)/analytics/page.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/(site)/billing/lifetime/page.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/(site)/billing/page.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/(site)/err/page.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/(site)/integrations/social/layout.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/(site)/integrations/social/[provider]/continue/page.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/(site)/integrations/social/[provider]/page.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/(site)/launches/page.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/(site)/layout.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/(site)/marketplace/buyer/page.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/(site)/marketplace/layout.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/(site)/marketplace/page.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/(site)/marketplace/seller/page.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/(site)/messages/layout.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/(site)/messages/page.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/(site)/messages/[id]/page.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/(site)/plugs/page.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/(site)/settings/page.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/auth/activate/page.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/auth/activate/[code]/page.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/auth/forgot/page.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/auth/forgot/[token]/page.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/auth/layout.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/auth/login/page.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/auth/page.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/auth/return.url.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/colors.scss",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/global.scss",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/layout.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/app/polonto.css",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/analytics/analytics.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/analytics/chart-social.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/analytics/chart.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/analytics/stars.and.forks.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/analytics/stars.table.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/auth/activate.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/auth/after.activate.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/auth/forgot-return.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/auth/forgot.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/auth/login.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/auth/nayner.auth.button.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/auth/providers/farcaster.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/auth/providers/github.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/auth/providers/google.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/auth/providers/oauth.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/auth/providers/placeholder/wallet.ui.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/auth/providers/wallet.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/auth/register.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/autopost/autopost.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/billing/billing.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/billing/faq.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/billing/lifetime.deal.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/billing/main.billing.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/billing/purchase.crypto.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/add.edit.model.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/add.post.button.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/add.provider.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/ai.image.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/bold.text.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/bot.picture.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/calendar.context.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/calendar.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/comments/comment.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/connect.with.wallet.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/customer.modal.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/editor.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/filters.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/general.preview.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/generator/generator.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/helpers/date.picker.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/helpers/dnd.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/helpers/isuscitizen.utils.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/helpers/linkedin.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/helpers/new.image.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/helpers/pick.platform.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/helpers/top.title.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/helpers/use.existing.data.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/helpers/use.expend.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/helpers/use.hide.top.editor.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/helpers/use.move.to.integration.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/integration.redirect.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/internal.channels.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/launches.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/menu/menu.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/merge.post.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/new.post.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/polonto/polonto.picture.generation.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/polonto.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/post.to.organization.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/bluesky/bluesky.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/continue-provider/facebook/facebook.continue.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/continue-provider/instagram/instagram.continue.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/continue-provider/linkedin/linkedin.continue.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/continue-provider/list.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/devto/devto.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/devto/devto.tags.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/devto/fonts/SFNS.woff2",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/devto/select.organization.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/discord/discord.channel.select.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/discord/discord.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/dribbble/dribbble.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/dribbble/dribbble.teams.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/facebook/facebook.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/hashnode/hashnode.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/hashnode/hashnode.publications.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/hashnode/hashnode.tags.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/high.order.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/instagram/instagram.collaborators.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/instagram/instagram.tags.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/lemmy/lemmy.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/lemmy/subreddit.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/linkedin/linkedin.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/mastodon/mastodon.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/medium/fonts/Charter Bold Italic.ttf",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/medium/fonts/Charter Bold.ttf",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/medium/fonts/Charter Italic.ttf",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/medium/fonts/Charter Regular.ttf",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/medium/fonts/stylesheet.css",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/medium/medium.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/medium/medium.publications.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/medium/medium.tags.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/nostr/nostr.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/pinterest/pinterest.board.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/pinterest/pinterest.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/reddit/reddit.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/reddit/subreddit.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/show.all.providers.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/slack/slack.channel.select.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/slack/slack.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/telegram/telegram.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/threads/threads.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/tiktok/tiktok.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/vk/vk.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/warpcast/subreddit.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/warpcast/warpcast.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/x/fonts/Chirp-Bold.woff2",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/x/fonts/Chirp-Regular.woff2",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/x/x.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers/youtube/youtube.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/providers.options.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/repeat.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/select.customer.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/settings.modal.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/statistics.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/submitted.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/tags.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/time.table.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/u.text.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/up.down.arrow.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/web3/providers/nostr.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/web3/providers/telegram.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/web3/providers/wrapcaster.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/launches/web3/web3.list.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/layout/check.payment.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/layout/click.outside.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/layout/continue.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/layout/drop.files.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/layout/facebook.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/layout/impersonate.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/layout/layout.context.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/layout/layout.settings.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/layout/loading.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/layout/logout.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/layout/mode.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/layout/new.subscription.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/layout/organization.selector.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/layout/redirect.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/layout/settings.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/layout/support.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/layout/title.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/layout/tolt.script.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/layout/top.menu.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/layout/top.tip.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/layout/user.context.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/marketplace/buyer.seller.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/marketplace/buyer.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/marketplace/marketplace.provider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/marketplace/marketplace.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/marketplace/order.list.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/marketplace/order.top.actions.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/marketplace/preview.popup.dynamic.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/marketplace/seller.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/marketplace/special.message.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/media/media.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/media/new.uploader.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/messages/layout.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/messages/messages.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/notifications/notification.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/onboarding/connect.channels.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/onboarding/github.onboarding.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/onboarding/onboarding.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/platform-analytics/platform.analytics.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/platform-analytics/render.analytics.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/plugs/plug.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/plugs/plugs.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/post-url-selector/post.url.selector.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/preview/comments.components.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/preview/copy.client.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/preview/preview.wrapper.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/public-api/public.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/settings/github.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/settings/settings.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/settings/signatures.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/settings/teams.component.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/signature.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/src/components/webhooks/webhooks.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/tsconfig.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/tsconfig.spec.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/frontend/tsconfig.tsbuildinfo",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/workers/.eslintrc.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/workers/project.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/workers/tsconfig.app.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/workers/tsconfig.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "apps/workers/tsconfig.spec.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "CODE_OF_CONDUCT.md",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "CONTRIBUTING.md",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "docker-compose.dev.yaml",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "Dockerfile.dev",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "Jenkinsfile",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/helpers/src/utils/custom.fetch.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/helpers/src/utils/utm.saver.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/.eslintrc.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/project.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/README.md",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/src/database/prisma/schema.prisma",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/tsconfig.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/nestjs-libraries/tsconfig.lib.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/plugins/.eslintrc.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/plugins/project.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/plugins/README.md",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/plugins/tsconfig.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/plugins/tsconfig.lib.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/.eslintrc.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/project.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/README.md",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/form/button.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/form/canonical.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/form/checkbox.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/form/color.picker.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/form/custom.select.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/form/input.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/form/select.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/form/slider.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/form/textarea.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/form/total.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/form/track.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/helpers/delete.dialog.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/helpers/image.with.fallback.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/helpers/is.general.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/helpers/mantine.wrapper.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/helpers/posthog.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/helpers/use.is.visible.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/helpers/use.prevent.window.unload.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/helpers/use.track.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/helpers/utc.date.render.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/helpers/variable.context.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/helpers/video.frame.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/helpers/video.or.image.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/src/toaster/toaster.tsx",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/tsconfig.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "libraries/react-shared-libraries/tsconfig.lib.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "LICENSE",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "migrations.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "nx.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "package-lock.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "package.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "railway.toml",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "README.md",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "reports/junit.xml",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "SECURITY.md",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "tsconfig.base.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "var/docker/Caddyfile",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "var/docker/docker-build.sh",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "var/docker/docker-create.sh",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "var/docker/entrypoint.sh",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "var/docker/supervisord/backend.conf",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "var/docker/supervisord/caddy.conf",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "var/docker/supervisord/cron.conf",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "var/docker/supervisord/frontend.conf",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "var/docker/supervisord/workers.conf",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "var/docker/supervisord.conf",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "version.txt",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  }
+]

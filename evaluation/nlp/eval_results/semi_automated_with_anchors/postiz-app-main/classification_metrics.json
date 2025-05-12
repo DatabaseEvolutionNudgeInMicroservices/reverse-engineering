@@ -1,0 +1,12 @@
+{
+  "accuracy": "91.35%",
+  "precision": "40.23%",
+  "recall": "92.11%",
+  "f1Score": "56.00%",
+  "rawCounts": {
+    "TP": 35,
+    "TN": 546,
+    "FP": 52,
+    "FN": 3
+  }
+}

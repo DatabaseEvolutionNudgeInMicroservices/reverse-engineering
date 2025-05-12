@@ -17,7 +17,10 @@ const {INPUT_INCORRECTLY_FORMATTED} = require('../error/Constant.error.js');
 // Helpers
 
 const StaticAnalyzer = require('./StaticAnalyzer.helper.js');
-const {tagFilesSemiAutomated, tagFilesFullyAutomated} = require('./StaticAnalyzerNLP_DbClustering.helper.js');
+
+// Evaluation
+
+const {evaluateFilesTags} = require("../evaluation/nlp");
 
 // Libraries : File System
 
@@ -173,7 +176,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
                     // Normalize and tokenize the DB concepts using the same method as for concepts in source files
                     dbDetails["data_concepts"] = this.extractConcepts(dbDetails["data_concepts"].join(" ")).flatMap(concept => concept.split(" "));
                     // Tag each file based on the presence of DB-related concepts using heuristics
-                    filesAndTheirConcepts = tagFilesSemiAutomated(element, filesAndTheirConcepts, dbDetails);
+                    filesAndTheirConcepts = this.tagFilesSemiAutomated(element, filesAndTheirConcepts, dbDetails);
                 }
 
                 // Convert the analyzed data into a hierarchical directory tree structure,
@@ -443,7 +446,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
 
         // If automatic tagging is enabled, tag files as DB-related using heuristics
         if (automaticTaggingEnabled) {
-            refinedResults = tagFilesFullyAutomated(element, refinedResults, bestConceptsSorted);
+            refinedResults = this.tagFilesFullyAutomated(element, refinedResults, bestConceptsSorted);
         }
 
         return refinedResults;
@@ -584,6 +587,104 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         });
 
         return analysisResults;
+    }
+
+    /**
+     * Tags each file in the analysis results as DB-related using heuristics,
+     * writes the clustering results to a file, and evaluates the tagging accuracy.
+     *
+     * @param {string} element - The repository name, used for evaluation.
+     * @param {Array} refinedResults - Array of files with token metadata.
+     * @param bestConcepts {Array} - A list of concepts with computed scores
+     * @returns {Array} The tagged analysis results with cluster values.
+     */
+    tagFilesFullyAutomated(element, refinedResults, bestConcepts) {
+        return this.tagFiles(element, refinedResults, {data_concepts: bestConcepts.map(x => x.concept).slice(0, 30)}, "fully_automated");
+    }
+
+    /**
+     * Tags each file in the analysis results as DB-related using heuristics,
+     * writes the clustering results to a file, and evaluates the tagging accuracy.
+     *
+     * @param {string} element - The repository name, used for evaluation.
+     * @param {Array} refinedResults - Array of files with token metadata.
+     * @param {Object} dbDetails - List of database-related concepts and optionnally anchor points concepts.
+     * @returns {Array} The tagged analysis results with cluster values.
+     */
+    tagFilesSemiAutomated(element, refinedResults, dbDetails) {
+        return this.tagFiles(element, refinedResults, dbDetails, `semi_automated_with${"anchor_points" in dbDetails ? "" : "out"}_anchors`);
+    }
+
+    /**
+     * Tags each file in the analysis results as DB-related using heuristics,
+     * writes the clustering results to a file, and evaluates the tagging accuracy.
+     *
+     * @param {string} element - The repository name, used for evaluation.
+     * @param {Array} refinedResults - Array of files with token metadata.
+     * @param {Object} dataConcepts - List of database-related concepts and optionnally anchor points concepts.
+     * @param {string} taggingMode - Fully automated or semi-automated with(out) anchors tag files mode
+     * @returns {Array} The tagged analysis results with cluster values.
+     */
+    tagFiles(element, refinedResults, dataConcepts, taggingMode) {
+        // Tag the files using clustering heuristics based on database concepts and save results
+        const refinedAnalysisResultsWithTags = this.tagFilesByClusteringWithHeuristics(refinedResults, dataConcepts);
+
+        // Evaluate the tagging results
+        evaluateFilesTags(element, refinedAnalysisResultsWithTags, taggingMode);
+
+        return refinedAnalysisResultsWithTags;
+    }
+
+    /**
+     * Tags files as database-related or not using density heuristic.
+     *
+     * A file is considered DB-related (cluster = 1) if
+     * the density of DB-related concepts (occurrences / lines of code) is >= THRESHOLD_DENSITY.
+     *
+     * @param refinedResults {Array} - List of files with token data and metadata.
+     * @param dbDetails {Object}  - List of database-related concepts and optionnally anchor points concepts.
+     * @returns {Array} Files with a `cluster` field: 1 (DB-related), 0 (not DB-related).
+     */
+    tagFilesByClusteringWithHeuristics(refinedResults, dbDetails) {
+        // Separate files with and without token information
+        const filesWithTokens = refinedResults.filter(file =>
+            Object.keys(file.tokens).length > 0 && file.fileNumberOfLinesOfCode > 0
+        );
+        const filesWithoutTokens = refinedResults.filter(file =>
+            Object.keys(file.tokens).length === 0 || file.fileNumberOfLinesOfCode === 0
+        );
+
+        // Heuristic threshold
+        const THRESHOLD_DENSITY = 0.2;
+
+        // Apply heuristic on files with tokens
+        const clusteredFilesWithTokens = filesWithTokens.map(file => {
+
+            // Count how many DB-related concept occurrences are in this file
+            const dbConceptOccurrences = Object.entries(file.tokens)
+                .filter(([token]) => dbDetails["data_concepts"].includes(token))
+                .reduce((sum, [, data]) => sum + data.numberOfOccurence, 0);
+
+            // Calculate concept density relative to lines of code
+            const dbConceptDensity = dbConceptOccurrences / file.fileNumberOfLinesOfCode;
+
+            // Tag file as DB-related (1) or not (0) based on heuristics
+            return {
+                ...file,
+                cluster: dbDetails["anchor_points"]
+                    ? (Object.keys(file.tokens).some(item => dbDetails["anchor_points"].includes(item.toLowerCase())) && dbConceptDensity >= THRESHOLD_DENSITY) ? 1 : 0
+                    : dbConceptDensity >= THRESHOLD_DENSITY ? 1 : 0
+            };
+        });
+
+        // Tag files without tokens or code as unusable
+        const clusteredFilesWithoutTokens = filesWithoutTokens.map(file => ({
+            ...file,
+            cluster: 0
+        }));
+
+        // Return all tagged files
+        return [...clusteredFilesWithTokens, ...clusteredFilesWithoutTokens];
     }
 
     /**

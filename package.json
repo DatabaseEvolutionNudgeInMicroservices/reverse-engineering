@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "evaluation": "node evaluation/index.js",
+    "evaluation_heuristics": "node evaluation/heuristics/index.js",
     "swagger": "node swagger.js",
     "test_unit": "jest --testRegex=^/test/unit/(.*)\\.test\\.js$ --coverage --forceExit --runInBand",
     "test_integration": "jest --testRegex=^/test/integration/(.*)\\.test\\.js$"

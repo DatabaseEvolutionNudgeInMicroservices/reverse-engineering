@@ -308,111 +308,6 @@ const projectsGroundTruthForEvaluation = {
 }
 
 
-/**
- * Tags each file in the analysis results as DB-related using heuristics,
- * writes the clustering results to a file, and evaluates the tagging accuracy.
- *
- * @param {string} element - The repository name, used for evaluation.
- * @param {Array} refinedResults - Array of files with token metadata.
- * @param bestConcepts {Array} - A list of concepts with computed scores
- * @returns {Array} The tagged analysis results with cluster values.
- */
-function tagFilesFullyAutomated(element, refinedResults, bestConcepts) {
-    return tagFiles(element, refinedResults, {data_concepts: bestConcepts.map(x => x.concept).slice(0, 30)}, getEvaluationResultsPath(element, true));
-}
-
-/**
- * Tags each file in the analysis results as DB-related using heuristics,
- * writes the clustering results to a file, and evaluates the tagging accuracy.
- *
- * @param {string} element - The repository name, used for evaluation.
- * @param {Array} refinedResults - Array of files with token metadata.
- * @param {Object} dbDetails - List of database-related concepts and optionnally anchor points concepts.
- * @returns {Array} The tagged analysis results with cluster values.
- */
-function tagFilesSemiAutomated(element, refinedResults, dbDetails) {
-    return tagFiles(element, refinedResults, dbDetails, getEvaluationResultsPath(element, false));
-}
-
-/**
- * Tags each file in the analysis results as DB-related using heuristics,
- * writes the clustering results to a file, and evaluates the tagging accuracy.
- *
- * @param {string} element - The repository name, used for evaluation.
- * @param {Array} refinedResults - Array of files with token metadata.
- * @param {Object} dataConcepts - List of database-related concepts and optionnally anchor points concepts.
- * @param {string} evaluationResultsPath - The evaluation results directory path
- * @returns {Array} The tagged analysis results with cluster values.
- */
-function tagFiles(element, refinedResults, dataConcepts, evaluationResultsPath) {
-    // Ensure that the directory for storing evaluation results exists
-    if (!fs.existsSync(evaluationResultsPath)) {
-        fs.mkdirSync(evaluationResultsPath, {recursive: true});
-    }
-
-    // Tag the files using clustering heuristics based on database concepts and save results
-    const refinedAnalysisResultsWithTags = tagFilesByClusteringWithHeuristics(refinedResults, dataConcepts);
-    fs.writeFileSync(`${evaluationResultsPath}/clustering_results.json`, JSON.stringify(refinedAnalysisResultsWithTags, null, 2), 'utf8');
-
-    // If ground truth data is available for the project, evaluate the tagging results
-    if (Object.keys(projectsGroundTruthForEvaluation).includes(element)) {
-        evaluateFilesTags(element, refinedAnalysisResultsWithTags, evaluationResultsPath)
-    }
-
-    return refinedAnalysisResultsWithTags;
-}
-
-/**
- * Tags files as database-related or not using density heuristic.
- *
- * A file is considered DB-related (cluster = 1) if
- * the density of DB-related concepts (occurrences / lines of code) is >= THRESHOLD_DENSITY.
- *
- * @param refinedResults {Array} - List of files with token data and metadata.
- * @param dbDetails {Object}  - List of database-related concepts and optionnally anchor points concepts.
- * @returns {Array} Files with a `cluster` field: 1 (DB-related), 0 (not DB-related).
- */
-function tagFilesByClusteringWithHeuristics(refinedResults, dbDetails) {
-    // Separate files with and without token information
-    const filesWithTokens = refinedResults.filter(file =>
-        Object.keys(file.tokens).length > 0 && file.fileNumberOfLinesOfCode > 0
-    );
-    const filesWithoutTokens = refinedResults.filter(file =>
-        Object.keys(file.tokens).length === 0 || file.fileNumberOfLinesOfCode === 0
-    );
-
-    // Heuristic threshold
-    const THRESHOLD_DENSITY = 0.2;
-
-    // Apply heuristic on files with tokens
-    const clusteredFilesWithTokens = filesWithTokens.map(file => {
-
-        // Count how many DB-related concept occurrences are in this file
-        const dbConceptOccurrences = Object.entries(file.tokens)
-            .filter(([token]) => dbDetails["data_concepts"].includes(token))
-            .reduce((sum, [, data]) => sum + data.numberOfOccurence, 0);
-
-        // Calculate concept density relative to lines of code
-        const dbConceptDensity = dbConceptOccurrences / file.fileNumberOfLinesOfCode;
-
-        // Tag file as DB-related (1) or not (0) based on heuristics
-        return {
-            ...file,
-            cluster: dbDetails["anchor_points"]
-                ? (Object.keys(file.tokens).some(item => dbDetails["anchor_points"].includes(item.toLowerCase())) && dbConceptDensity >= THRESHOLD_DENSITY) ? 1 : 0
-                : dbConceptDensity >= THRESHOLD_DENSITY ? 1 : 0
-        };
-    });
-
-    // Tag files without tokens or code as unusable
-    const clusteredFilesWithoutTokens = filesWithoutTokens.map(file => ({
-        ...file,
-        cluster: 0
-    }));
-
-    // Return all tagged files
-    return [...clusteredFilesWithTokens, ...clusteredFilesWithoutTokens];
-}
 
 
 /**
@@ -432,11 +327,17 @@ function tagFilesByClusteringWithHeuristics(refinedResults, dbDetails) {
  *
  * @param {string} project - The project name, used to retrieve the ground truth classification.
  * @param {Array} clusteredData - The array containing files with their assigned cluster (-1 = No Tokens, 0 = Other, 1 = DB/API).
- * @param {string} evaluationResultsPath - The path where the evaluation results should be saved.
+ * @param {string} taggingMode - Fully automated or semi-automated with(out) anchors tag files mode
  */
-function evaluateFilesTags(project, clusteredData, evaluationResultsPath) {
+function evaluateFilesTags(project, clusteredData, taggingMode) {
     if (!projectsGroundTruthForEvaluation[project]) {
         throw new Error(`Project '${project}' is not supported for file tags evaluation`);
+    }
+
+    // Ensure that the directory for storing evaluation results exists
+    const evaluationResultsPath = getEvaluationResultsPath(project, taggingMode);
+    if (!fs.existsSync(evaluationResultsPath)) {
+        fs.mkdirSync(evaluationResultsPath, {recursive: true});
     }
 
     // Retrieve expected DB and API files from the ground truth
@@ -486,6 +387,7 @@ function evaluateFilesTags(project, clusteredData, evaluationResultsPath) {
     const evaluationMetrics = computeEvaluationMetrics(classificationResults);
 
     // Save detailed results
+    fs.writeFileSync(`${evaluationResultsPath}/clustering_results.json`, JSON.stringify(clusteredData, null, 2), 'utf8');
     fs.writeFileSync(`${evaluationResultsPath}/classification_metrics.json`, JSON.stringify(evaluationMetrics, null, 2), 'utf8');
     fs.writeFileSync(`${evaluationResultsPath}/classification_check.json`, JSON.stringify(classificationResults, null, 2), 'utf8');
     console.log(`Detailed results saved in folder : ${evaluationResultsPath}`);
@@ -541,11 +443,22 @@ function computeEvaluationMetrics(classificationResults) {
  * Returns the path to the evaluation results folder for a given project.
  *
  * @param {string} project - Project name.
- * @param {boolean} fullyAutomated - Evaluation is for fully automated tag files mode
+ * @param {string} tagging_mode - Evaluation is for fully automated or semi-automated with(out) anchors tag files mode
  * @returns {string} - Absolute path to the project's evaluation results.
  */
-function getEvaluationResultsPath(project, fullyAutomated) {
-    return path.join(__dirname, 'StaticAnalyzerNLP_DbClustering_EvalResults', fullyAutomated ? 'FullyAutomated' : 'SemiAutomated', project);
+function getEvaluationResultsPath(project, tagging_mode) {
+    switch (tagging_mode) {
+        case "fully_automated":
+            return path.join(__dirname, 'eval_results', 'fully_automated', project);
+        case "semi_automated_without_anchors":
+            return path.join(__dirname, 'eval_results', 'semi_automated_without_anchors', project);
+        case "semi_automated_with_anchors":
+            return path.join(__dirname, 'eval_results', 'semi_automated_with_anchors', project);
+        default:
+            console.error("Tagging mode unknown when evaluating")
+    }
 }
 
-module.exports = {tagFilesSemiAutomated, tagFilesFullyAutomated};
+
+
+module.exports = {evaluateFilesTags};
