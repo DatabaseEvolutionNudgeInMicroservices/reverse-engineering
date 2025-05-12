@@ -1,319 +1,61 @@
 const fs = require('fs');
 const path = require('path');
+const {projectsGroundTruthForFileTaggingEvaluation, projectsGroundTruthForConceptPipelineExtractionEvaluation} = require("./ground_truth");
 
 
 /**
- * Ground truth data for evaluating file classifications across different projects.
- * This object contains the expected DB and API files for various projects.
- * Each project has two arrays:
- * 1. `expected_db_files` - List of files that are expected to be DB files.
- * 2. `expected_api_files` - List of files that are expected to be API files.
+ *
+ *
+ * EVALUATION CONCEPT EXTRACTION PIPELINE
+ *
+ *
+ *
  */
-const projectsGroundTruthForEvaluation = {
-    "cinema-microservice-master": {
-        "expected_db_files": [
-            'booking-service/src/repository/repository.js',
-            'cinema-catalog-service/src/repository/repository.js',
-            'movies-service/src/repository/repository.js',
-            'payment-service/src/repository/repository.js'
-        ],
-        "expected_api_files": [
-            'booking-service/src/api/booking.js',
-            'booking-service/src/services/payment.service.js',
-            'booking-service/src/services/notification.service.js',
-            'cinema-catalog-service/src/api/cinema-catalog.js',
-            'movies-service/src/api/movies.js',
-            'notification-service/src/api/notification.js',
-            'payment-service/src/api/payment.js',
-        ]
-    },
-    "robot-shop-master": {
-        "expected_db_files": [
-            'catalogue/server.js',
-            'mongo/catalogue.js',
-            'mongo/users.js',
-            'user/server.js',
-            'cart/server.js'
-        ],
-        "expected_api_files": [
-            'catalogue/server.js',
-            'cart/server.js',
-            'user/server.js'
-        ]
-    },
-    "comments-api-master": {
-        "expected_db_files": [
-            "db/index.js",
-            "src/data-access/comments-db.js"
-        ],
-        "expected_api_files": [
-            "src/index.js"
-        ]
-    },
-    "overleaf-main": {
-        "expected_db_files": [
-            "services/docstore/app/js/HealthChecker.js",
-            "services/docstore/app/js/MongoManager.js",
-            "services/docstore/app/js/mongodb.js",
-            "services/document-updater/app/js/SnapshotManager.js",
-            "services/document-updater/app/js/mongodb.js",
-            "services/chat/app/js/Features/Messages/MessageManager.js",
-            "services/chat/app/js/Features/Threads/ThreadManager.js",
-            "services/chat/app/js/mongodb.js",
-            "services/contacts/app/js/ContactManager.js",
-            "services/contacts/app/js/mongodb.js",
-            "services/notifications/app/js/HealthCheckController.js",
-            "services/notifications/app/js/Notifications.js",
-            "services/notifications/app/js/mongodb.js",
-            "services/web/app/src/Features/Spelling/LearnedWordsManager.js",
-            "services/web/app/src/infrastructure/mongodb.js",
-            "services/document-updater/app/js/DispatchManager.js",
-            "services/document-updater/app/js/ProjectHistoryRedisManager.js",
-            "services/document-updater/app/js/LockManager.js",
-            "services/document-updater/app/js/ProjectFlusher.js",
-            "services/document-updater/app/js/ProjectHistoryRedisManager.js",
-            "services/document-updater/app/js/RealTimeRedisManager.js",
-            "services/document-updater/app/js/RedisManager.js",
-            "services/real-time/app.js",
-            "services/real-time/app/js/ConnectedUserManager.js",
-            "services/real-time/app/js/DocumentUpdaterManager.js",
-            "services/real-time/app/js/DocumentUpdaterController.js",
-            "services/real-time/app/js/ChannelManager.js",
-            "services/real-time/app/js/WebsocketLoadBalancer.js",
-            "services/project-history/app/js/LockManager.js",
-            "services/project-history/app/js/RedisManager.js",
-            "services/project-history/app/js/mongodb.js"
-        ],
-        "expected_api_files": [
-            "services/docstore/app.js",
-            "services/document-updater/app.js",
-            "serivces/chat/app.js",
-            "services/clsi/app.js",
-            "services/contacts/app.js",
-            "services/filestore/app.js",
-            "services/notifications/app.js",
-            "services/real-time/app/js/Router.js",
-            "services/real-time/app.js",
-            "services/history-v1/app.js",
-            "services/project-history/app.js",
-        ]
-    },
-    "cloudboost-master": {
-        "expected_db_files": [
-            "data-service/cron/expire.js",
-            "data-service/database-connect/keyService.js",
-            "data-service/databases/mongo.js",
-            "data-service/helpers/mongo.js",
-            "data-service/services/app.js",
-            "data-service/services/cloudObject.js",
-            "data-service/services/table.js",
-            "data-service/database-connect/apiTracker.js",
-            "data-service/helpers/session.js",
-            "data-service/helpers/socketQuery.js",
-            "data-service/helpers/socketSession.js",
-        ],
-        "expected_api_files": [
-            "data-service/api/app/Admin.js",
-            "data-service/api/app/App.js",
-            "data-service/api/app/AppFiles.js",
-            "data-service/api/app/AppSettings.js",
-            "data-service/api/db/mongo.js",
-            "data-service/api/email/CloudEmail.js",
-            "data-service/api/file/CloudFiles.js",
-            "data-service/api/pages/Page.js",
-            "data-service/api/server/Server.js",
-            "data-service/api/tables/CloudObject.js",
-            "data-service/api/tables/CloudUser.js",
-            "data-service/helpers/github.js",
-            "data-service/routes.js",
-        ]
-    },
-    "wise-old-man-master": {
-        "expected_db_files": [
-            'server/__tests__/suites/integration/achievements.test.ts',
-            'server/__tests__/suites/integration/competitions.test.ts',
-            'server/__tests__/suites/integration/deltas.test.ts',
-            'server/__tests__/suites/integration/efficiency.test.ts',
-            'server/__tests__/suites/integration/general.test.ts',
-            'server/__tests__/suites/integration/groups.test.ts',
-            'server/__tests__/suites/integration/names.test.ts',
-            'server/__tests__/suites/integration/patrons.test.ts',
-            'server/__tests__/suites/integration/players.test.ts',
-            'server/__tests__/suites/integration/records.test.ts',
-            'server/src/api/modules/achievements/services/FindGroupAchievementsService.ts',
-            'server/src/api/modules/achievements/services/FindPlayerAchievementProgressService.ts',
-            'server/src/api/modules/achievements/services/FindPlayerAchievementsService.ts',
-            'server/src/api/modules/achievements/services/ReevaluatePlayerAchievementsService.ts',
-            'server/src/api/modules/competitions/competition.events.ts',
-            'server/src/api/modules/competitions/services/AddParticipantsService.ts',
-            'server/src/api/modules/competitions/services/AddTeamsService.ts',
-            'server/src/api/modules/competitions/services/AddToGroupCompetitionsService.ts',
-            'server/src/api/modules/competitions/services/CreateCompetitionService.ts',
-            'server/src/api/modules/competitions/services/DeleteCompetitionService.ts',
-            'server/src/api/modules/competitions/services/EditCompetitionService.ts',
-            'server/src/api/modules/competitions/services/FetchCompetitionDetailsService.ts',
-            'server/src/api/modules/competitions/services/FetchTop5ProgressService.ts',
-            'server/src/api/modules/competitions/services/FindGroupCompetitionsService.ts',
-            'server/src/api/modules/competitions/services/FindPlayerParticipationsService.ts',
-            'server/src/api/modules/competitions/services/FindPlayerParticipationsStandings2Service.ts',
-            'server/src/api/modules/competitions/services/RemoveFromGroupCompetitionsService.ts',
-            'server/src/api/modules/competitions/services/RemoveParticipantsService.ts',
-            'server/src/api/modules/competitions/services/RemoveTeamsService.ts',
-            'server/src/api/modules/competitions/services/ResetCompetitionCodeService.ts',
-            'server/src/api/modules/competitions/services/SearchCompetitionsService.ts',
-            'server/src/api/modules/competitions/services/UpdateAllParticipantsService.ts',
-            'server/src/api/modules/deltas/services/FindDeltaLeaderboardsService.ts',
-            'server/src/api/modules/deltas/services/FindGroupDeltasService.ts',
-            'server/src/api/modules/deltas/services/FindPlayerDeltasService.ts',
-            'server/src/api/modules/efficiency/services/ComputeEfficiencyRankService.ts',
-            'server/src/api/modules/efficiency/services/FindEfficiencyLeaderboardsService.ts',
-            'server/src/api/modules/general/services/AllowUserActionsService.ts',
-            'server/src/api/modules/general/services/BlockUserActionsService.ts',
-            'server/src/api/modules/general/services/CreateAPIKeyService.ts',
-            'server/src/api/modules/general/services/FetchTableCountsService.ts',
-            'server/src/api/modules/groups/group.events.ts',
-            'server/src/api/modules/groups/services/AddMembersService.ts',
-            'server/src/api/modules/groups/services/ChangeMemberRoleService.ts',
-            'server/src/api/modules/groups/services/CreateGroupService.ts',
-            'server/src/api/modules/groups/services/DeleteGroupService.ts',
-            'server/src/api/modules/groups/services/EditGroupService.ts',
-            'server/src/api/modules/groups/services/FetchGroupActivityService.ts',
-            'server/src/api/modules/groups/services/FetchGroupDetailsService.ts',
-            'server/src/api/modules/groups/services/FetchGroupHiscoresService.ts',
-            'server/src/api/modules/groups/services/FetchGroupStatisticsService.ts',
-            'server/src/api/modules/groups/services/FetchMembersCSVService.ts',
-            'server/src/api/modules/groups/services/FindPlayerMembershipsService.ts',
-            'server/src/api/modules/groups/services/RemoveMembersService.ts',
-            'server/src/api/modules/groups/services/ResetGroupCodeService.ts',
-            'server/src/api/modules/groups/services/SearchGroupsService.ts',
-            'server/src/api/modules/groups/services/UpdateAllMembersService.ts',
-            'server/src/api/modules/groups/services/VerifyGroupService.ts',
-            'server/src/api/modules/name-changes/services/ApproveNameChangeService.ts',
-            'server/src/api/modules/name-changes/services/ClearNameChangeHistoryService.ts',
-            'server/src/api/modules/name-changes/services/DenyNameChangeService.ts',
-            'server/src/api/modules/name-changes/services/FetchNameChangeDetailsService.ts',
-            'server/src/api/modules/name-changes/services/FindGroupNameChangesService.ts',
-            'server/src/api/modules/name-changes/services/FindPlayerNameChangesService.ts',
-            'server/src/api/modules/name-changes/services/SearchNameChangesService.ts',
-            'server/src/api/modules/name-changes/services/SubmitNameChangeService.ts',
-            'server/src/api/modules/patrons/services/ClaimPatreonBenefitsService.ts',
-            'server/src/api/modules/players/player.router.ts',
-            'server/src/api/modules/players/player.utils.ts',
-            'server/src/api/modules/players/services/ArchivePlayerService.ts',
-            'server/src/api/modules/players/services/AssertPlayerTypeService.ts',
-            'server/src/api/modules/players/services/ChangePlayerCountryService.ts',
-            'server/src/api/modules/players/services/CreateAnnotationService.ts',
-            'server/src/api/modules/players/services/DeleteAnnotationService.ts',
-            'server/src/api/modules/players/services/DeletePlayerService.ts',
-            'server/src/api/modules/players/services/FetchPlayerDetailsService.ts',
-            'server/src/api/modules/players/services/FindOrCreatePlayersService.ts',
-            'server/src/api/modules/players/services/FindPlayerArchivesService.ts',
-            'server/src/api/modules/players/services/ImportPlayerHistoryService.ts',
-            'server/src/api/modules/players/services/SearchPlayersService.ts',
-            'server/src/api/modules/players/services/UpdatePlayerService.ts',
-            'server/src/api/modules/records/services/FindGroupRecordsService.ts',
-            'server/src/api/modules/records/services/FindPlayerRecordsService.ts',
-            'server/src/api/modules/records/services/FindRecordLeaderboardsService.ts',
-            'server/src/api/modules/snapshots/services/FindGroupSnapshotsService.ts',
-            'server/src/api/modules/snapshots/services/FindPlayerSnapshotsService.ts',
-            'server/src/api/modules/snapshots/services/FindPlayerSnapshotTimelineService.ts',
-            'server/src/api/modules/snapshots/services/RollbackCollectionLogService.ts',
-            'server/src/api/modules/snapshots/services/RollbackSnapshotsService.ts',
-            'server/src/api/services/external/discord.service.ts',
-            'server/src/api/util/middlewares.ts',
-            'server/src/jobs-new/handlers/assert-player-type.job.ts',
-            'server/src/jobs-new/handlers/calculate-computed-rank-tables.job.ts',
-            'server/src/jobs-new/handlers/check-creation-spam.job.ts',
-            'server/src/jobs-new/handlers/check-inappropriate-content.job.ts',
-            'server/src/jobs-new/handlers/check-player-banned.job.ts',
-            'server/src/jobs-new/handlers/check-player-ranked.job.ts',
-            'server/src/jobs-new/handlers/invalidate-deltas.job.ts',
-            'server/src/jobs-new/handlers/review-name-change.job.ts',
-            'server/src/jobs-new/handlers/schedule-banned-player-checks.job.ts',
-            'server/src/jobs-new/handlers/schedule-competition-events.job.ts',
-            'server/src/jobs-new/handlers/schedule-competition-score-updates.job.ts',
-            'server/src/jobs-new/handlers/schedule-flagged-player-review.job.ts',
-            'server/src/jobs-new/handlers/schedule-group-score-updates.job.ts',
-            'server/src/jobs-new/handlers/schedule-name-change-reviews.job.ts',
-            'server/src/jobs-new/handlers/schedule-patron-group-updates.job.ts',
-            'server/src/jobs-new/handlers/schedule-patron-player-updates.job.ts',
-            'server/src/jobs-new/handlers/sync-api-keys.job.ts',
-            'server/src/jobs-new/handlers/sync-patrons.job.ts',
-            'server/src/jobs-new/handlers/sync-player-achievements.job.ts',
-            'server/src/jobs-new/handlers/sync-player-competition-participations.job.ts',
-            'server/src/jobs-new/handlers/sync-player-deltas.job.ts',
-            'server/src/jobs-new/handlers/sync-player-records.job.ts',
-            'server/src/jobs-new/handlers/update-competition-score.job.ts',
-            'server/src/jobs-new/handlers/update-group-score.job.ts',
-            'server/src/jobs-new/handlers/update-player.job.ts',
-            'server/src/prisma/index.ts'
-        ],
-        "expected_api_files": [
-            "server/src/api/routing.ts",
-            "server/src/api/modules/competitions/competition.router.ts",
-            "server/src/api/modules/deltas/delta.router.ts",
-            "server/src/api/modules/efficiency/efficiency.router.ts",
-            "server/src/api/modules/general/general.router.ts",
-            "server/src/api/modules/groups/group.router.ts",
-            "server/src/api/modules/name-changes/name-change.router.ts",
-            "server/src/api/modules/patrons/patron.router.ts",
-            "server/src/api/modules/players/player.router.ts",
-            "server/src/api/modules/records/record.router.ts"
-        ]
-    },
-    "postiz-app-main": {
-        "expected_db_files": [
-            "libraries/nestjs-libraries/src/database/prisma/agencies/agencies.repository.ts",
-            "libraries/nestjs-libraries/src/database/prisma/autopost/autopost.repository.ts",
-            "libraries/nestjs-libraries/src/database/prisma/integrations/integration.repository.ts",
-            "libraries/nestjs-libraries/src/database/prisma/marketplace/item.user.repository.ts",
-            "libraries/nestjs-libraries/src/database/prisma/marketplace/messages.repository.ts",
-            "libraries/nestjs-libraries/src/database/prisma/media/media.repository.ts",
-            "libraries/nestjs-libraries/src/database/prisma/notifications/notifications.repository.ts",
-            "libraries/nestjs-libraries/src/database/prisma/organizations/organization.repository.ts",
-            "libraries/nestjs-libraries/src/database/prisma/posts/posts.repository.ts",
-            "libraries/nestjs-libraries/src/database/prisma/signatures/signature.repository.ts",
-            "libraries/nestjs-libraries/src/database/prisma/stars/stars.repository.ts",
-            "libraries/nestjs-libraries/src/database/prisma/subscriptions/subscription.repository.ts",
-            "libraries/nestjs-libraries/src/database/prisma/users/users.repository.ts",
-            "libraries/nestjs-libraries/src/database/prisma/webhooks/webhooks.repository.ts"
-        ],
-        "expected_api_files": [
-            "apps/backend/src/api/routes/agencies.controller.ts",
-            "apps/backend/src/api/routes/analytics.controller.ts",
-            "apps/backend/src/api/routes/auth.controller.ts",
-            "apps/backend/src/api/routes/autopost.controller.ts",
-            "apps/backend/src/api/routes/billing.controller.ts",
-            "apps/backend/src/api/routes/copilot.controller.ts",
-            "apps/backend/src/api/routes/integrations.controller.ts",
-            "apps/backend/src/api/routes/marketplace.controller.ts",
-            "apps/backend/src/api/routes/mcp.controller.ts",
-            "apps/backend/src/api/routes/media.controller.ts",
-            "apps/backend/src/api/routes/messages.controller.ts",
-            "apps/backend/src/api/routes/notifications.controller.ts",
-            "apps/backend/src/api/routes/posts.controller.ts",
-            "apps/backend/src/api/routes/public.controller.ts",
-            "apps/backend/src/api/routes/root.controller.ts",
-            "apps/backend/src/api/routes/settings.controller.ts",
-            "apps/backend/src/api/routes/signature.controller.ts",
-            "apps/backend/src/api/routes/stripe.controller.ts",
-            "apps/backend/src/api/routes/users.controller.ts",
-            "apps/backend/src/api/routes/webhooks.controller.ts",
-            "apps/backend/src/public-api/routes/v1/public.integrations.controller.ts",
-            "apps/workers/src/app/plugs.controller.ts",
-            "apps/workers/src/app/posts.controller.ts",
-            "apps/workers/src/app/stars.controller.ts"
-        ]
+
+function evaluateConceptExtractionPipeline(project, bestConceptsSortedNameOnly, extractConceptsFunction) {
+    const groundTruthRaw = projectsGroundTruthForConceptPipelineExtractionEvaluation[project].join(" ");
+    const groundTruthNormalized = extractConceptsFunction(groundTruthRaw)
+        .flatMap(concept => concept.split(" "));
+    const groundTruthSet = new Set(groundTruthNormalized);
+
+    const intersection = [...new Set(
+        bestConceptsSortedNameOnly.filter(concept => groundTruthSet.has(concept))
+    )];
+    const difference = [...new Set(
+        groundTruthNormalized.filter(concept => !bestConceptsSortedNameOnly.includes(concept))
+    )];
+
+    console.log("Common concepts:", intersection);
+    console.log("Missing concepts:", difference);
+    console.log(`Coverage score: ${intersection.length}/${groundTruthSet.size}`);
+
+    const indexedConcepts = Object.fromEntries(
+        bestConceptsSortedNameOnly.map((concept, index) => [concept, index + 1])
+    );
+
+    const matchedConcepts = bestConceptsSortedNameOnly.filter(concept => intersection.includes(concept));
+    const bestRanked = matchedConcepts[0];
+    const worstRanked = matchedConcepts.at(-1);
+
+    if (matchedConcepts.length > 0) {
+        console.log(`Best ranked concept position: ${indexedConcepts[bestRanked]} out of ${bestConceptsSortedNameOnly.length}`);
+        console.log(`Worst ranked concept position: ${indexedConcepts[worstRanked]} out of ${bestConceptsSortedNameOnly.length}`);
+    } else {
+        console.log("No common concepts found.");
     }
 }
 
 
 
 
+
+
+
+
 /**
  *
  *
- * EVALUATION
+ * EVALUATION FILE TAGGING
  *
  *
  *
@@ -330,20 +72,20 @@ const projectsGroundTruthForEvaluation = {
  * @param {string} taggingMode - Fully automated or semi-automated with(out) anchors tag files mode
  */
 function evaluateFilesTags(project, clusteredData, taggingMode) {
-    if (!projectsGroundTruthForEvaluation[project]) {
+    if (!projectsGroundTruthForFileTaggingEvaluation[project]) {
         throw new Error(`Project '${project}' is not supported for file tags evaluation`);
     }
 
     // Ensure that the directory for storing evaluation results exists
-    const evaluationResultsPath = getEvaluationResultsPath(project, taggingMode);
+    const evaluationResultsPath = getFileTaggingEvaluationResultsPath(project, taggingMode);
     if (!fs.existsSync(evaluationResultsPath)) {
         fs.mkdirSync(evaluationResultsPath, {recursive: true});
     }
 
     // Retrieve expected DB and API files from the ground truth
     const dbAndApiFiles = new Set([
-        ...projectsGroundTruthForEvaluation[project]["expected_db_files"],
-        ...projectsGroundTruthForEvaluation[project]["expected_api_files"]
+        ...projectsGroundTruthForFileTaggingEvaluation[project]["expected_db_files"],
+        ...projectsGroundTruthForFileTaggingEvaluation[project]["expected_api_files"]
     ]);
 
     /**
@@ -446,14 +188,14 @@ function computeEvaluationMetrics(classificationResults) {
  * @param {string} tagging_mode - Evaluation is for fully automated or semi-automated with(out) anchors tag files mode
  * @returns {string} - Absolute path to the project's evaluation results.
  */
-function getEvaluationResultsPath(project, tagging_mode) {
+function getFileTaggingEvaluationResultsPath(project, tagging_mode) {
     switch (tagging_mode) {
         case "fully_automated":
-            return path.join(__dirname, 'eval_results', 'fully_automated', project);
+            return path.join(__dirname, 'eval_file_tagging_results', 'fully_automated', project);
         case "semi_automated_without_anchors":
-            return path.join(__dirname, 'eval_results', 'semi_automated_without_anchors', project);
+            return path.join(__dirname, 'eval_file_tagging_results', 'semi_automated_without_anchors', project);
         case "semi_automated_with_anchors":
-            return path.join(__dirname, 'eval_results', 'semi_automated_with_anchors', project);
+            return path.join(__dirname, 'eval_file_tagging_results', 'semi_automated_with_anchors', project);
         default:
             console.error("Tagging mode unknown when evaluating")
     }
@@ -461,4 +203,4 @@ function getEvaluationResultsPath(project, tagging_mode) {
 
 
 
-module.exports = {evaluateFilesTags};
+module.exports = {evaluateConceptExtractionPipeline, evaluateFilesTags};

@@ -20,7 +20,7 @@ const StaticAnalyzer = require('./StaticAnalyzer.helper.js');
 
 // Evaluation
 
-const {evaluateFilesTags} = require("../evaluation/nlp");
+const {evaluateConceptExtractionPipeline, evaluateFilesTags} = require("../evaluation/nlp");
 
 // Libraries : File System
 
@@ -433,6 +433,17 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
 
         // Keep only name of concepts
         const bestConceptsSortedNameOnly = bestConceptsSorted.map(conceptObject => conceptObject.concept)
+
+        /**
+         *
+         * TODO : A SUPPRIMER OU DEPLACER ICI C'EST JUSTE POUR L'EVALUATION DU PIPELINE D'EXTRACTION DE CONCEPTS
+         *
+         * concepts trouvés + "/" + concepts sensés être trouvés
+         * concepts métiers le moins bien classé + "/" + total de concepts
+         * concepts métiers le mieux classé + "/" + total de concepts
+         *
+         */
+        evaluateConceptExtractionPipeline(element, bestConceptsSortedNameOnly, this.extractConcepts.bind(this));
 
         // Make the results refined with only the best concepts
         let refinedResults = sortedResults.map(item => {
