@@ -434,15 +434,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         // Keep only name of concepts
         const bestConceptsSortedNameOnly = bestConceptsSorted.map(conceptObject => conceptObject.concept)
 
-        /**
-         *
-         * TODO : A SUPPRIMER OU DEPLACER ICI C'EST JUSTE POUR L'EVALUATION DU PIPELINE D'EXTRACTION DE CONCEPTS
-         *
-         * concepts trouvés + "/" + concepts sensés être trouvés
-         * concepts métiers le moins bien classé + "/" + total de concepts
-         * concepts métiers le mieux classé + "/" + total de concepts
-         *
-         */
+        // Evaluate the concepts extraction pipeline results
         evaluateConceptExtractionPipeline(element, bestConceptsSortedNameOnly, this.extractConcepts.bind(this));
 
         // Make the results refined with only the best concepts
@@ -601,8 +593,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
     }
 
     /**
-     * Tags each file in the analysis results as DB-related using heuristics,
-     * writes the clustering results to a file, and evaluates the tagging accuracy.
+     * Tags each file in the analysis results as DB-related using heuristics.
      *
      * @param {string} element - The repository name, used for evaluation.
      * @param {Array} refinedResults - Array of files with token metadata.
@@ -614,8 +605,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
     }
 
     /**
-     * Tags each file in the analysis results as DB-related using heuristics,
-     * writes the clustering results to a file, and evaluates the tagging accuracy.
+     * Tags each file in the analysis results as DB-related using heuristics.
      *
      * @param {string} element - The repository name, used for evaluation.
      * @param {Array} refinedResults - Array of files with token metadata.
@@ -627,12 +617,11 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
     }
 
     /**
-     * Tags each file in the analysis results as DB-related using heuristics,
-     * writes the clustering results to a file, and evaluates the tagging accuracy.
+     * Tags each file in the analysis results as DB-related using heuristics, and evaluates the tagging accuracy.
      *
      * @param {string} element - The repository name, used for evaluation.
      * @param {Array} refinedResults - Array of files with token metadata.
-     * @param {Object} dataConcepts - List of database-related concepts and optionnally anchor points concepts.
+     * @param {Object} dataConcepts - List of database-related concepts and optionally anchor points concepts.
      * @param {string} taggingMode - Fully automated or semi-automated with(out) anchors tag files mode
      * @returns {Array} The tagged analysis results with cluster values.
      */

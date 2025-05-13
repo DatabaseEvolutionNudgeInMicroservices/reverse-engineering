@@ -1,6 +1,15 @@
 const fs = require('fs');
 const path = require('path');
-const {projectsGroundTruthForFileTaggingEvaluation, projectsGroundTruthForConceptPipelineExtractionEvaluation} = require("./ground_truth");
+
+// Ground truth
+
+const {
+    projectsGroundTruthForConceptPipelineExtractionEvaluation,
+    projectsGroundTruthForFileTaggingEvaluation
+} = require("./ground_truth");
+
+
+
 
 
 /**
@@ -13,37 +22,56 @@ const {projectsGroundTruthForFileTaggingEvaluation, projectsGroundTruthForConcep
  */
 
 function evaluateConceptExtractionPipeline(project, bestConceptsSortedNameOnly, extractConceptsFunction) {
+    if (!projectsGroundTruthForConceptPipelineExtractionEvaluation[project]) {
+        console.error(`Project '${project}' is not supported for concept extraction evaluation`);
+        return;
+    }
+
+    // Ensure that the directory for storing evaluation results exists
+    const evaluationResultsPath = getConceptExtractionEvaluationResultsPath(project);
+    if (!fs.existsSync(evaluationResultsPath)) {
+        fs.mkdirSync(evaluationResultsPath, {recursive: true});
+    }
+
     const groundTruthRaw = projectsGroundTruthForConceptPipelineExtractionEvaluation[project].join(" ");
     const groundTruthNormalized = extractConceptsFunction(groundTruthRaw)
         .flatMap(concept => concept.split(" "));
     const groundTruthSet = new Set(groundTruthNormalized);
+    const conceptExtractionResults = {};
 
-    const intersection = [...new Set(
+    conceptExtractionResults["intersection"] = [...new Set(
         bestConceptsSortedNameOnly.filter(concept => groundTruthSet.has(concept))
     )];
-    const difference = [...new Set(
+    conceptExtractionResults["difference"] = [...new Set(
         groundTruthNormalized.filter(concept => !bestConceptsSortedNameOnly.includes(concept))
     )];
+    conceptExtractionResults["coverage_score"] = `${conceptExtractionResults["intersection"].length}/${groundTruthSet.size}`
 
-    console.log("Common concepts:", intersection);
-    console.log("Missing concepts:", difference);
-    console.log(`Coverage score: ${intersection.length}/${groundTruthSet.size}`);
 
     const indexedConcepts = Object.fromEntries(
         bestConceptsSortedNameOnly.map((concept, index) => [concept, index + 1])
     );
-
-    const matchedConcepts = bestConceptsSortedNameOnly.filter(concept => intersection.includes(concept));
+    const matchedConcepts = bestConceptsSortedNameOnly.filter(concept => conceptExtractionResults["intersection"].includes(concept));
     const bestRanked = matchedConcepts[0];
     const worstRanked = matchedConcepts.at(-1);
-
     if (matchedConcepts.length > 0) {
-        console.log(`Best ranked concept position: ${indexedConcepts[bestRanked]} out of ${bestConceptsSortedNameOnly.length}`);
-        console.log(`Worst ranked concept position: ${indexedConcepts[worstRanked]} out of ${bestConceptsSortedNameOnly.length}`);
-    } else {
-        console.log("No common concepts found.");
+        conceptExtractionResults["best_ranked_concept"] = `${indexedConcepts[bestRanked]} out of ${bestConceptsSortedNameOnly.length}`
+        conceptExtractionResults["worst_ranked_concept"] = `${indexedConcepts[worstRanked]} out of ${bestConceptsSortedNameOnly.length}`
     }
+
+    fs.writeFileSync(`${evaluationResultsPath}/concept_extraction_results.json`, JSON.stringify(conceptExtractionResults, null, 2), 'utf8');
 }
+
+/**
+ * Returns the path to the concept extraction evaluation results folder for a given project.
+ *
+ * @param {string} project - Project name.
+ * @returns {string} - Absolute path to the project's evaluation results.
+ */
+function getConceptExtractionEvaluationResultsPath(project) {
+    return path.join(__dirname, 'eval_concept_extraction_results', project);
+}
+
 
 
 
@@ -73,7 +101,8 @@ function evaluateConceptExtractionPipeline(project, bestConceptsSortedNameOnly, 
  */
 function evaluateFilesTags(project, clusteredData, taggingMode) {
     if (!projectsGroundTruthForFileTaggingEvaluation[project]) {
-        throw new Error(`Project '${project}' is not supported for file tags evaluation`);
+        console.error(`Project '${project}' is not supported for file tags evaluation`);
+        return;
     }
 
     // Ensure that the directory for storing evaluation results exists
@@ -182,7 +211,7 @@ function computeEvaluationMetrics(classificationResults) {
 
 
 /**
- * Returns the path to the evaluation results folder for a given project.
+ * Returns the path to the file tagging evaluation results folder for a given project.
  *
  * @param {string} project - Project name.
  * @param {string} tagging_mode - Evaluation is for fully automated or semi-automated with(out) anchors tag files mode
@@ -200,7 +229,6 @@ function getFileTaggingEvaluationResultsPath(project, tagging_mode) {
             console.error("Tagging mode unknown when evaluating")
     }
 }
-
 
 
 module.exports = {evaluateConceptExtractionPipeline, evaluateFilesTags};
