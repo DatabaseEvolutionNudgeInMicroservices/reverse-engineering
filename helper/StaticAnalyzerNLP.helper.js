@@ -459,7 +459,6 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      * Filters and sorts the most relevant concepts based on various metrics.
      * The function calculates metrics such as TF-IDF, coefficient of variation, and dominance,
      * then normalizes them and computes a final score to determine the most important concepts.
-     * The most important concepts are once again filtered based on the value of the centrality metric
      *
      * @param sortedResults {Array} - The list of results containing extracted concepts and their occurrences.
      * @returns {Array} A list of concepts with computed scores, sorted by relevance.
@@ -472,7 +471,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
             dominance: 0.1, // Measures how much a concept dominates in a file relative to others (higher = more dominant).
         };
 
-        // Step 1: Compute initial metrics for each concept (without centrality)
+        // Step 1: Compute initial metrics for each concept
         let conceptsAndMetrics = [];
         Object.entries(this.getConceptsWithFilesAndOccurences(sortedResults))
             .forEach(([concept, occurrences]) => {
