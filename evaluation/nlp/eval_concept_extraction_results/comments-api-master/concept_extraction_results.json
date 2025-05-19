@@ -1,0 +1,22 @@
+{
+  "intersection": [
+    "id",
+    "comment",
+    "post",
+    "created",
+    "reply",
+    "text",
+    "browser",
+    "author",
+    "referrer",
+    "published",
+    "source",
+    "ip",
+    "modified",
+    "hash"
+  ],
+  "difference": [],
+  "coverage_score": "14/14",
+  "best_ranked_concept": "17 out of 141",
+  "worst_ranked_concept": "125 out of 141"
+}

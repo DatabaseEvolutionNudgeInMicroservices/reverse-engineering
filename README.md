@@ -8,20 +8,20 @@ This application enables to reverse-engineer a microservices architecture from a
 
 Here is a summary of the features currently supported.
 
-### Static Analysis
+### Static Analysis by Heuristics
 
 #### Description
 
-The static analysis feature enables the developer to (1) retrieve one or more GitHub/GitLab microservices, (2) 
-statically analyze them, (3) identify data access code fragments linked to certain API or database technologies and 
-likely to change during the evolution phase, implying then the propagation of changes in interdependent components 
-(e.g. other microservices or databases), (4) extract thanks to NLP the data concepts of those data access code 
-fragments, (5) link the data access code fragments with related data concepts, (6) compare data concepts with other 
-ones in the same microservice, (7) associate same data concepts, (8) present the result as a report, in a defined 
-model, designed to help developers understand microservices in a conceptual data approach, so that they can pay 
-attention to them when co-evolving API and database accesses. This report aims to provide developers with a valuable 
-basis for software evolution tasks, such as re-documentation, visualization, quality assessment, improvement 
-recommendations, impact analysis, or change propagation. 
+The static analysis feature enables the developer to (1) retrieve one or more GitHub/GitLab microservices, (2)
+statically analyze them, (3) identify data access code fragments linked to certain API or database technologies and
+likely to change during the evolution phase, implying then the propagation of changes in interdependent components
+(e.g. other microservices or databases), (4) extract thanks to NLP the data concepts of those data access code
+fragments, (5) link the data access code fragments with related data concepts, (6) compare data concepts with other
+ones in the same microservice, (7) associate same data concepts, (8) present the result as a report, in a defined
+model, designed to help developers understand microservices in a conceptual data approach, so that they can pay
+attention to them when co-evolving API and database accesses. This report aims to provide developers with a valuable
+basis for software evolution tasks, such as re-documentation, visualization, quality assessment, improvement
+recommendations, impact analysis, or change propagation.
 
 Here is a summary of languages and technologies currently supported:
 
@@ -35,12 +35,15 @@ Here is a summary of languages and technologies currently supported:
 
 **__INPUT__**
 
-Invoke the static analysis by using the [POST /static/language/:language/repository/zip](http://locahost:3000/static/language/:language/repository/zip) root with a ZIP file inside the request.
+Invoke the static analysis by using
+the [POST /static/heuristics/language/:language/repository/zip](http://locahost:3000/static/language/:language/repository/zip) root
+with a ZIP file inside the request.
 WARNING: This can take a while depending on the repository size.
 All repositories to analyze have to be integrated in the ZIP file.
 Each directory at the root of the zip file represents a repository.
 
-This zip file can be generated from GitHub/GitLab repositories thanks to [DENIM Downloading](https://github.com/DatabaseEvolutionNudgeInMicroservices/downloading).
+This zip file can be generated from GitHub/GitLab repositories thanks
+to [DENIM Downloading](https://github.com/DatabaseEvolutionNudgeInMicroservices/downloading).
 
 **__OUTPUT__**
 
@@ -67,33 +70,142 @@ Consult the response object:
                 // A code fragment
                 "location": "https://github.com/<user>/<repository>/.../<file path>.js#Lx1Cx1-Lx2y2",
                 "technology": {
-                  "name": "<technology>" // E.g., javascript-api-express, javascript-db-mongo, javascript-db-redis.
+                  "name": "<technology>"
+                  // E.g., javascript-api-express, javascript-db-mongo, javascript-db-redis.
                 },
                 "operation": {
-                  "name": "<operation>" // E.g., CREATE, READ, UPDATE, DELETE, OTHER
+                  "name": "<operation>"
+                  // E.g., CREATE, READ, UPDATE, DELETE, OTHER
                 },
                 "method": {
-                  "name": "<method>" // E.g., post, get, findOne, sadd, etc.
+                  "name": "<method>"
+                  // E.g., post, get, findOne, sadd, etc.
                 },
                 "sample": {
-                  "content": "<sample>" // E.g., a Redis key, a MongoDB object, etc.
+                  "content": "<sample>"
+                  // E.g., a Redis key, a MongoDB object, etc.
                 },
                 "concepts": [
                   {
-                    "name": "<concept>" // E.g., a route resource concept name, a Redis key name, a MongoDB, collection name, etc.
+                    "name": "<concept>"
+                    // E.g., a route resource concept name, a Redis key name, a MongoDB, collection name, etc.
                   }
                 ],
-                "heuristics": "<heuristics>", // The matching heuristics tracing.
-                "score": "<score>" // The computed likelihood score.
+                "heuristics": "<heuristics>",
+                // The matching heuristics tracing.
+                "score": "<score>"
+                // The computed likelihood score.
               }
             ]
-          } // ...
+          }
+          // ...
         ]
-      } // ...
+      }
+      // ...
     ]
-  } // ...
+  }
+  // ...
 ]
 ```
+
+### Static Analysis by NLP
+
+#### Description
+
+The NLP concept extraction approach enables the developer to (1) retrieve one or more microservices from a codebase, (2)
+perform lexical and statistical analysis to extract candidate business concepts from source files, (3) filter and
+prioritize these concepts using relevance metrics such as TF-IDF and dominance (4) use these high-level
+business concepts as anchors to locate related code fragments, including those that access APIs or databases, (5) compare concept occurrences and usage
+across different files and components, (6) reveal indirect or implicit dependencies between business logic and data
+access code, and (7) present the result as a report, in a defined model, designed to help developers understand
+microservices in a conceptual data approach, so that they can pay attention to them when co-evolving API and database
+accesses. This report aims to provide developers with a valuable basis for software evolution tasks, such as
+re-documentation, visualization, quality assessment, improvement recommendations, impact analysis, or change
+propagation.
+
+Here is a summary of languages and technologies currently supported:
+
+#### Implementation status
+
+| Language              | Technology | Implementation status |
+|-----------------------|------------|-----------------------|
+| JavaScript/TypeScript | Any        | 🌕                    |
+
+#### How to?
+
+**__INPUT__**
+
+Invoke the static analysis by using
+the [POST /static/nlp/language/:language/repository/zip](http://locahost:3000/static/language/:language/repository/zip) root
+with a ZIP file inside the request.
+WARNING: This can take a while depending on the repository size.
+All repositories to analyze have to be integrated in the ZIP file.
+Each directory at the root of the zip file represents a repository.
+
+This zip file can be generated from GitHub/GitLab repositories thanks
+to [DENIM Downloading](https://github.com/DatabaseEvolutionNudgeInMicroservices/downloading).
+
+An optional concepts file can be provided to guide the clustering algorithm in deciding whether a file should be classified as a data-access file.
+This input file must follow the structure below:
+
+```json
+  {
+    "<project_name>": {
+      // List of concepts that are related to the business domain (ex: table and column names from DB schema of the project)
+      "data_concepts": [
+        <list of domain related concepts>
+      ],
+      
+      // Optional
+      // List of concepts that the file should contain at list one element to be considered as data access related
+      "anchor_points": [
+        <list of anchor points>
+      ],
+    }
+  }
+```
+
+Here is an example of such file:
+```json
+{
+  "cinema-microservice-master": {
+    "data_concepts": [
+      "cinema",
+      "movie",
+      "payment",
+      "ticket",
+      "booking"
+    ]
+  },
+  "comments-api-master": {
+    "anchor_points": [
+      "express",
+      "db"
+    ],
+    "data_concepts": [
+      "comment",
+      "author",
+      "createdOn",
+      "hash",
+      "id",
+      "modifiedOn",
+      "postId",
+      "published",
+      "replyToId",
+      "source",
+      "ip",
+      "browser",
+      "referrer",
+      "text"
+    ]
+  }
+```
+
+
+
+**__OUTPUT__**
+
+The same as in Static analysis by Heuristics.
 
 ## 👩‍💻 Development details
 
@@ -209,7 +321,7 @@ Warning! Right privileges must be granted to Docker on the session on which the 
 
 ## 🧪 Design details
 
-### Static Analysis
+### Static Analysis by Heuristics
 
 For finding locations of code related to some API or database technologies, some heuristics are defined based on
 pattern and rules matching according to the documentation of the technologies. These help to compute the likelihood
@@ -217,38 +329,38 @@ scores.
 
 API (Express) Likelihood Score Heuristics.
 
-| ID  | Description                                                                                                                       |
-|-----|-----------------------------------------------------------------------------------------------------------------------------------|
-| E1  | According to the Express documentation, the method call has an Express-like method name (e.g., get, post, put, delete, ...).      |
-| E2  | According to the Express documentation, the method call has an string as first argument.                                          |
-| E3  | According to the Express documentation, the method call has an Express route-like string as first argument.                       |
-| E4  | According to the Express documentation, the method call has a function as second argument.                                        |
-| E5  | According to the Express documentation, the method call has an Express-like receiver name (e.g., app).                            |
-| E6  | According to the Express documentation, the method call has an Express-like import around (in the same file).                     |   
-| E7  | According to the Express documentation, the method call has an Express-like client assignment around (in the same file).          |
-| E8  | According to the Express documentation, the method call is linked to an Express-like client assignment around (in the same file). |
+| ID | Description                                                                                                                       |
+|----|-----------------------------------------------------------------------------------------------------------------------------------|
+| E1 | According to the Express documentation, the method call has an Express-like method name (e.g., get, post, put, delete, ...).      |
+| E2 | According to the Express documentation, the method call has an string as first argument.                                          |
+| E3 | According to the Express documentation, the method call has an Express route-like string as first argument.                       |
+| E4 | According to the Express documentation, the method call has a function as second argument.                                        |
+| E5 | According to the Express documentation, the method call has an Express-like receiver name (e.g., app).                            |
+| E6 | According to the Express documentation, the method call has an Express-like import around (in the same file).                     |   
+| E7 | According to the Express documentation, the method call has an Express-like client assignment around (in the same file).          |
+| E8 | According to the Express documentation, the method call is linked to an Express-like client assignment around (in the same file). |
 
 DB (Redis) Likelihood Score Heuristics.
 
-| ID  | Description                                                                                                                                    |
-|-----|------------------------------------------------------------------------------------------------------------------------------------------------|
-| R1  | According to the Redis documentation, the method call has a Redis-like method name (e.g., get, set, del, scan, keys, sadd, rpush, setnx, ...). |
-| R2  | According to the Redis documentation, the method call has a string as first argument.                                                          |
-| R3  | According to the Redis documentation, the method call has an Redis-like receiver name (e.g., client, redisClient).                             |
-| R4  | According to the Redis documentation, the method call has a Redis-like import around (in the same file).                                       |   
-| R5  | According to the Redis documentation, the method call has a Redis-like client assignment around (in the same file).                            |
-| R6  | According to the Redis documentation, the method call is linked to an Redis-like client assignment around (in the same file).                  |
+| ID | Description                                                                                                                                    |
+|----|------------------------------------------------------------------------------------------------------------------------------------------------|
+| R1 | According to the Redis documentation, the method call has a Redis-like method name (e.g., get, set, del, scan, keys, sadd, rpush, setnx, ...). |
+| R2 | According to the Redis documentation, the method call has a string as first argument.                                                          |
+| R3 | According to the Redis documentation, the method call has an Redis-like receiver name (e.g., client, redisClient).                             |
+| R4 | According to the Redis documentation, the method call has a Redis-like import around (in the same file).                                       |   
+| R5 | According to the Redis documentation, the method call has a Redis-like client assignment around (in the same file).                            |
+| R6 | According to the Redis documentation, the method call is linked to an Redis-like client assignment around (in the same file).                  |
 
 DB (MongoDB) Likelihood Score Heuristics.
 
-| ID  | Description                                                                                                                                     |
-|-----|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| M1  | According to the MongoDB documentation, the method call has a MongoDB-like method name (e.g., findOne, insertMany, updateOne, deleteMany, ...). |
-| M2  | According to the MongoDB documentation, the method call has a string, an object or an array as first argument.                                  |
-| M3  | According to the MongoDB documentation, the method call has an MongoDB-like receiver name (e.g., db, collection).                               |
-| M4  | According to the MongoDB documentation, the method call has a MongoDB-like import around (in the same file).                                    |   
-| M5  | According to the MongoDB documentation, the method call has a MongoDB-like client assignment around (in the same file).                         |
-| M6  | According to the MongoDB documentation, the method call is linked to a MongoDB-like client assignment around (in the same file).                |
+| ID | Description                                                                                                                                     |
+|----|-------------------------------------------------------------------------------------------------------------------------------------------------|
+| M1 | According to the MongoDB documentation, the method call has a MongoDB-like method name (e.g., findOne, insertMany, updateOne, deleteMany, ...). |
+| M2 | According to the MongoDB documentation, the method call has a string, an object or an array as first argument.                                  |
+| M3 | According to the MongoDB documentation, the method call has an MongoDB-like receiver name (e.g., db, collection).                               |
+| M4 | According to the MongoDB documentation, the method call has a MongoDB-like import around (in the same file).                                    |   
+| M5 | According to the MongoDB documentation, the method call has a MongoDB-like client assignment around (in the same file).                         |
+| M6 | According to the MongoDB documentation, the method call is linked to a MongoDB-like client assignment around (in the same file).                |
 
 The resulting report follows that model:
 
@@ -256,7 +368,7 @@ The resulting report follows that model:
 
 ## 🤝 Contributing
 
-If you want to contribute to the project by supporting new technologies or heuristics, please consider the 
+If you want to contribute to the project by supporting new technologies or heuristics, please consider the
 following instructions:
 
 - Any query file must be added in the `/query` directory.
@@ -267,18 +379,20 @@ following instructions:
 - Any helping method used for the queries must be added in the `utils.qll` file.
 - Any helping method or class must be named clearly (no abbreviations), especially integrating the type of detection,
   technology, and type of code fragment.
-- More generally, any contribution must follow the conventions and keep the shape of previous contributions.  
-- Any contribution must be tested (unit and integration tests) and evaluated (evaluation). See `/test` and 
-  `/evaluation` directories. All the tests and the CI/CD pipeline must pass before definitively integrating the 
+- More generally, any contribution must follow the conventions and keep the shape of previous contributions.
+- Any contribution must be tested (unit and integration tests) and evaluated (evaluation). See `/test` and
+  `/evaluation` directories. All the tests and the CI/CD pipeline must pass before definitively integrating the
   contribution.
 - Any contribution must be documented, especially by updating the `README.md` file.
 - Any contribution must be approved via the pull request mechanism.
 
 ## 📊 Evaluation
 
-The complete data of our evaluation is detailed in the [`/evaluation`](https://github.com/DatabaseEvolutionNudgeInMicroservices/reverse-engineering/tree/main/evaluation) folder. The `1-Ground truth
+The complete data of our evaluation is detailed in the [
+`/evaluation`](https://github.com/DatabaseEvolutionNudgeInMicroservices/reverse-engineering/tree/main/evaluation)
+folder. The `1-Ground truth
 <system name>.xlsx` files details the manual annotation performed on the system codebases. The `2-Actual <system
 name>.xlsx` file details the results of the empirical evaluation, for example in terms of precision and recall. The
 script `index.js` with files `3-expected <system name>.csv` and `4-actual <system name>.csv` help to compute
-precision and recall scores. The `4-actual <system name>.json` show examples of final reports according to the model. 
+precision and recall scores. The `4-actual <system name>.json` show examples of final reports according to the model.
 Files `5-<...>...` contains charts and metrics.

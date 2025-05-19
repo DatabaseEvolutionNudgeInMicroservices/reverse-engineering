@@ -9,6 +9,7 @@ const CleaningFail = require('../error/CleaningFail.error.js');
 const {DOWNLOAD_FAIL, INPUT_INCORRECTLY_FORMATTED} = require('../error/Constant.error');
 const {FILE_SYSTEM_SEPARATOR} = require("../helper/Constant.helper");
 const multer = require('multer');
+const {readFileSync} = require("fs");
 
 // Configuration
 
@@ -27,10 +28,13 @@ const upload = multer({
     })
 });
 
-router.post('/static/language/:language/repository/zip', upload.single('file'), function (request, response) {
-    if (request.file) {
-        const {path: zipTempFilePath, originalname: originalFileName} = request.file;
-        controller.analyzeStatically(zipTempFilePath, request.params.language)
+// Helper function for handling file uploads and responses
+
+const handleFileUploadAndResponse = (fileMethod) => (request, response) => {
+    if (request.files.file) {
+        const {path: zipTempFilePath, originalname: originalFileName} = request.files.file[0];
+        const db_details = request.files.concepts ? JSON.parse(readFileSync(request.files.concepts[0].path, 'utf-8')) : undefined;
+        fileMethod.call(controller, zipTempFilePath, request.params.language, db_details)
             .then((result) => {
                 response.status(200);
                 response.json(result);
@@ -58,6 +62,16 @@ router.post('/static/language/:language/repository/zip', upload.single('file'), 
     } else {
         response.status(400).json({name: DOWNLOAD_FAIL, message: INPUT_INCORRECTLY_FORMATTED});
     }
-});
+};
+
+// Endpoints
+
+router.post('/static/heuristics/language/:language/repository/zip', upload.single('file'), handleFileUploadAndResponse(controller.analyzeStaticallyHeuristics));
+
+router.post('/static/nlp/language/:language/repository/zip', upload.fields([
+    {name: 'file'},
+    {name: 'concepts', maxCount: 1}
+]), handleFileUploadAndResponse(controller.analyzeStaticallyNLP));
+
 
 module.exports = router;

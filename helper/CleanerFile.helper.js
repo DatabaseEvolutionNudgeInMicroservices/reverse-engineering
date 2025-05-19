@@ -70,7 +70,7 @@ class CleanerFile extends Cleaner {
                     try {
                         const stats = fs.lstatSync(path);
                         if (stats.isDirectory()) {
-                            fs.rmdirSync(path, {recursive: true});
+                            fs.rmdirSync(path, {recursive: true, retryDelay: 500});
                         } else if (stats.isFile()) {
                             fs.rmSync(path, {force: true});
                         }

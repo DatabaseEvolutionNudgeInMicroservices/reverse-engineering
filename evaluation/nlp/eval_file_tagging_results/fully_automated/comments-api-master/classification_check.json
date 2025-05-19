@@ -1,0 +1,308 @@
+[
+  {
+    "file": ".eslintrc.js",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "db/index.js",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "jest-mongo.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "jest-setup.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "jest-teardown.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/comment/comment.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/comment/comment.spec.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/comment/index.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/comment/source.js",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "src/controllers/delete-comment.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/controllers/get-comments.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/controllers/index.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/controllers/not-found.js",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "src/controllers/patch-comment.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/controllers/patch-comment.spec.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/controllers/post-comment.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/controllers/post-comment.spec.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/data-access/comments-db.js",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "src/data-access/comments-db.spec.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/data-access/index.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/express-callback/index.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/Id/index.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/index.js",
+    "expected": 1,
+    "found": 1,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "src/is-questionable/index.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/is-questionable/is-questionable.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/is-questionable/is-questionable.spec.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/use-cases/add-comment.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/use-cases/add-comment.spec.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/use-cases/edit-comment.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/use-cases/edit-comment.spec.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/use-cases/handle-moderation.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/use-cases/index.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/use-cases/list-comments.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/use-cases/list-comments.spec.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/use-cases/remove-comment.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "src/use-cases/remove-comment.spec.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "__test__/akismet.spec.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "__test__/e2e.spec.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "__test__/fixtures/comment.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "__test__/fixtures/db.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": "__test__/is-questionable.spec.js",
+    "expected": 0,
+    "found": 1,
+    "status": "❌ Incorrect (false positive)"
+  },
+  {
+    "file": ".babelrc",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": ".gitignore",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "LICENSE",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "package-lock.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "package.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "README.md",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "sampledotenv",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "__test__/fixtures/moderation-api/no-classification.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "__test__/fixtures/moderation-api/no-review.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  },
+  {
+    "file": "__test__/fixtures/moderation-api/review.json",
+    "expected": 0,
+    "found": 0,
+    "status": "✅ Correct"
+  }
+]

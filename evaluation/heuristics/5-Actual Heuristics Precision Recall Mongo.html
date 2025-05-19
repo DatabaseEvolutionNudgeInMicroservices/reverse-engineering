@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MongoDB Heuristics Precision and Recall</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+<div id="plot" style="width:35%;height:800px;"></div>
+<script>
+    let xValues = ['M1', 'M2', 'M3', 'M4', 'M5', 'M6'];
+
+    let yValues = [
+        'Overleaf - Precision',
+        'Overleaf - Recall',
+        'Comments - Precision',
+        'Comments - Recall',
+        'Cinema - Precision',
+        'Cinema - Recall',
+        'Robot Shop - Precision',
+        'Robot Shop - Recall',
+        'Cloudboost - Precision',
+        'Cloudboost - Recall'
+    ];
+
+    let zValues = [
+        [78.36, 94.94, 97.22, 98.13, 100.00, 100.00],
+        [100.00, 71.43, 100.00, 100.00, 11.43, 11.43],
+        [72, 78.95, 75, "N/A", "N/A", "N/A"],
+        [100, 83.33, 100, 0.00, 0.00, 0.00],
+        [100.00, 100.00, 100.00, "N/A", "N/A", "N/A"],
+        [100.00, 65.00, 100.00, 0.00, 0.00, 0.00],
+        [100, 100, 100, 100, 100, 100],
+        [100, 95.65, 100, 78.26, 78.26, 13.04],
+        [53.16, 80.00, 97.96, 66.42, "N/A", "N/A"],
+        [100, 47.52, 95.05, 88.12, 0, 0]
+    ];
+
+    let colorscaleValue = [
+        [0, '#ffffff'],
+        [1, '#74e599']
+    ];
+
+    let data = [{
+        x: xValues,
+        y: yValues,
+        z: zValues,
+        type: 'heatmap',
+        colorscale: colorscaleValue,
+        showscale: true,
+        colorbar: {
+            title: {
+                text: ' % ',
+            }
+        }
+    }];
+
+    let layout = {
+        title: 'MongoDB Heuristics Precision and Recall',
+        annotations: [],
+        xaxis: {
+            automargin: true,
+            showgrid: false
+        },
+        yaxis: {
+            automargin: true,
+            showgrid: false
+        },
+        shapes: [] // Separation lines
+    };
+
+    for (let i = 0; i < yValues.length; i++) {
+        for (let j = 0; j < xValues.length; j++) {
+            let result = {
+                xref: 'x1',
+                yref: 'y1',
+                x: xValues[j],
+                y: yValues[i],
+                text: zValues[i][j],
+                font: {
+                    family: 'Arial',
+                    size: 12
+                },
+                showarrow: false,
+                font: {
+                    color: 'black'
+                }
+            };
+            layout.annotations.push(result);
+        }
+    }
+
+    // Separation lines
+
+    for (let i = 2; i < yValues.length; i += 2) {
+        layout.shapes.push({
+            type: 'line',
+            x0: -0.5,
+            x1: xValues.length - 0.5,
+            y0: i - 0.5,
+            y1: i - 0.5,
+            line: {
+                color: 'black',
+                width: 2
+            }
+        });
+    }
+
+    Plotly.newPlot('plot', data, layout);
+</script>
+</body>
+</html>

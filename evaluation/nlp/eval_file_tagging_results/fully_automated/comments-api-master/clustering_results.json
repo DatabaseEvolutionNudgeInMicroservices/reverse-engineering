@@ -1,0 +1,3067 @@
+[
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\.eslintrc.js",
+    "tokens": {
+      "env": {
+        "numberOfOccurence": 1
+      },
+      "node": {
+        "numberOfOccurence": 1
+      },
+      "mongo": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 8,
+    "cluster": 0
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\db\\index.js",
+    "tokens": {
+      "db": {
+        "numberOfOccurence": 5
+      },
+      "datum": {
+        "numberOfOccurence": 1
+      },
+      "config": {
+        "numberOfOccurence": 1
+      },
+      "async": {
+        "numberOfOccurence": 1
+      },
+      "database": {
+        "numberOfOccurence": 3
+      },
+      "collection": {
+        "numberOfOccurence": 2
+      },
+      "created": {
+        "numberOfOccurence": 1
+      },
+      "not": {
+        "numberOfOccurence": 1
+      },
+      "result": {
+        "numberOfOccurence": 2
+      },
+      "comment": {
+        "numberOfOccurence": 1
+      },
+      "key": {
+        "numberOfOccurence": 3
+      },
+      "hash": {
+        "numberOfOccurence": 2
+      },
+      "name": {
+        "numberOfOccurence": 3
+      },
+      "post": {
+        "numberOfOccurence": 2
+      },
+      "id": {
+        "numberOfOccurence": 4
+      },
+      "reply": {
+        "numberOfOccurence": 2
+      },
+      "process": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 17,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\jest-mongo.js",
+    "tokens": {
+      "node": {
+        "numberOfOccurence": 3
+      },
+      "environment": {
+        "numberOfOccurence": 5
+      },
+      "path": {
+        "numberOfOccurence": 5
+      },
+      "global": {
+        "numberOfOccurence": 8
+      },
+      "config": {
+        "numberOfOccurence": 8
+      },
+      "mongo": {
+        "numberOfOccurence": 5
+      },
+      "json": {
+        "numberOfOccurence": 2
+      },
+      "async": {
+        "numberOfOccurence": 2
+      },
+      "db": {
+        "numberOfOccurence": 1
+      },
+      "name": {
+        "numberOfOccurence": 1
+      },
+      "teardown": {
+        "numberOfOccurence": 2
+      },
+      "run": {
+        "numberOfOccurence": 2
+      }
+    },
+    "fileNumberOfLinesOfCode": 22,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\jest-setup.js",
+    "tokens": {
+      "path": {
+        "numberOfOccurence": 5
+      },
+      "mongo": {
+        "numberOfOccurence": 7
+      },
+      "server": {
+        "numberOfOccurence": 4
+      },
+      "mongodb": {
+        "numberOfOccurence": 1
+      },
+      "global": {
+        "numberOfOccurence": 6
+      },
+      "config": {
+        "numberOfOccurence": 6
+      },
+      "json": {
+        "numberOfOccurence": 2
+      },
+      "mongod": {
+        "numberOfOccurence": 8
+      },
+      "async": {
+        "numberOfOccurence": 1
+      },
+      "db": {
+        "numberOfOccurence": 1
+      },
+      "name": {
+        "numberOfOccurence": 1
+      },
+      "connection": {
+        "numberOfOccurence": 1
+      },
+      "test": {
+        "numberOfOccurence": 1
+      },
+      "run": {
+        "numberOfOccurence": 1
+      },
+      "set": {
+        "numberOfOccurence": 1
+      },
+      "close": {
+        "numberOfOccurence": 1
+      },
+      "teardown": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 20,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\jest-teardown.js",
+    "tokens": {
+      "async": {
+        "numberOfOccurence": 1
+      },
+      "global": {
+        "numberOfOccurence": 1
+      },
+      "mongod": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 5,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\comment\\comment.js",
+    "tokens": {
+      "build": {
+        "numberOfOccurence": 1
+      },
+      "comment": {
+        "numberOfOccurence": 11
+      },
+      "id": {
+        "numberOfOccurence": 25
+      },
+      "sanitize": {
+        "numberOfOccurence": 2
+      },
+      "source": {
+        "numberOfOccurence": 9
+      },
+      "author": {
+        "numberOfOccurence": 9
+      },
+      "created": {
+        "numberOfOccurence": 3
+      },
+      "date": {
+        "numberOfOccurence": 2
+      },
+      "modified": {
+        "numberOfOccurence": 3
+      },
+      "post": {
+        "numberOfOccurence": 6
+      },
+      "published": {
+        "numberOfOccurence": 6
+      },
+      "reply": {
+        "numberOfOccurence": 7
+      },
+      "text": {
+        "numberOfOccurence": 16
+      },
+      "valid": {
+        "numberOfOccurence": 6
+      },
+      "error": {
+        "numberOfOccurence": 8
+      },
+      "name": {
+        "numberOfOccurence": 1
+      },
+      "character": {
+        "numberOfOccurence": 2
+      },
+      "contain": {
+        "numberOfOccurence": 2
+      },
+      "include": {
+        "numberOfOccurence": 1
+      },
+      "one": {
+        "numberOfOccurence": 1
+      },
+      "sanitized": {
+        "numberOfOccurence": 6
+      },
+      "no": {
+        "numberOfOccurence": 1
+      },
+      "deleted": {
+        "numberOfOccurence": 7
+      },
+      "hash": {
+        "numberOfOccurence": 6
+      }
+    },
+    "fileNumberOfLinesOfCode": 74,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\comment\\comment.spec.js",
+    "tokens": {
+      "fake": {
+        "numberOfOccurence": 25
+      },
+      "comment": {
+        "numberOfOccurence": 77
+      },
+      "test": {
+        "numberOfOccurence": 1
+      },
+      "fixture": {
+        "numberOfOccurence": 1
+      },
+      "describe": {
+        "numberOfOccurence": 1
+      },
+      "author": {
+        "numberOfOccurence": 5
+      },
+      "expect": {
+        "numberOfOccurence": 29
+      },
+      "throw": {
+        "numberOfOccurence": 10
+      },
+      "valid": {
+        "numberOfOccurence": 4
+      },
+      "post": {
+        "numberOfOccurence": 4
+      },
+      "id": {
+        "numberOfOccurence": 18
+      },
+      "contain": {
+        "numberOfOccurence": 3
+      },
+      "text": {
+        "numberOfOccurence": 12
+      },
+      "include": {
+        "numberOfOccurence": 1
+      },
+      "one": {
+        "numberOfOccurence": 1
+      },
+      "character": {
+        "numberOfOccurence": 1
+      },
+      "reply": {
+        "numberOfOccurence": 6
+      },
+      "not": {
+        "numberOfOccurence": 7
+      },
+      "undefined": {
+        "numberOfOccurence": 7
+      },
+      "no": {
+        "numberOfOccurence": 15
+      },
+      "defined": {
+        "numberOfOccurence": 5
+      },
+      "published": {
+        "numberOfOccurence": 8
+      },
+      "unpublished": {
+        "numberOfOccurence": 5
+      },
+      "created": {
+        "numberOfOccurence": 5
+      },
+      "utc": {
+        "numberOfOccurence": 4
+      },
+      "date": {
+        "numberOfOccurence": 8
+      },
+      "modified": {
+        "numberOfOccurence": 6
+      },
+      "deleted": {
+        "numberOfOccurence": 5
+      },
+      "hash": {
+        "numberOfOccurence": 2
+      },
+      "source": {
+        "numberOfOccurence": 15
+      },
+      "ip": {
+        "numberOfOccurence": 6
+      },
+      "http": {
+        "numberOfOccurence": 1
+      },
+      "browser": {
+        "numberOfOccurence": 6
+      },
+      "referrer": {
+        "numberOfOccurence": 3
+      }
+    },
+    "fileNumberOfLinesOfCode": 129,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\comment\\index.js",
+    "tokens": {
+      "id": {
+        "numberOfOccurence": 3
+      },
+      "ip": {
+        "numberOfOccurence": 7
+      },
+      "sanitize": {
+        "numberOfOccurence": 5
+      },
+      "html": {
+        "numberOfOccurence": 3
+      },
+      "build": {
+        "numberOfOccurence": 4
+      },
+      "comment": {
+        "numberOfOccurence": 5
+      },
+      "source": {
+        "numberOfOccurence": 5
+      },
+      "valid": {
+        "numberOfOccurence": 2
+      },
+      "test": {
+        "numberOfOccurence": 1
+      },
+      "text": {
+        "numberOfOccurence": 4
+      },
+      "hash": {
+        "numberOfOccurence": 1
+      },
+      "update": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 23,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\comment\\source.js",
+    "tokens": {
+      "build": {
+        "numberOfOccurence": 1
+      },
+      "source": {
+        "numberOfOccurence": 4
+      },
+      "valid": {
+        "numberOfOccurence": 3
+      },
+      "ip": {
+        "numberOfOccurence": 9
+      },
+      "browser": {
+        "numberOfOccurence": 3
+      },
+      "referrer": {
+        "numberOfOccurence": 3
+      },
+      "error": {
+        "numberOfOccurence": 2
+      },
+      "comment": {
+        "numberOfOccurence": 2
+      },
+      "contain": {
+        "numberOfOccurence": 2
+      }
+    },
+    "fileNumberOfLinesOfCode": 15,
+    "cluster": 0
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\controllers\\delete-comment.js",
+    "tokens": {
+      "delete": {
+        "numberOfOccurence": 2
+      },
+      "comment": {
+        "numberOfOccurence": 4
+      },
+      "remove": {
+        "numberOfOccurence": 2
+      },
+      "async": {
+        "numberOfOccurence": 1
+      },
+      "http": {
+        "numberOfOccurence": 2
+      },
+      "request": {
+        "numberOfOccurence": 2
+      },
+      "header": {
+        "numberOfOccurence": 3
+      },
+      "content": {
+        "numberOfOccurence": 1
+      },
+      "type": {
+        "numberOfOccurence": 1
+      },
+      "application": {
+        "numberOfOccurence": 1
+      },
+      "json": {
+        "numberOfOccurence": 1
+      },
+      "deleted": {
+        "numberOfOccurence": 4
+      },
+      "id": {
+        "numberOfOccurence": 2
+      },
+      "status": {
+        "numberOfOccurence": 2
+      },
+      "count": {
+        "numberOfOccurence": 1
+      },
+      "body": {
+        "numberOfOccurence": 2
+      },
+      "error": {
+        "numberOfOccurence": 2
+      },
+      "message": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 24,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\controllers\\get-comments.js",
+    "tokens": {
+      "comment": {
+        "numberOfOccurence": 6
+      },
+      "list": {
+        "numberOfOccurence": 2
+      },
+      "async": {
+        "numberOfOccurence": 1
+      },
+      "http": {
+        "numberOfOccurence": 2
+      },
+      "request": {
+        "numberOfOccurence": 2
+      },
+      "header": {
+        "numberOfOccurence": 3
+      },
+      "content": {
+        "numberOfOccurence": 1
+      },
+      "type": {
+        "numberOfOccurence": 1
+      },
+      "application": {
+        "numberOfOccurence": 1
+      },
+      "json": {
+        "numberOfOccurence": 1
+      },
+      "post": {
+        "numberOfOccurence": 4
+      },
+      "id": {
+        "numberOfOccurence": 2
+      },
+      "query": {
+        "numberOfOccurence": 1
+      },
+      "status": {
+        "numberOfOccurence": 2
+      },
+      "body": {
+        "numberOfOccurence": 2
+      },
+      "error": {
+        "numberOfOccurence": 2
+      },
+      "message": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 26,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\controllers\\index.js",
+    "tokens": {
+      "add": {
+        "numberOfOccurence": 2
+      },
+      "comment": {
+        "numberOfOccurence": 34
+      },
+      "edit": {
+        "numberOfOccurence": 2
+      },
+      "list": {
+        "numberOfOccurence": 2
+      },
+      "remove": {
+        "numberOfOccurence": 2
+      },
+      "use": {
+        "numberOfOccurence": 1
+      },
+      "delete": {
+        "numberOfOccurence": 5
+      },
+      "post": {
+        "numberOfOccurence": 6
+      },
+      "patch": {
+        "numberOfOccurence": 6
+      },
+      "not": {
+        "numberOfOccurence": 4
+      },
+      "found": {
+        "numberOfOccurence": 4
+      }
+    },
+    "fileNumberOfLinesOfCode": 26,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\controllers\\not-found.js",
+    "tokens": {
+      "async": {
+        "numberOfOccurence": 1
+      },
+      "not": {
+        "numberOfOccurence": 2
+      },
+      "found": {
+        "numberOfOccurence": 2
+      },
+      "header": {
+        "numberOfOccurence": 1
+      },
+      "content": {
+        "numberOfOccurence": 1
+      },
+      "type": {
+        "numberOfOccurence": 1
+      },
+      "application": {
+        "numberOfOccurence": 1
+      },
+      "json": {
+        "numberOfOccurence": 1
+      },
+      "body": {
+        "numberOfOccurence": 1
+      },
+      "error": {
+        "numberOfOccurence": 1
+      },
+      "status": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 9,
+    "cluster": 0
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\controllers\\patch-comment.js",
+    "tokens": {
+      "patch": {
+        "numberOfOccurence": 2
+      },
+      "comment": {
+        "numberOfOccurence": 6
+      },
+      "edit": {
+        "numberOfOccurence": 4
+      },
+      "async": {
+        "numberOfOccurence": 1
+      },
+      "http": {
+        "numberOfOccurence": 7
+      },
+      "request": {
+        "numberOfOccurence": 7
+      },
+      "source": {
+        "numberOfOccurence": 5
+      },
+      "info": {
+        "numberOfOccurence": 2
+      },
+      "body": {
+        "numberOfOccurence": 4
+      },
+      "ip": {
+        "numberOfOccurence": 2
+      },
+      "browser": {
+        "numberOfOccurence": 1
+      },
+      "header": {
+        "numberOfOccurence": 6
+      },
+      "referrer": {
+        "numberOfOccurence": 1
+      },
+      "id": {
+        "numberOfOccurence": 2
+      },
+      "patched": {
+        "numberOfOccurence": 3
+      },
+      "content": {
+        "numberOfOccurence": 3
+      },
+      "type": {
+        "numberOfOccurence": 3
+      },
+      "application": {
+        "numberOfOccurence": 3
+      },
+      "json": {
+        "numberOfOccurence": 3
+      },
+      "modified": {
+        "numberOfOccurence": 2
+      },
+      "date": {
+        "numberOfOccurence": 1
+      },
+      "utc": {
+        "numberOfOccurence": 1
+      },
+      "status": {
+        "numberOfOccurence": 3
+      },
+      "error": {
+        "numberOfOccurence": 4
+      },
+      "name": {
+        "numberOfOccurence": 1
+      },
+      "message": {
+        "numberOfOccurence": 2
+      }
+    },
+    "fileNumberOfLinesOfCode": 48,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\controllers\\patch-comment.spec.js",
+    "tokens": {
+      "patch": {
+        "numberOfOccurence": 10
+      },
+      "comment": {
+        "numberOfOccurence": 27
+      },
+      "fake": {
+        "numberOfOccurence": 14
+      },
+      "test": {
+        "numberOfOccurence": 1
+      },
+      "fixture": {
+        "numberOfOccurence": 1
+      },
+      "describe": {
+        "numberOfOccurence": 1
+      },
+      "async": {
+        "numberOfOccurence": 2
+      },
+      "edit": {
+        "numberOfOccurence": 2
+      },
+      "request": {
+        "numberOfOccurence": 5
+      },
+      "header": {
+        "numberOfOccurence": 4
+      },
+      "content": {
+        "numberOfOccurence": 4
+      },
+      "type": {
+        "numberOfOccurence": 4
+      },
+      "application": {
+        "numberOfOccurence": 4
+      },
+      "json": {
+        "numberOfOccurence": 4
+      },
+      "source": {
+        "numberOfOccurence": 4
+      },
+      "referrer": {
+        "numberOfOccurence": 2
+      },
+      "browser": {
+        "numberOfOccurence": 2
+      },
+      "id": {
+        "numberOfOccurence": 4
+      },
+      "body": {
+        "numberOfOccurence": 5
+      },
+      "expected": {
+        "numberOfOccurence": 4
+      },
+      "modified": {
+        "numberOfOccurence": 2
+      },
+      "date": {
+        "numberOfOccurence": 1
+      },
+      "utc": {
+        "numberOfOccurence": 1
+      },
+      "status": {
+        "numberOfOccurence": 2
+      },
+      "patched": {
+        "numberOfOccurence": 1
+      },
+      "actual": {
+        "numberOfOccurence": 4
+      },
+      "expect": {
+        "numberOfOccurence": 2
+      },
+      "equal": {
+        "numberOfOccurence": 2
+      },
+      "error": {
+        "numberOfOccurence": 3
+      }
+    },
+    "fileNumberOfLinesOfCode": 57,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\controllers\\post-comment.js",
+    "tokens": {
+      "post": {
+        "numberOfOccurence": 2
+      },
+      "comment": {
+        "numberOfOccurence": 6
+      },
+      "add": {
+        "numberOfOccurence": 2
+      },
+      "async": {
+        "numberOfOccurence": 1
+      },
+      "http": {
+        "numberOfOccurence": 6
+      },
+      "request": {
+        "numberOfOccurence": 6
+      },
+      "source": {
+        "numberOfOccurence": 5
+      },
+      "info": {
+        "numberOfOccurence": 2
+      },
+      "body": {
+        "numberOfOccurence": 3
+      },
+      "ip": {
+        "numberOfOccurence": 2
+      },
+      "browser": {
+        "numberOfOccurence": 1
+      },
+      "header": {
+        "numberOfOccurence": 5
+      },
+      "referrer": {
+        "numberOfOccurence": 1
+      },
+      "posted": {
+        "numberOfOccurence": 3
+      },
+      "content": {
+        "numberOfOccurence": 2
+      },
+      "type": {
+        "numberOfOccurence": 2
+      },
+      "application": {
+        "numberOfOccurence": 2
+      },
+      "json": {
+        "numberOfOccurence": 2
+      },
+      "modified": {
+        "numberOfOccurence": 2
+      },
+      "date": {
+        "numberOfOccurence": 1
+      },
+      "utc": {
+        "numberOfOccurence": 1
+      },
+      "status": {
+        "numberOfOccurence": 2
+      },
+      "error": {
+        "numberOfOccurence": 2
+      },
+      "message": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 35,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\controllers\\post-comment.spec.js",
+    "tokens": {
+      "post": {
+        "numberOfOccurence": 10
+      },
+      "comment": {
+        "numberOfOccurence": 25
+      },
+      "fake": {
+        "numberOfOccurence": 7
+      },
+      "test": {
+        "numberOfOccurence": 1
+      },
+      "fixture": {
+        "numberOfOccurence": 1
+      },
+      "describe": {
+        "numberOfOccurence": 1
+      },
+      "async": {
+        "numberOfOccurence": 2
+      },
+      "add": {
+        "numberOfOccurence": 2
+      },
+      "request": {
+        "numberOfOccurence": 6
+      },
+      "header": {
+        "numberOfOccurence": 4
+      },
+      "content": {
+        "numberOfOccurence": 4
+      },
+      "type": {
+        "numberOfOccurence": 4
+      },
+      "application": {
+        "numberOfOccurence": 4
+      },
+      "json": {
+        "numberOfOccurence": 4
+      },
+      "source": {
+        "numberOfOccurence": 5
+      },
+      "referrer": {
+        "numberOfOccurence": 2
+      },
+      "browser": {
+        "numberOfOccurence": 2
+      },
+      "body": {
+        "numberOfOccurence": 6
+      },
+      "ip": {
+        "numberOfOccurence": 2
+      },
+      "expected": {
+        "numberOfOccurence": 4
+      },
+      "modified": {
+        "numberOfOccurence": 2
+      },
+      "date": {
+        "numberOfOccurence": 1
+      },
+      "utc": {
+        "numberOfOccurence": 1
+      },
+      "status": {
+        "numberOfOccurence": 2
+      },
+      "posted": {
+        "numberOfOccurence": 1
+      },
+      "actual": {
+        "numberOfOccurence": 4
+      },
+      "expect": {
+        "numberOfOccurence": 2
+      },
+      "equal": {
+        "numberOfOccurence": 2
+      },
+      "error": {
+        "numberOfOccurence": 3
+      }
+    },
+    "fileNumberOfLinesOfCode": 52,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\data-access\\comments-db.js",
+    "tokens": {
+      "id": {
+        "numberOfOccurence": 49
+      },
+      "comment": {
+        "numberOfOccurence": 19
+      },
+      "db": {
+        "numberOfOccurence": 26
+      },
+      "find": {
+        "numberOfOccurence": 15
+      },
+      "hash": {
+        "numberOfOccurence": 4
+      },
+      "post": {
+        "numberOfOccurence": 5
+      },
+      "reply": {
+        "numberOfOccurence": 7
+      },
+      "insert": {
+        "numberOfOccurence": 3
+      },
+      "remove": {
+        "numberOfOccurence": 2
+      },
+      "update": {
+        "numberOfOccurence": 3
+      },
+      "async": {
+        "numberOfOccurence": 8
+      },
+      "published": {
+        "numberOfOccurence": 6
+      },
+      "query": {
+        "numberOfOccurence": 7
+      },
+      "result": {
+        "numberOfOccurence": 16
+      },
+      "collection": {
+        "numberOfOccurence": 8
+      },
+      "array": {
+        "numberOfOccurence": 5
+      },
+      "found": {
+        "numberOfOccurence": 12
+      },
+      "info": {
+        "numberOfOccurence": 11
+      },
+      "omit": {
+        "numberOfOccurence": 2
+      },
+      "one": {
+        "numberOfOccurence": 3
+      },
+      "inserted": {
+        "numberOfOccurence": 4
+      },
+      "set": {
+        "numberOfOccurence": 1
+      },
+      "modified": {
+        "numberOfOccurence": 1
+      },
+      "count": {
+        "numberOfOccurence": 2
+      },
+      "delete": {
+        "numberOfOccurence": 1
+      },
+      "deleted": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 85,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\data-access\\comments-db.spec.js",
+    "tokens": {
+      "db": {
+        "numberOfOccurence": 28
+      },
+      "test": {
+        "numberOfOccurence": 2
+      },
+      "fixture": {
+        "numberOfOccurence": 2
+      },
+      "comment": {
+        "numberOfOccurence": 86
+      },
+      "fake": {
+        "numberOfOccurence": 21
+      },
+      "describe": {
+        "numberOfOccurence": 1
+      },
+      "async": {
+        "numberOfOccurence": 9
+      },
+      "list": {
+        "numberOfOccurence": 1
+      },
+      "insert": {
+        "numberOfOccurence": 15
+      },
+      "found": {
+        "numberOfOccurence": 8
+      },
+      "find": {
+        "numberOfOccurence": 12
+      },
+      "expect": {
+        "numberOfOccurence": 15
+      },
+      "contain": {
+        "numberOfOccurence": 4
+      },
+      "equal": {
+        "numberOfOccurence": 11
+      },
+      "result": {
+        "numberOfOccurence": 2
+      },
+      "id": {
+        "numberOfOccurence": 18
+      },
+      "hash": {
+        "numberOfOccurence": 3
+      },
+      "one": {
+        "numberOfOccurence": 5
+      },
+      "two": {
+        "numberOfOccurence": 5
+      },
+      "inserted": {
+        "numberOfOccurence": 4
+      },
+      "update": {
+        "numberOfOccurence": 2
+      },
+      "text": {
+        "numberOfOccurence": 2
+      },
+      "post": {
+        "numberOfOccurence": 20
+      },
+      "reply": {
+        "numberOfOccurence": 14
+      },
+      "omit": {
+        "numberOfOccurence": 3
+      },
+      "not": {
+        "numberOfOccurence": 2
+      },
+      "first": {
+        "numberOfOccurence": 3
+      },
+      "second": {
+        "numberOfOccurence": 3
+      },
+      "deletes": {
+        "numberOfOccurence": 1
+      },
+      "remove": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 83,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\data-access\\index.js",
+    "tokens": {
+      "comment": {
+        "numberOfOccurence": 5
+      },
+      "db": {
+        "numberOfOccurence": 10
+      },
+      "mongodb": {
+        "numberOfOccurence": 3
+      },
+      "mongo": {
+        "numberOfOccurence": 3
+      },
+      "client": {
+        "numberOfOccurence": 7
+      },
+      "url": {
+        "numberOfOccurence": 3
+      },
+      "process": {
+        "numberOfOccurence": 2
+      },
+      "env": {
+        "numberOfOccurence": 2
+      },
+      "name": {
+        "numberOfOccurence": 2
+      },
+      "use": {
+        "numberOfOccurence": 1
+      },
+      "new": {
+        "numberOfOccurence": 1
+      },
+      "parser": {
+        "numberOfOccurence": 1
+      },
+      "async": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 14,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\express-callback\\index.js",
+    "tokens": {
+      "express": {
+        "numberOfOccurence": 1
+      },
+      "callback": {
+        "numberOfOccurence": 1
+      },
+      "req": {
+        "numberOfOccurence": 10
+      },
+      "res": {
+        "numberOfOccurence": 5
+      },
+      "http": {
+        "numberOfOccurence": 7
+      },
+      "request": {
+        "numberOfOccurence": 2
+      },
+      "body": {
+        "numberOfOccurence": 3
+      },
+      "query": {
+        "numberOfOccurence": 2
+      },
+      "ip": {
+        "numberOfOccurence": 2
+      },
+      "path": {
+        "numberOfOccurence": 2
+      },
+      "header": {
+        "numberOfOccurence": 3
+      },
+      "content": {
+        "numberOfOccurence": 2
+      },
+      "type": {
+        "numberOfOccurence": 3
+      },
+      "response": {
+        "numberOfOccurence": 5
+      },
+      "set": {
+        "numberOfOccurence": 1
+      },
+      "json": {
+        "numberOfOccurence": 1
+      },
+      "status": {
+        "numberOfOccurence": 3
+      },
+      "error": {
+        "numberOfOccurence": 2
+      }
+    },
+    "fileNumberOfLinesOfCode": 26,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\Id\\index.js",
+    "tokens": {
+      "id": {
+        "numberOfOccurence": 4
+      },
+      "valid": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 6,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\index.js",
+    "tokens": {
+      "express": {
+        "numberOfOccurence": 4
+      },
+      "body": {
+        "numberOfOccurence": 3
+      },
+      "parser": {
+        "numberOfOccurence": 2
+      },
+      "delete": {
+        "numberOfOccurence": 3
+      },
+      "comment": {
+        "numberOfOccurence": 16
+      },
+      "not": {
+        "numberOfOccurence": 2
+      },
+      "found": {
+        "numberOfOccurence": 2
+      },
+      "post": {
+        "numberOfOccurence": 3
+      },
+      "patch": {
+        "numberOfOccurence": 5
+      },
+      "callback": {
+        "numberOfOccurence": 9
+      },
+      "config": {
+        "numberOfOccurence": 1
+      },
+      "api": {
+        "numberOfOccurence": 7
+      },
+      "root": {
+        "numberOfOccurence": 7
+      },
+      "process": {
+        "numberOfOccurence": 1
+      },
+      "env": {
+        "numberOfOccurence": 1
+      },
+      "app": {
+        "numberOfOccurence": 12
+      },
+      "use": {
+        "numberOfOccurence": 3
+      },
+      "json": {
+        "numberOfOccurence": 1
+      },
+      "res": {
+        "numberOfOccurence": 2
+      },
+      "set": {
+        "numberOfOccurence": 1
+      },
+      "id": {
+        "numberOfOccurence": 2
+      },
+      "request": {
+        "numberOfOccurence": 1
+      },
+      "server": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 30,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\is-questionable\\index.js",
+    "tokens": {
+      "axios": {
+        "numberOfOccurence": 3
+      },
+      "querystring": {
+        "numberOfOccurence": 3
+      },
+      "questionable": {
+        "numberOfOccurence": 5
+      },
+      "issue": {
+        "numberOfOccurence": 1
+      },
+      "http": {
+        "numberOfOccurence": 1
+      },
+      "request": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 10,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\is-questionable\\is-questionable.js",
+    "tokens": {
+      "questionable": {
+        "numberOfOccurence": 2
+      },
+      "issue": {
+        "numberOfOccurence": 3
+      },
+      "http": {
+        "numberOfOccurence": 4
+      },
+      "request": {
+        "numberOfOccurence": 3
+      },
+      "querystring": {
+        "numberOfOccurence": 4
+      },
+      "async": {
+        "numberOfOccurence": 1
+      },
+      "author": {
+        "numberOfOccurence": 5
+      },
+      "browser": {
+        "numberOfOccurence": 4
+      },
+      "created": {
+        "numberOfOccurence": 4
+      },
+      "ip": {
+        "numberOfOccurence": 5
+      },
+      "modified": {
+        "numberOfOccurence": 5
+      },
+      "referrer": {
+        "numberOfOccurence": 4
+      },
+      "test": {
+        "numberOfOccurence": 5
+      },
+      "text": {
+        "numberOfOccurence": 8
+      },
+      "moderation": {
+        "numberOfOccurence": 6
+      },
+      "api": {
+        "numberOfOccurence": 12
+      },
+      "build": {
+        "numberOfOccurence": 4
+      },
+      "response": {
+        "numberOfOccurence": 9
+      },
+      "spam": {
+        "numberOfOccurence": 4
+      },
+      "akismet": {
+        "numberOfOccurence": 4
+      },
+      "post": {
+        "numberOfOccurence": 3
+      },
+      "datum": {
+        "numberOfOccurence": 5
+      },
+      "header": {
+        "numberOfOccurence": 2
+      },
+      "content": {
+        "numberOfOccurence": 3
+      },
+      "type": {
+        "numberOfOccurence": 3
+      },
+      "html": {
+        "numberOfOccurence": 1
+      },
+      "key": {
+        "numberOfOccurence": 1
+      },
+      "process": {
+        "numberOfOccurence": 3
+      },
+      "env": {
+        "numberOfOccurence": 3
+      },
+      "url": {
+        "numberOfOccurence": 2
+      },
+      "review": {
+        "numberOfOccurence": 1
+      },
+      "application": {
+        "numberOfOccurence": 1
+      },
+      "comment": {
+        "numberOfOccurence": 6
+      },
+      "date": {
+        "numberOfOccurence": 3
+      }
+    },
+    "fileNumberOfLinesOfCode": 100,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\is-questionable\\is-questionable.spec.js",
+    "tokens": {
+      "build": {
+        "numberOfOccurence": 6
+      },
+      "moderation": {
+        "numberOfOccurence": 9
+      },
+      "api": {
+        "numberOfOccurence": 13
+      },
+      "response": {
+        "numberOfOccurence": 4
+      },
+      "akismet": {
+        "numberOfOccurence": 3
+      },
+      "questionable": {
+        "numberOfOccurence": 2
+      },
+      "fake": {
+        "numberOfOccurence": 2
+      },
+      "comment": {
+        "numberOfOccurence": 24
+      },
+      "test": {
+        "numberOfOccurence": 6
+      },
+      "fixture": {
+        "numberOfOccurence": 4
+      },
+      "review": {
+        "numberOfOccurence": 10
+      },
+      "json": {
+        "numberOfOccurence": 3
+      },
+      "no": {
+        "numberOfOccurence": 7
+      },
+      "querystring": {
+        "numberOfOccurence": 2
+      },
+      "config": {
+        "numberOfOccurence": 1
+      },
+      "describe": {
+        "numberOfOccurence": 1
+      },
+      "valid": {
+        "numberOfOccurence": 2
+      },
+      "moderator": {
+        "numberOfOccurence": 1
+      },
+      "request": {
+        "numberOfOccurence": 2
+      },
+      "expected": {
+        "numberOfOccurence": 4
+      },
+      "post": {
+        "numberOfOccurence": 3
+      },
+      "datum": {
+        "numberOfOccurence": 5
+      },
+      "original": {
+        "numberOfOccurence": 2
+      },
+      "text": {
+        "numberOfOccurence": 6
+      },
+      "header": {
+        "numberOfOccurence": 2
+      },
+      "content": {
+        "numberOfOccurence": 3
+      },
+      "type": {
+        "numberOfOccurence": 3
+      },
+      "html": {
+        "numberOfOccurence": 1
+      },
+      "key": {
+        "numberOfOccurence": 1
+      },
+      "process": {
+        "numberOfOccurence": 3
+      },
+      "env": {
+        "numberOfOccurence": 3
+      },
+      "url": {
+        "numberOfOccurence": 2
+      },
+      "expect": {
+        "numberOfOccurence": 5
+      },
+      "equal": {
+        "numberOfOccurence": 2
+      },
+      "handle": {
+        "numberOfOccurence": 3
+      },
+      "application": {
+        "numberOfOccurence": 1
+      },
+      "http": {
+        "numberOfOccurence": 1
+      },
+      "ip": {
+        "numberOfOccurence": 4
+      },
+      "source": {
+        "numberOfOccurence": 6
+      },
+      "browser": {
+        "numberOfOccurence": 3
+      },
+      "referrer": {
+        "numberOfOccurence": 4
+      },
+      "author": {
+        "numberOfOccurence": 4
+      },
+      "date": {
+        "numberOfOccurence": 3
+      },
+      "created": {
+        "numberOfOccurence": 3
+      },
+      "modified": {
+        "numberOfOccurence": 4
+      },
+      "actual": {
+        "numberOfOccurence": 2
+      }
+    },
+    "fileNumberOfLinesOfCode": 73,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\use-cases\\add-comment.js",
+    "tokens": {
+      "comment": {
+        "numberOfOccurence": 17
+      },
+      "add": {
+        "numberOfOccurence": 2
+      },
+      "db": {
+        "numberOfOccurence": 3
+      },
+      "handle": {
+        "numberOfOccurence": 2
+      },
+      "moderation": {
+        "numberOfOccurence": 2
+      },
+      "async": {
+        "numberOfOccurence": 1
+      },
+      "info": {
+        "numberOfOccurence": 2
+      },
+      "find": {
+        "numberOfOccurence": 1
+      },
+      "hash": {
+        "numberOfOccurence": 5
+      },
+      "moderated": {
+        "numberOfOccurence": 11
+      },
+      "source": {
+        "numberOfOccurence": 6
+      },
+      "insert": {
+        "numberOfOccurence": 1
+      },
+      "author": {
+        "numberOfOccurence": 2
+      },
+      "created": {
+        "numberOfOccurence": 2
+      },
+      "id": {
+        "numberOfOccurence": 6
+      },
+      "modified": {
+        "numberOfOccurence": 2
+      },
+      "post": {
+        "numberOfOccurence": 2
+      },
+      "published": {
+        "numberOfOccurence": 2
+      },
+      "reply": {
+        "numberOfOccurence": 2
+      },
+      "ip": {
+        "numberOfOccurence": 2
+      },
+      "browser": {
+        "numberOfOccurence": 2
+      },
+      "referrer": {
+        "numberOfOccurence": 2
+      },
+      "text": {
+        "numberOfOccurence": 2
+      }
+    },
+    "fileNumberOfLinesOfCode": 28,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\use-cases\\add-comment.spec.js",
+    "tokens": {
+      "add": {
+        "numberOfOccurence": 16
+      },
+      "comment": {
+        "numberOfOccurence": 41
+      },
+      "handle": {
+        "numberOfOccurence": 14
+      },
+      "moderation": {
+        "numberOfOccurence": 14
+      },
+      "db": {
+        "numberOfOccurence": 12
+      },
+      "datum": {
+        "numberOfOccurence": 1
+      },
+      "fake": {
+        "numberOfOccurence": 5
+      },
+      "test": {
+        "numberOfOccurence": 2
+      },
+      "fixture": {
+        "numberOfOccurence": 2
+      },
+      "describe": {
+        "numberOfOccurence": 1
+      },
+      "insert": {
+        "numberOfOccurence": 6
+      },
+      "database": {
+        "numberOfOccurence": 1
+      },
+      "async": {
+        "numberOfOccurence": 4
+      },
+      "new": {
+        "numberOfOccurence": 7
+      },
+      "questionable": {
+        "numberOfOccurence": 5
+      },
+      "published": {
+        "numberOfOccurence": 3
+      },
+      "initiate": {
+        "numberOfOccurence": 4
+      },
+      "review": {
+        "numberOfOccurence": 4
+      },
+      "inserted": {
+        "numberOfOccurence": 6
+      },
+      "expect": {
+        "numberOfOccurence": 5
+      },
+      "not": {
+        "numberOfOccurence": 1
+      },
+      "text": {
+        "numberOfOccurence": 2
+      },
+      "post": {
+        "numberOfOccurence": 1
+      },
+      "id": {
+        "numberOfOccurence": 4
+      },
+      "undefined": {
+        "numberOfOccurence": 1
+      },
+      "one": {
+        "numberOfOccurence": 3
+      },
+      "two": {
+        "numberOfOccurence": 2
+      },
+      "defined": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 65,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\use-cases\\edit-comment.js",
+    "tokens": {
+      "comment": {
+        "numberOfOccurence": 12
+      },
+      "edit": {
+        "numberOfOccurence": 2
+      },
+      "db": {
+        "numberOfOccurence": 3
+      },
+      "handle": {
+        "numberOfOccurence": 2
+      },
+      "moderation": {
+        "numberOfOccurence": 2
+      },
+      "async": {
+        "numberOfOccurence": 1
+      },
+      "id": {
+        "numberOfOccurence": 7
+      },
+      "error": {
+        "numberOfOccurence": 3
+      },
+      "text": {
+        "numberOfOccurence": 4
+      },
+      "existing": {
+        "numberOfOccurence": 6
+      },
+      "find": {
+        "numberOfOccurence": 1
+      },
+      "not": {
+        "numberOfOccurence": 1
+      },
+      "found": {
+        "numberOfOccurence": 1
+      },
+      "modified": {
+        "numberOfOccurence": 3
+      },
+      "hash": {
+        "numberOfOccurence": 4
+      },
+      "moderated": {
+        "numberOfOccurence": 6
+      },
+      "update": {
+        "numberOfOccurence": 1
+      },
+      "published": {
+        "numberOfOccurence": 2
+      }
+    },
+    "fileNumberOfLinesOfCode": 28,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\use-cases\\edit-comment.spec.js",
+    "tokens": {
+      "edit": {
+        "numberOfOccurence": 19
+      },
+      "comment": {
+        "numberOfOccurence": 42
+      },
+      "fake": {
+        "numberOfOccurence": 8
+      },
+      "test": {
+        "numberOfOccurence": 2
+      },
+      "fixture": {
+        "numberOfOccurence": 2
+      },
+      "handle": {
+        "numberOfOccurence": 9
+      },
+      "moderation": {
+        "numberOfOccurence": 9
+      },
+      "db": {
+        "numberOfOccurence": 15
+      },
+      "datum": {
+        "numberOfOccurence": 1
+      },
+      "describe": {
+        "numberOfOccurence": 1
+      },
+      "include": {
+        "numberOfOccurence": 2
+      },
+      "id": {
+        "numberOfOccurence": 5
+      },
+      "update": {
+        "numberOfOccurence": 4
+      },
+      "error": {
+        "numberOfOccurence": 3
+      },
+      "not": {
+        "numberOfOccurence": 6
+      },
+      "questionable": {
+        "numberOfOccurence": 5
+      },
+      "undefined": {
+        "numberOfOccurence": 3
+      },
+      "expect": {
+        "numberOfOccurence": 8
+      },
+      "reject": {
+        "numberOfOccurence": 2
+      },
+      "throw": {
+        "numberOfOccurence": 2
+      },
+      "text": {
+        "numberOfOccurence": 4
+      },
+      "async": {
+        "numberOfOccurence": 2
+      },
+      "initiate": {
+        "numberOfOccurence": 2
+      },
+      "review": {
+        "numberOfOccurence": 2
+      },
+      "modified": {
+        "numberOfOccurence": 3
+      },
+      "inserted": {
+        "numberOfOccurence": 8
+      },
+      "insert": {
+        "numberOfOccurence": 2
+      },
+      "edited": {
+        "numberOfOccurence": 7
+      },
+      "hash": {
+        "numberOfOccurence": 3
+      },
+      "defined": {
+        "numberOfOccurence": 1
+      },
+      "published": {
+        "numberOfOccurence": 3
+      },
+      "remove": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 74,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\use-cases\\handle-moderation.js",
+    "tokens": {
+      "handle": {
+        "numberOfOccurence": 2
+      },
+      "moderation": {
+        "numberOfOccurence": 2
+      },
+      "questionable": {
+        "numberOfOccurence": 2
+      },
+      "initiate": {
+        "numberOfOccurence": 2
+      },
+      "review": {
+        "numberOfOccurence": 2
+      },
+      "async": {
+        "numberOfOccurence": 1
+      },
+      "comment": {
+        "numberOfOccurence": 9
+      },
+      "text": {
+        "numberOfOccurence": 3
+      },
+      "ip": {
+        "numberOfOccurence": 2
+      },
+      "source": {
+        "numberOfOccurence": 3
+      },
+      "browser": {
+        "numberOfOccurence": 2
+      },
+      "referrer": {
+        "numberOfOccurence": 2
+      },
+      "author": {
+        "numberOfOccurence": 2
+      },
+      "created": {
+        "numberOfOccurence": 2
+      },
+      "modified": {
+        "numberOfOccurence": 2
+      },
+      "moderated": {
+        "numberOfOccurence": 6
+      },
+      "id": {
+        "numberOfOccurence": 2
+      },
+      "content": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 24,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\use-cases\\index.js",
+    "tokens": {
+      "add": {
+        "numberOfOccurence": 6
+      },
+      "comment": {
+        "numberOfOccurence": 31
+      },
+      "edit": {
+        "numberOfOccurence": 6
+      },
+      "remove": {
+        "numberOfOccurence": 6
+      },
+      "list": {
+        "numberOfOccurence": 6
+      },
+      "handle": {
+        "numberOfOccurence": 7
+      },
+      "moderation": {
+        "numberOfOccurence": 7
+      },
+      "db": {
+        "numberOfOccurence": 5
+      },
+      "datum": {
+        "numberOfOccurence": 1
+      },
+      "questionable": {
+        "numberOfOccurence": 3
+      },
+      "initiate": {
+        "numberOfOccurence": 2
+      },
+      "review": {
+        "numberOfOccurence": 2
+      },
+      "async": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 24,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\use-cases\\list-comments.js",
+    "tokens": {
+      "list": {
+        "numberOfOccurence": 2
+      },
+      "comment": {
+        "numberOfOccurence": 19
+      },
+      "db": {
+        "numberOfOccurence": 2
+      },
+      "async": {
+        "numberOfOccurence": 1
+      },
+      "post": {
+        "numberOfOccurence": 5
+      },
+      "id": {
+        "numberOfOccurence": 8
+      },
+      "error": {
+        "numberOfOccurence": 1
+      },
+      "find": {
+        "numberOfOccurence": 1
+      },
+      "omit": {
+        "numberOfOccurence": 1
+      },
+      "reply": {
+        "numberOfOccurence": 7
+      },
+      "nested": {
+        "numberOfOccurence": 5
+      },
+      "filter": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 28,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\use-cases\\list-comments.spec.js",
+    "tokens": {
+      "comment": {
+        "numberOfOccurence": 64
+      },
+      "list": {
+        "numberOfOccurence": 1
+      },
+      "db": {
+        "numberOfOccurence": 20
+      },
+      "datum": {
+        "numberOfOccurence": 1
+      },
+      "fake": {
+        "numberOfOccurence": 7
+      },
+      "test": {
+        "numberOfOccurence": 2
+      },
+      "fixture": {
+        "numberOfOccurence": 2
+      },
+      "describe": {
+        "numberOfOccurence": 1
+      },
+      "requires": {
+        "numberOfOccurence": 1
+      },
+      "post": {
+        "numberOfOccurence": 14
+      },
+      "id": {
+        "numberOfOccurence": 29
+      },
+      "expect": {
+        "numberOfOccurence": 7
+      },
+      "reject": {
+        "numberOfOccurence": 1
+      },
+      "throw": {
+        "numberOfOccurence": 1
+      },
+      "async": {
+        "numberOfOccurence": 1
+      },
+      "first": {
+        "numberOfOccurence": 21
+      },
+      "reply": {
+        "numberOfOccurence": 24
+      },
+      "second": {
+        "numberOfOccurence": 10
+      },
+      "third": {
+        "numberOfOccurence": 5
+      },
+      "insert": {
+        "numberOfOccurence": 1
+      },
+      "actual": {
+        "numberOfOccurence": 4
+      },
+      "filter": {
+        "numberOfOccurence": 3
+      },
+      "contain": {
+        "numberOfOccurence": 3
+      },
+      "equal": {
+        "numberOfOccurence": 3
+      },
+      "remove": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 68,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\use-cases\\remove-comment.js",
+    "tokens": {
+      "comment": {
+        "numberOfOccurence": 42
+      },
+      "remove": {
+        "numberOfOccurence": 5
+      },
+      "db": {
+        "numberOfOccurence": 9
+      },
+      "async": {
+        "numberOfOccurence": 6
+      },
+      "id": {
+        "numberOfOccurence": 22
+      },
+      "error": {
+        "numberOfOccurence": 1
+      },
+      "delete": {
+        "numberOfOccurence": 26
+      },
+      "find": {
+        "numberOfOccurence": 4
+      },
+      "nothing": {
+        "numberOfOccurence": 3
+      },
+      "reply": {
+        "numberOfOccurence": 16
+      },
+      "soft": {
+        "numberOfOccurence": 7
+      },
+      "deleted": {
+        "numberOfOccurence": 11
+      },
+      "parent": {
+        "numberOfOccurence": 9
+      },
+      "published": {
+        "numberOfOccurence": 2
+      },
+      "count": {
+        "numberOfOccurence": 4
+      },
+      "message": {
+        "numberOfOccurence": 4
+      },
+      "not": {
+        "numberOfOccurence": 1
+      },
+      "found": {
+        "numberOfOccurence": 1
+      },
+      "info": {
+        "numberOfOccurence": 2
+      },
+      "update": {
+        "numberOfOccurence": 1
+      },
+      "author": {
+        "numberOfOccurence": 2
+      },
+      "text": {
+        "numberOfOccurence": 2
+      },
+      "post": {
+        "numberOfOccurence": 2
+      }
+    },
+    "fileNumberOfLinesOfCode": 82,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\src\\use-cases\\remove-comment.spec.js",
+    "tokens": {
+      "remove": {
+        "numberOfOccurence": 20
+      },
+      "comment": {
+        "numberOfOccurence": 78
+      },
+      "db": {
+        "numberOfOccurence": 24
+      },
+      "datum": {
+        "numberOfOccurence": 1
+      },
+      "fake": {
+        "numberOfOccurence": 33
+      },
+      "test": {
+        "numberOfOccurence": 2
+      },
+      "fixture": {
+        "numberOfOccurence": 2
+      },
+      "describe": {
+        "numberOfOccurence": 1
+      },
+      "handle": {
+        "numberOfOccurence": 1
+      },
+      "async": {
+        "numberOfOccurence": 4
+      },
+      "expected": {
+        "numberOfOccurence": 8
+      },
+      "deleted": {
+        "numberOfOccurence": 11
+      },
+      "count": {
+        "numberOfOccurence": 4
+      },
+      "soft": {
+        "numberOfOccurence": 7
+      },
+      "delete": {
+        "numberOfOccurence": 7
+      },
+      "message": {
+        "numberOfOccurence": 4
+      },
+      "not": {
+        "numberOfOccurence": 3
+      },
+      "found": {
+        "numberOfOccurence": 5
+      },
+      "nothing": {
+        "numberOfOccurence": 1
+      },
+      "actual": {
+        "numberOfOccurence": 8
+      },
+      "expect": {
+        "numberOfOccurence": 8
+      },
+      "equal": {
+        "numberOfOccurence": 5
+      },
+      "deletes": {
+        "numberOfOccurence": 3
+      },
+      "reply": {
+        "numberOfOccurence": 15
+      },
+      "insert": {
+        "numberOfOccurence": 5
+      },
+      "find": {
+        "numberOfOccurence": 3
+      },
+      "id": {
+        "numberOfOccurence": 9
+      },
+      "parent": {
+        "numberOfOccurence": 6
+      },
+      "no": {
+        "numberOfOccurence": 1
+      },
+      "post": {
+        "numberOfOccurence": 2
+      },
+      "published": {
+        "numberOfOccurence": 1
+      },
+      "inserted": {
+        "numberOfOccurence": 4
+      }
+    },
+    "fileNumberOfLinesOfCode": 91,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\__test__\\akismet.spec.js",
+    "tokens": {
+      "axios": {
+        "numberOfOccurence": 4
+      },
+      "querystring": {
+        "numberOfOccurence": 1
+      },
+      "fake": {
+        "numberOfOccurence": 2
+      },
+      "comment": {
+        "numberOfOccurence": 17
+      },
+      "fixture": {
+        "numberOfOccurence": 1
+      },
+      "config": {
+        "numberOfOccurence": 1
+      },
+      "default": {
+        "numberOfOccurence": 1
+      },
+      "status": {
+        "numberOfOccurence": 4
+      },
+      "equal": {
+        "numberOfOccurence": 1
+      },
+      "describe": {
+        "numberOfOccurence": 1
+      },
+      "akismet": {
+        "numberOfOccurence": 1
+      },
+      "async": {
+        "numberOfOccurence": 1
+      },
+      "req": {
+        "numberOfOccurence": 2
+      },
+      "header": {
+        "numberOfOccurence": 1
+      },
+      "content": {
+        "numberOfOccurence": 2
+      },
+      "type": {
+        "numberOfOccurence": 2
+      },
+      "application": {
+        "numberOfOccurence": 1
+      },
+      "url": {
+        "numberOfOccurence": 1
+      },
+      "process": {
+        "numberOfOccurence": 1
+      },
+      "env": {
+        "numberOfOccurence": 1
+      },
+      "post": {
+        "numberOfOccurence": 2
+      },
+      "datum": {
+        "numberOfOccurence": 2
+      },
+      "http": {
+        "numberOfOccurence": 1
+      },
+      "ip": {
+        "numberOfOccurence": 2
+      },
+      "source": {
+        "numberOfOccurence": 3
+      },
+      "browser": {
+        "numberOfOccurence": 1
+      },
+      "referrer": {
+        "numberOfOccurence": 2
+      },
+      "author": {
+        "numberOfOccurence": 2
+      },
+      "text": {
+        "numberOfOccurence": 1
+      },
+      "date": {
+        "numberOfOccurence": 3
+      },
+      "created": {
+        "numberOfOccurence": 1
+      },
+      "modified": {
+        "numberOfOccurence": 2
+      },
+      "test": {
+        "numberOfOccurence": 1
+      },
+      "res": {
+        "numberOfOccurence": 2
+      },
+      "expect": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 35,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\__test__\\e2e.spec.js",
+    "tokens": {
+      "axios": {
+        "numberOfOccurence": 17
+      },
+      "comment": {
+        "numberOfOccurence": 81
+      },
+      "db": {
+        "numberOfOccurence": 19
+      },
+      "datum": {
+        "numberOfOccurence": 21
+      },
+      "fake": {
+        "numberOfOccurence": 18
+      },
+      "fixture": {
+        "numberOfOccurence": 1
+      },
+      "config": {
+        "numberOfOccurence": 1
+      },
+      "describe": {
+        "numberOfOccurence": 5
+      },
+      "api": {
+        "numberOfOccurence": 3
+      },
+      "default": {
+        "numberOfOccurence": 3
+      },
+      "url": {
+        "numberOfOccurence": 1
+      },
+      "process": {
+        "numberOfOccurence": 2
+      },
+      "env": {
+        "numberOfOccurence": 2
+      },
+      "header": {
+        "numberOfOccurence": 1
+      },
+      "content": {
+        "numberOfOccurence": 5
+      },
+      "type": {
+        "numberOfOccurence": 1
+      },
+      "application": {
+        "numberOfOccurence": 1
+      },
+      "json": {
+        "numberOfOccurence": 1
+      },
+      "status": {
+        "numberOfOccurence": 12
+      },
+      "equal": {
+        "numberOfOccurence": 6
+      },
+      "async": {
+        "numberOfOccurence": 14
+      },
+      "collection": {
+        "numberOfOccurence": 1
+      },
+      "moderator": {
+        "numberOfOccurence": 2
+      },
+      "allows": {
+        "numberOfOccurence": 2
+      },
+      "request": {
+        "numberOfOccurence": 2
+      },
+      "per": {
+        "numberOfOccurence": 2
+      },
+      "second": {
+        "numberOfOccurence": 2
+      },
+      "done": {
+        "numberOfOccurence": 6
+      },
+      "set": {
+        "numberOfOccurence": 3
+      },
+      "timeout": {
+        "numberOfOccurence": 4
+      },
+      "add": {
+        "numberOfOccurence": 1
+      },
+      "database": {
+        "numberOfOccurence": 1
+      },
+      "response": {
+        "numberOfOccurence": 34
+      },
+      "post": {
+        "numberOfOccurence": 21
+      },
+      "id": {
+        "numberOfOccurence": 35
+      },
+      "undefined": {
+        "numberOfOccurence": 9
+      },
+      "text": {
+        "numberOfOccurence": 10
+      },
+      "expect": {
+        "numberOfOccurence": 27
+      },
+      "posted": {
+        "numberOfOccurence": 8
+      },
+      "find": {
+        "numberOfOccurence": 1
+      },
+      "published": {
+        "numberOfOccurence": 2
+      },
+      "remove": {
+        "numberOfOccurence": 6
+      },
+      "requires": {
+        "numberOfOccurence": 3
+      },
+      "contain": {
+        "numberOfOccurence": 7
+      },
+      "author": {
+        "numberOfOccurence": 2
+      },
+      "error": {
+        "numberOfOccurence": 3
+      },
+      "defined": {
+        "numberOfOccurence": 3
+      },
+      "valid": {
+        "numberOfOccurence": 1
+      },
+      "spam": {
+        "numberOfOccurence": 1
+      },
+      "insert": {
+        "numberOfOccurence": 15
+      },
+      "patch": {
+        "numberOfOccurence": 2
+      },
+      "patched": {
+        "numberOfOccurence": 2
+      },
+      "list": {
+        "numberOfOccurence": 1
+      },
+      "comment1": {
+        "numberOfOccurence": 13
+      },
+      "reply": {
+        "numberOfOccurence": 18
+      },
+      "comment2": {
+        "numberOfOccurence": 6
+      },
+      "expected": {
+        "numberOfOccurence": 6
+      },
+      "created": {
+        "numberOfOccurence": 12
+      },
+      "mongo": {
+        "numberOfOccurence": 1
+      },
+      "deletes": {
+        "numberOfOccurence": 2
+      },
+      "result": {
+        "numberOfOccurence": 6
+      },
+      "deleted": {
+        "numberOfOccurence": 6
+      },
+      "count": {
+        "numberOfOccurence": 2
+      },
+      "soft": {
+        "numberOfOccurence": 3
+      },
+      "delete": {
+        "numberOfOccurence": 2
+      }
+    },
+    "fileNumberOfLinesOfCode": 201,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\__test__\\fixtures\\comment.js",
+    "tokens": {
+      "faker": {
+        "numberOfOccurence": 7
+      },
+      "id": {
+        "numberOfOccurence": 14
+      },
+      "valid": {
+        "numberOfOccurence": 1
+      },
+      "text": {
+        "numberOfOccurence": 4
+      },
+      "hash": {
+        "numberOfOccurence": 2
+      },
+      "update": {
+        "numberOfOccurence": 1
+      },
+      "fake": {
+        "numberOfOccurence": 1
+      },
+      "comment": {
+        "numberOfOccurence": 9
+      },
+      "author": {
+        "numberOfOccurence": 2
+      },
+      "name": {
+        "numberOfOccurence": 2
+      },
+      "find": {
+        "numberOfOccurence": 1
+      },
+      "created": {
+        "numberOfOccurence": 1
+      },
+      "date": {
+        "numberOfOccurence": 2
+      },
+      "modified": {
+        "numberOfOccurence": 1
+      },
+      "post": {
+        "numberOfOccurence": 2
+      },
+      "published": {
+        "numberOfOccurence": 2
+      },
+      "reply": {
+        "numberOfOccurence": 2
+      },
+      "source": {
+        "numberOfOccurence": 1
+      },
+      "ip": {
+        "numberOfOccurence": 2
+      },
+      "browser": {
+        "numberOfOccurence": 1
+      },
+      "referrer": {
+        "numberOfOccurence": 1
+      },
+      "url": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 41,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\__test__\\fixtures\\db.js",
+    "tokens": {
+      "mongodb": {
+        "numberOfOccurence": 3
+      },
+      "mongo": {
+        "numberOfOccurence": 3
+      },
+      "client": {
+        "numberOfOccurence": 3
+      },
+      "connection": {
+        "numberOfOccurence": 6
+      },
+      "db": {
+        "numberOfOccurence": 11
+      },
+      "async": {
+        "numberOfOccurence": 3
+      },
+      "global": {
+        "numberOfOccurence": 2
+      },
+      "use": {
+        "numberOfOccurence": 1
+      },
+      "new": {
+        "numberOfOccurence": 1
+      },
+      "url": {
+        "numberOfOccurence": 1
+      },
+      "parser": {
+        "numberOfOccurence": 1
+      },
+      "close": {
+        "numberOfOccurence": 3
+      },
+      "collection": {
+        "numberOfOccurence": 1
+      },
+      "comment": {
+        "numberOfOccurence": 1
+      },
+      "delete": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 22,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\__test__\\is-questionable.spec.js",
+    "tokens": {
+      "questionable": {
+        "numberOfOccurence": 7
+      },
+      "review": {
+        "numberOfOccurence": 7
+      },
+      "fixture": {
+        "numberOfOccurence": 4
+      },
+      "moderation": {
+        "numberOfOccurence": 3
+      },
+      "api": {
+        "numberOfOccurence": 4
+      },
+      "json": {
+        "numberOfOccurence": 3
+      },
+      "no": {
+        "numberOfOccurence": 7
+      },
+      "fake": {
+        "numberOfOccurence": 5
+      },
+      "comment": {
+        "numberOfOccurence": 38
+      },
+      "describe": {
+        "numberOfOccurence": 1
+      },
+      "content": {
+        "numberOfOccurence": 4
+      },
+      "moderator": {
+        "numberOfOccurence": 1
+      },
+      "allows": {
+        "numberOfOccurence": 1
+      },
+      "request": {
+        "numberOfOccurence": 1
+      },
+      "per": {
+        "numberOfOccurence": 1
+      },
+      "second": {
+        "numberOfOccurence": 1
+      },
+      "done": {
+        "numberOfOccurence": 2
+      },
+      "set": {
+        "numberOfOccurence": 1
+      },
+      "timeout": {
+        "numberOfOccurence": 1
+      },
+      "async": {
+        "numberOfOccurence": 4
+      },
+      "text": {
+        "numberOfOccurence": 16
+      },
+      "original": {
+        "numberOfOccurence": 4
+      },
+      "result": {
+        "numberOfOccurence": 8
+      },
+      "ip": {
+        "numberOfOccurence": 8
+      },
+      "source": {
+        "numberOfOccurence": 12
+      },
+      "browser": {
+        "numberOfOccurence": 8
+      },
+      "referrer": {
+        "numberOfOccurence": 8
+      },
+      "author": {
+        "numberOfOccurence": 9
+      },
+      "created": {
+        "numberOfOccurence": 8
+      },
+      "modified": {
+        "numberOfOccurence": 8
+      },
+      "test": {
+        "numberOfOccurence": 5
+      },
+      "expect": {
+        "numberOfOccurence": 4
+      },
+      "filter": {
+        "numberOfOccurence": 1
+      },
+      "spam": {
+        "numberOfOccurence": 1
+      }
+    },
+    "fileNumberOfLinesOfCode": 67,
+    "cluster": 1
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\.babelrc",
+    "tokens": {},
+    "fileNumberOfLinesOfCode": 0,
+    "cluster": 0
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\.gitignore",
+    "tokens": {},
+    "fileNumberOfLinesOfCode": 0,
+    "cluster": 0
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\LICENSE",
+    "tokens": {},
+    "fileNumberOfLinesOfCode": 0,
+    "cluster": 0
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\package-lock.json",
+    "tokens": {},
+    "fileNumberOfLinesOfCode": 0,
+    "cluster": 0
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\package.json",
+    "tokens": {},
+    "fileNumberOfLinesOfCode": 0,
+    "cluster": 0
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\README.md",
+    "tokens": {},
+    "fileNumberOfLinesOfCode": 0,
+    "cluster": 0
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\sampledotenv",
+    "tokens": {},
+    "fileNumberOfLinesOfCode": 0,
+    "cluster": 0
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\__test__\\fixtures\\moderation-api\\no-classification.json",
+    "tokens": {},
+    "fileNumberOfLinesOfCode": 0,
+    "cluster": 0
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\__test__\\fixtures\\moderation-api\\no-review.json",
+    "tokens": {},
+    "fileNumberOfLinesOfCode": 0,
+    "cluster": 0
+  },
+  {
+    "repository": "comments-api-master",
+    "file": "C:\\Users\\milan\\IdeaProjects\\reverse-engineering-text-retrieval\\TEMP\\comments-api-master\\__test__\\fixtures\\moderation-api\\review.json",
+    "tokens": {},
+    "fileNumberOfLinesOfCode": 0,
+    "cluster": 0
+  }
+]
