@@ -695,7 +695,9 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
      * @returns {Object} A structured representation of directories and files with code fragments.
      */
     buildDirectoryTreeWithFilesAndCodeFragments(extractionResults) {
-        const root = {location: `${extractionResults[0].repository}/`, directories: []};
+        const root = {location: `${extractionResults[0].repository}/`, directories: [
+                {location: `${extractionResults[0].repository}/`, directories: [], files: []}
+            ]};
 
         /**
          * Retrieves or creates a directory node in the hierarchical structure.
@@ -704,13 +706,13 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
          * @param currentNode {Object} - The current directory node.
          * @returns {Object} The directory node.
          */
-        function getOrCreateDirectory(fullPath, currentNode) {
+        const getOrCreateDirectory = (fullPath, currentNode) => {
             return fullPath.split("/").reduce((currentDir, part, index, parts) => {
                 const currentPath = parts.slice(0, index + 1).join("/") + "/";
-                let dir = currentDir.directories.find(d => d.location === currentPath);
+                let dir = currentDir.directories.find(d => d.location === this.joinPaths(root.location, currentPath));
 
                 if (!dir) {
-                    dir = {location: currentPath, directories: [], files: []};
+                    dir = {location: this.joinPaths(root.location, currentPath), directories: [], files: []};
                     currentDir.directories.push(dir);
                 }
                 return dir;
@@ -724,7 +726,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
          * @param entry {Object} - The file entry containing token information.
          * @returns {Array} An array containing the code fragment object.
          */
-        function createCodeFragments(relativePath, entry) {
+        const createCodeFragments = (relativePath, entry)=> {
             // If file has no concept
             if (Object.keys(entry.tokens).length === 0) {
                 return [{
@@ -765,17 +767,19 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
 
         extractionResults.forEach(entry => {
             // Normalize to UNIX format
-            const relativePath = entry.file.split(`${FILE_SYSTEM_SEPARATOR}TEMP${FILE_SYSTEM_SEPARATOR}`)[1].replace(/\\/g, "/");
+            const relativePath = entry.file.split(`${FILE_SYSTEM_SEPARATOR}TEMP${FILE_SYSTEM_SEPARATOR}`)[1].split(FILE_SYSTEM_SEPARATOR).slice(1).join("/");
             const dirPath = relativePath.substring(0, relativePath.lastIndexOf("/"));
 
             // Build directory hierarchy
-            const parentDir = getOrCreateDirectory(dirPath, root);
+            const parentDir = dirPath === ""
+                                ? root.directories.find(dir => dir.location === root.location)
+                                : getOrCreateDirectory(dirPath, root.directories.find(dir => dir.location === root.location));
 
             // Add file to the correct directory
             parentDir.files.push({
-                location: relativePath,
+                location: this.joinPaths(root.location, relativePath),
                 linesOfCode: entry.fileNumberOfLinesOfCode,
-                codeFragments: entry.cluster === 1 ? createCodeFragments(relativePath, entry) : [],
+                codeFragments: entry.cluster === 1 ? createCodeFragments(this.joinPaths(root.location, relativePath), entry) : [],
             });
         });
 
@@ -806,6 +810,31 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
             return "";
         }
         return filePath.substring(filePath.lastIndexOf(".") + 1);
+    }
+
+    /**
+     * Joins two file paths into a single path string, ensuring exactly one slash (`/`) between them.
+     *
+     * @param path1 {String} - The first part of the file path (e.g., a directory path).
+     *                         Can include trailing slashes, which will be normalized.
+     * @param path2 {String} - The second part of the file path (e.g., a file name or subdirectory).
+     *                         Can include leading slashes, which will be normalized.
+     * @returns {String} - The combined path with a single slash between the two parts.
+     *                     Returns an empty string if both inputs are empty.
+     *                     Returns the non-empty path if one input is empty.
+     */
+    joinPaths(path1, path2) {
+        // Handle empty strings
+        if (!path1 && !path2) return '';
+        if (!path1) return path2.replace(/^\/+/, '');
+        if (!path2) return path1.replace(/\/+$/, '');
+
+        // Remove trailing slashes from path1 and leading slashes from path2
+        const cleanPath1 = path1.replace(/\/+$/, '');
+        const cleanPath2 = path2.replace(/^\/+/, '');
+
+        // Join with a single slash
+        return `${cleanPath1}/${cleanPath2}`;
     }
 
     /**
