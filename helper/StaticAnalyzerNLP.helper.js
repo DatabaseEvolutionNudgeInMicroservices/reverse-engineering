@@ -775,8 +775,7 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
             parentDir.files.push({
                 location: relativePath,
                 linesOfCode: entry.fileNumberOfLinesOfCode,
-                codeFragments: createCodeFragments(relativePath, entry),
-                cluster: entry?.cluster
+                codeFragments: entry.cluster === 1 ? createCodeFragments(relativePath, entry) : [],
             });
         });
 
