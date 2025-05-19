@@ -700,8 +700,8 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         /**
          * Retrieves or creates a directory node in the hierarchical structure.
          *
-         * @param {string} fullPath - The full directory path.
-         * @param {Object} currentNode - The current directory node.
+         * @param fullPath {String} - The full directory path.
+         * @param currentNode {Object} - The current directory node.
          * @returns {Object} The directory node.
          */
         function getOrCreateDirectory(fullPath, currentNode) {
@@ -720,8 +720,8 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         /**
          * Creates a code fragment for a given file entry.
          *
-         * @param {string} relativePath - The relative file path.
-         * @param {Object} entry - The file entry containing token information.
+         * @param relativePath {String} - The relative file path.
+         * @param entry {Object} - The file entry containing token information.
          * @returns {Array} An array containing the code fragment object.
          */
         function createCodeFragments(relativePath, entry) {
@@ -785,9 +785,9 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
     /**
      * Checks if the file is supported for NLP analysis.
      *
-     * @param {string} filePath - The full path of the file to be analyzed.
+     * @param filePath {String} - The full path of the file to be analyzed.
      *                            It should include the file name and extension.
-     * @returns {boolean} - Returns `true` if the file extension is supported (currently 'js' or 'java'),
+     * @returns {Boolean} - Returns `true` if the file extension is supported (currently 'js' or 'java'),
      *                      otherwise returns `false`.
      */
     fileIsSupportedForNLPAnalysis(filePath) {
