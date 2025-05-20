@@ -434,8 +434,8 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         // Keep only name of concepts
         const bestConceptsSortedNameOnly = bestConceptsSorted.map(conceptObject => conceptObject.concept)
 
-        // Evaluate the concepts extraction pipeline results
-        evaluateConceptExtractionPipeline(element, bestConceptsSortedNameOnly, this.extractConcepts.bind(this));
+        // Evaluate the concepts extraction pipeline results (optional)
+        // evaluateConceptExtractionPipeline(element, bestConceptsSortedNameOnly, this.extractConcepts.bind(this));
 
         // Make the results refined with only the best concepts
         let refinedResults = sortedResults.map(item => {
@@ -628,8 +628,8 @@ class StaticAnalyzerNLP extends StaticAnalyzer {
         // Tag the files using clustering heuristics based on database concepts and save results
         const refinedAnalysisResultsWithTags = this.tagFilesByClusteringWithHeuristics(refinedResults, dataConcepts);
 
-        // Evaluate the tagging results
-        evaluateFilesTags(element, refinedAnalysisResultsWithTags, taggingMode);
+        // Evaluate the tagging results (optional)
+        // evaluateFilesTags(element, refinedAnalysisResultsWithTags, taggingMode);
 
         return refinedAnalysisResultsWithTags;
     }
