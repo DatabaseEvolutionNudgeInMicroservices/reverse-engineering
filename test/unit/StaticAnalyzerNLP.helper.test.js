@@ -248,26 +248,29 @@ describe('NLP static analyzer', () => {
     it('should build a correct directory tree with files and code fragments', () => {
         const extractionResults = [
             {
-                file: 'repo\\TEMP\\file1.js',
+                file: 'C:\\Home\\TEMP\\repo\\file1.js',
                 fileNumberOfLinesOfCode: 10,
-                tokens: {token1: {numberOfOccurence: 1, lines: [9]}, token2: {numberOfOccurence: 2, lines: [4, 9]}},
-                repository: "repo"
+                tokens: {user: {numberOfOccurence: 8, lines: [9,16,1,4,7,32,42,54]}, admin: {numberOfOccurence: 2, lines: [4, 9]}},
+                repository: "repo",
+                cluster: 1
             },
             {
-                file: 'repo\\TEMP\\dir1\\file2.js',
+                file: 'C:\\Home\\TEMP\\repo\\dir1\\file2.js',
                 fileNumberOfLinesOfCode: 20,
-                tokens: {token3: {numberOfOccurence: 3, lines: [5]}},
-                repository: "repo"
+                tokens: {user: {numberOfOccurence: 3, lines: [5,1,9]}},
+                repository: "repo",
+                cluster: 1
             }
         ];
 
         const result = staticAnalyzerNLP.buildDirectoryTreeWithFilesAndCodeFragments(extractionResults);
+        console.log(JSON.stringify(result))
         expect(result).toHaveProperty('directories');
         expect(result.directories.length).toBeGreaterThan(0);
-        expect(result.directories[0].files[0].location).toBe('file1.js');
+        expect(result.directories[0].files[0].location).toBe('repo/file1.js');
         expect(result.directories[0].files[0].codeFragments[0].concepts.length).toBe(2);
-        expect(result.directories[1].files[0].location).toBe('dir1/file2.js');
-        expect(result.directories[1].files[0].codeFragments[0].concepts.length).toBe(1);
+        expect(result.directories[0].directories[0].files[0].location).toBe('repo/dir1/file2.js');
+        expect(result.directories[0].directories[0].files[0].codeFragments[0].concepts.length).toBe(1);
     });
 
     it('should return true for supported file types', () => {
@@ -297,3 +300,159 @@ describe('NLP static analyzer', () => {
     });
 
 });
+
+
+
+
+describe('DB-related tagging methods', () => {
+    let staticAnalyzerNLP;
+
+    beforeEach(() => {
+        staticAnalyzerNLP = new StaticAnalyzerNLP();
+    });
+
+    describe('tagFilesFullyAutomated', () => {
+        it('should call tagFiles with correct parameters and return its result', () => {
+            const spy = jest.spyOn(staticAnalyzerNLP, 'tagFiles').mockReturnValue('result');
+            const element = 'repo';
+            const refinedResults = [{tokens: {movie: {numberOfOccurence: 2}}, fileNumberOfLinesOfCode: 10, file: 'file.js'}];
+            const bestConcepts = [{concept: 'movie'}, {concept: 'cinema'}];
+            const result = staticAnalyzerNLP.tagFilesFullyAutomated(element, refinedResults, bestConcepts);
+            expect(spy).toHaveBeenCalledWith(
+                element,
+                refinedResults,
+                {data_concepts: ['movie', 'cinema']},
+                "fully_automated"
+            );
+            expect(result).toBe('result');
+        });
+
+        it('should slice bestConcepts to 30 elements', () => {
+            const spy = jest.spyOn(staticAnalyzerNLP, 'tagFiles');
+            const bestConcepts = Array.from({length: 40}, (_, i) => ({concept: `c${i}`}));
+            staticAnalyzerNLP.tagFilesFullyAutomated('repo', [], bestConcepts);
+            expect(spy.mock.calls[0][2].data_concepts.length).toBe(30);
+        });
+    });
+
+    describe('tagFilesSemiAutomated', () => {
+        it('should call tagFiles with correct mode when anchor_points are present', () => {
+            const spy = jest.spyOn(staticAnalyzerNLP, 'tagFiles');
+            const dbDetails = {data_concepts: ['movie'], anchor_points: ['id']};
+            staticAnalyzerNLP.tagFilesSemiAutomated('repo', [], dbDetails);
+            expect(spy).toHaveBeenCalledWith(
+                'repo',
+                [],
+                dbDetails,
+                "semi_automated_with_anchors"
+            );
+        });
+
+        it('should call tagFiles with correct mode when anchor_points are absent', () => {
+            const spy = jest.spyOn(staticAnalyzerNLP, 'tagFiles');
+            const dbDetails = {data_concepts: ['movie']};
+            staticAnalyzerNLP.tagFilesSemiAutomated('repo', [], dbDetails);
+            expect(spy).toHaveBeenCalledWith(
+                'repo',
+                [],
+                dbDetails,
+                "semi_automated_without_anchors"
+            );
+        });
+    });
+
+    describe('tagFiles', () => {
+        it('should call tagFilesByClusteringWithHeuristics and return its result', () => {
+            const spy = jest.spyOn(staticAnalyzerNLP, 'tagFilesByClusteringWithHeuristics').mockReturnValue('tagged');
+            const result = staticAnalyzerNLP.tagFiles('repo', [{}, {}], {data_concepts: ['a']}, 'mode');
+            expect(spy).toHaveBeenCalledWith([{}, {}], {data_concepts: ['a']});
+            expect(result).toBe('tagged');
+        });
+    });
+
+    describe('tagFilesByClusteringWithHeuristics', () => {
+        it('should tag files as DB-related (cluster=1) if density >= threshold', () => {
+            const refinedResults = [
+                {
+                    tokens: {movie: {numberOfOccurence: 4}, user: {numberOfOccurence: 5}},
+                    fileNumberOfLinesOfCode: 10,
+                    file: 'file1.js'
+                }
+            ];
+            const dbDetails = {data_concepts: ['movie']};
+            const result = staticAnalyzerNLP.tagFilesByClusteringWithHeuristics(refinedResults, dbDetails);
+            expect(result[0].cluster).toBe(1);
+        });
+
+        it('should tag files as not DB-related (cluster=0) if density < threshold', () => {
+            const refinedResults = [
+                {
+                    tokens: {movie: {numberOfOccurence: 1}, user: {numberOfOccurence: 5}},
+                    fileNumberOfLinesOfCode: 10,
+                    file: 'file1.js'
+                }
+            ];
+            const dbDetails = {data_concepts: ['movie']};
+            const result = staticAnalyzerNLP.tagFilesByClusteringWithHeuristics(refinedResults, dbDetails);
+            expect(result[0].cluster).toBe(0);
+        });
+
+        it('should require anchor_points if present and density >= threshold', () => {
+            const refinedResults = [
+                {
+                    tokens: {movie: {numberOfOccurence: 3}, id: {numberOfOccurence: 1}},
+                    fileNumberOfLinesOfCode: 10,
+                    file: 'file1.js'
+                }
+            ];
+            const dbDetails = {data_concepts: ['movie'], anchor_points: ['id']};
+            const result = staticAnalyzerNLP.tagFilesByClusteringWithHeuristics(refinedResults, dbDetails);
+            expect(result[0].cluster).toBe(1);
+        });
+
+        it('should not tag as DB-related if anchor_points missing in tokens', () => {
+            const refinedResults = [
+                {
+                    tokens: {movie: {numberOfOccurence: 3}},
+                    fileNumberOfLinesOfCode: 10,
+                    file: 'file1.js'
+                }
+            ];
+            const dbDetails = {data_concepts: ['movie'], anchor_points: ['id']};
+            const result = staticAnalyzerNLP.tagFilesByClusteringWithHeuristics(refinedResults, dbDetails);
+            expect(result[0].cluster).toBe(0);
+        });
+
+        it('should tag files with no tokens or code as cluster=0', () => {
+            const refinedResults = [
+                {
+                    tokens: {},
+                    fileNumberOfLinesOfCode: 0,
+                    file: 'file2.js'
+                }
+            ];
+            const dbDetails = {data_concepts: ['movie']};
+            const result = staticAnalyzerNLP.tagFilesByClusteringWithHeuristics(refinedResults, dbDetails);
+            expect(result[0].cluster).toBe(0);
+        });
+
+        it('should handle multiple files and return correct clusters', () => {
+            const refinedResults = [
+                {
+                    tokens: {movie: {numberOfOccurence: 4}},
+                    fileNumberOfLinesOfCode: 10,
+                    file: 'file1.js'
+                },
+                {
+                    tokens: {},
+                    fileNumberOfLinesOfCode: 0,
+                    file: 'file2.js'
+                }
+            ];
+            const dbDetails = {data_concepts: ['movie']};
+            const result = staticAnalyzerNLP.tagFilesByClusteringWithHeuristics(refinedResults, dbDetails);
+            expect(result[0].cluster).toBe(1);
+            expect(result[1].cluster).toBe(0);
+        });
+    });
+});;
