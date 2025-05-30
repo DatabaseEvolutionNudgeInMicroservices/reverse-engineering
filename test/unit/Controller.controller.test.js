@@ -1,144 +1,160 @@
 // Controllers
 
-const Controller = require('../../controller/Controller.controller.js');
+const Controller = require('../../controller/Controller.controller.js')
 
 // Errors
 
-const DownloadFail = require('../../error/DownloadFail.error.js');
-const BadFormat = require('../../error/BadFormat.error.js');
-const {FILE_SYSTEM_SEPARATOR} = require("../../helper/Constant.helper");
+const DownloadFail = require('../../error/DownloadFail.error.js')
+const BadFormat = require('../../error/BadFormat.error.js')
+const { FILE_SYSTEM_SEPARATOR, TEMP_FOLDER_NAME } = require('../../helper/Constant.helper')
+const fs = require('fs')
 
 // Setup
 
-const languages = ['javascript'];
-const exampleRepository = process.cwd() + FILE_SYSTEM_SEPARATOR + 'test' + FILE_SYSTEM_SEPARATOR + 'unit' + FILE_SYSTEM_SEPARATOR + 'asset' + FILE_SYSTEM_SEPARATOR + 'example.zip';
+const languages = ['javascript']
+const exampleRepository =
+  process.cwd() +
+  FILE_SYSTEM_SEPARATOR +
+  'test' +
+  FILE_SYSTEM_SEPARATOR +
+  'unit' +
+  FILE_SYSTEM_SEPARATOR +
+  'asset' +
+  FILE_SYSTEM_SEPARATOR +
+  'example.zip'
 
 // Happy path test suite
 
 describe('Controller', () => {
+  it('analyzes statically a repository', async () => {
+    // Given
 
-    it('analyzes statically a repository', async () => {
+    let controller = new Controller()
 
-        // Given
+    // When Then
 
-        let controller = new Controller();
+    await controller.analyzeStatically(exampleRepository, languages[0]).then((result) => {
+      // console.log(JSON.stringify(result));
 
-        // When Then
-
-        await controller.analyzeStatically(exampleRepository, languages[0]).then((result) => {
-
-            // console.log(JSON.stringify(result));
-
-            // When Then
-            expect(JSON.stringify(result).includes('location":"https://github.com/example/example/tree/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/index.example.js#L0C0-L0C0"')).toBe(true);
-        });
-    });
-});
+      // When Then
+      expect(
+        JSON.stringify(result).includes(
+          'location":"https://github.com/example/example/tree/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa/index.example.js#L0C0-L0C0"'
+        )
+      ).toBe(true)
+    })
+  })
+})
 
 // Failure cases test suite
 
 describe('Controller tries to', () => {
+  it('analyzes statically a not found repository', async () => {
+    // Given
 
-    it('analyzes statically a not found repository', async () => {
+    let controller = new Controller()
 
-        // Given
+    // When Then
 
-        let controller = new Controller();
+    await expect(controller.analyzeStatically('unknownRepository', languages[0])).rejects.toThrow(
+      DownloadFail
+    )
+  })
 
-        // When Then
+  it('analyzes statically an undefined repository', async () => {
+    // Given
 
-        await expect(controller.analyzeStatically("unknownRepository", languages[0])).rejects.toThrow(DownloadFail);
-    });
+    let controller = new Controller()
+    let repository = undefined
 
-    it('analyzes statically an undefined repository', async () => {
+    // When Then
 
-        // Given
+    await expect(controller.analyzeStatically(repository, languages[0])).rejects.toThrow(BadFormat)
+  })
 
-        let controller = new Controller();
-        let repository = undefined;
+  it('analyzes statically a null repository', async () => {
+    // Given
 
-        // When Then
+    let controller = new Controller()
+    let repository = null
 
-        await expect(controller.analyzeStatically(repository, languages[0])).rejects.toThrow(BadFormat);
-    });
+    // When Then
 
-    it('analyzes statically a null repository', async () => {
+    await expect(controller.analyzeStatically(repository, languages[0])).rejects.toThrow(BadFormat)
+  })
 
-        // Given
+  it('analyzes statically an non-existent repository', async () => {
+    // Given
 
-        let controller = new Controller();
-        let repository = null;
+    let controller = new Controller()
+    let repository = ''
 
-        // When Then
+    // When Then
 
-        await expect(controller.analyzeStatically(repository, languages[0])).rejects.toThrow(BadFormat);
-    });
+    await expect(controller.analyzeStatically(repository, languages[0])).rejects.toThrow(BadFormat)
+  })
 
-    it('analyzes statically an non-existent repository', async () => {
+  it('analyzes statically an empty repository', async () => {
+    // Given
 
-        // Given
+    let controller = new Controller()
+    let repository =
+      process.cwd() +
+      FILE_SYSTEM_SEPARATOR +
+      'test' +
+      FILE_SYSTEM_SEPARATOR +
+      'unit' +
+      FILE_SYSTEM_SEPARATOR +
+      'asset' +
+      FILE_SYSTEM_SEPARATOR +
+      'empty.zip'
 
-        let controller = new Controller();
-        let repository = '';
+    // When Then
 
-        // When Then
+    await expect(controller.analyzeStatically(repository, languages[0])).rejects.toThrow(BadFormat)
+  })
 
-        await expect(controller.analyzeStatically(repository, languages[0])).rejects.toThrow(BadFormat);
-    });
+  it('analyzes statically a repository with an undefined language', async () => {
+    // Given
 
-    it('analyzes statically an empty repository', async () => {
+    let controller = new Controller()
 
-        // Given
+    // When Then
 
-        let controller = new Controller();
-        let repository = process.cwd() + FILE_SYSTEM_SEPARATOR + 'test' + FILE_SYSTEM_SEPARATOR + 'unit' + FILE_SYSTEM_SEPARATOR + 'asset' + FILE_SYSTEM_SEPARATOR + 'empty.zip';
+    await expect(controller.analyzeStatically(exampleRepository, undefined)).rejects.toThrow(
+      BadFormat
+    )
+  })
 
-        // When Then
+  it('analyzes statically a repository list with a null language', async () => {
+    // Given
 
-        await expect(controller.analyzeStatically(repository, languages[0])).rejects.toThrow(BadFormat);
-    });
+    let controller = new Controller()
 
-    it('analyzes statically a repository with an undefined language', async () => {
+    // When Then
 
-        // Given
+    await expect(controller.analyzeStatically(exampleRepository, null)).rejects.toThrow(BadFormat)
+  })
 
-        let controller = new Controller();
+  it('analyzes statically a repository list with an empty language', async () => {
+    // Given
 
-        // When Then
+    let controller = new Controller()
 
-        await expect(controller.analyzeStatically(exampleRepository, undefined)).rejects.toThrow(BadFormat);
-    });
+    // When Then
 
-    it('analyzes statically a repository list with a null language', async () => {
+    await expect(controller.analyzeStatically(exampleRepository, '')).rejects.toThrow(BadFormat)
+  })
 
-        // Given
+  it('analyzes statically a repository list with unknown language', async () => {
+    // Given
 
-        let controller = new Controller();
+    let controller = new Controller()
 
-        // When Then
+    // When Then
 
-        await expect(controller.analyzeStatically(exampleRepository, null)).rejects.toThrow(BadFormat);
-    });
-
-    it('analyzes statically a repository list with an empty language', async () => {
-
-        // Given
-
-        let controller = new Controller();
-
-        // When Then
-
-        await expect(controller.analyzeStatically(exampleRepository, '')).rejects.toThrow(BadFormat);
-    });
-
-    it('analyzes statically a repository list with unknown language', async () => {
-
-        // Given
-
-        let controller = new Controller();
-
-        // When Then
-
-        await expect(controller.analyzeStatically(exampleRepository, 'unknownLanguage')).rejects.toThrow(BadFormat);
-    });
-});
+    await expect(
+      controller.analyzeStatically(exampleRepository, 'unknownLanguage')
+    ).rejects.toThrow(BadFormat)
+  })
+})

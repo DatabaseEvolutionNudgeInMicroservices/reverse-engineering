@@ -1,229 +1,224 @@
 // Helpers
 
-const CleanerFile = require('../../helper/CleanerFile.helper.js');
+const CleanerFile = require('../../helper/CleanerFile.helper.js')
 
 // Libraries
 
-const fs = require('fs');
+const fs = require('fs')
 
 // Constants
 
-const {FILE_SYSTEM_SEPARATOR, TEMP_FOLDER_NAME} = require('../../helper/Constant.helper');
+const { FILE_SYSTEM_SEPARATOR, TEMP_FOLDER_NAME } = require('../../helper/Constant.helper')
 
 // Errors
 
-const CleaningFail = require('../../error/CleaningFail.error.js');
-const BadFormat = require('../../error/BadFormat.error.js');
+const CleaningFail = require('../../error/CleaningFail.error.js')
+const BadFormat = require('../../error/BadFormat.error.js')
 
 // Setup
 
-let directories = ['test1', 'test2', 'test3'];
-let files = ['file1.txt', 'file2.txt', 'file3.txt'];
+const tempPath = `${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}`
 
 // Happy path test suite
 
 describe('File cleaner', () => {
+  it('cleans a file', async () => {
+    // Given
 
-    beforeEach(() => {
-        const tempPath = `${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}`;
-        directories.forEach((directory) => {
-            const directoryPath = `${tempPath}${FILE_SYSTEM_SEPARATOR}${directory}`
-            if (!fs.existsSync(directoryPath)) {
-                fs.mkdirSync(directoryPath);
-            }
-            files.forEach((fileName) => {
-                const filePath = `${directoryPath}${FILE_SYSTEM_SEPARATOR}${fileName}`;
-                fs.writeFileSync(filePath, 'Test');
-            });
-        });
-        files.forEach((fileName) => {
-            const filePath = `${tempPath}${FILE_SYSTEM_SEPARATOR}${fileName}`;
-            fs.writeFileSync(filePath, 'Test');
-        });
-    });
+    let cleanerFile = new CleanerFile()
+    fs.writeFileSync(`${tempPath}${FILE_SYSTEM_SEPARATOR}CleanerFile_File1.txt`, 'Test')
 
-    it('cleans a file', async () => {
+    // When Then
 
-        // Given
+    await cleanerFile.cleanByElement('CleanerFile_File1.txt').then((result) => {
+      const fileDeleted = fs.existsSync(
+        `${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}CleanerFile_File1.txt`
+      )
+      expect(fileDeleted).toBe(false)
+    })
+  })
 
-        let cleanerFile = new CleanerFile();
+  it('cleans a directory', async () => {
+    // Given
 
-        // When Then
+    let cleanerFile = new CleanerFile()
+    fs.mkdirSync(`${tempPath}${FILE_SYSTEM_SEPARATOR}CleanerFile_Directory1`)
 
-        await cleanerFile.cleanByElement(files[0]).then((result) => {
-            const fileDeleted = fs.existsSync(`${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}${files[0]}`);
-            expect(fileDeleted).toBe(false);
-        });
-    });
+    // When Then
 
-    it('cleans a directory', async () => {
+    await cleanerFile.cleanByElement('CleanerFile_Directory1').then((result) => {
+      const directoryDeleted = fs.existsSync(
+        `${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}directory1`
+      )
+      expect(directoryDeleted).toBe(false)
+    })
+  })
 
-        // Given
+  it('cleans a file list', async () => {
+    // Given
 
-        let cleanerFile = new CleanerFile();
+    let cleanerFile = new CleanerFile()
+    fs.writeFileSync(`${tempPath}${FILE_SYSTEM_SEPARATOR}CleanerFile_File2.txt`, 'Test')
+    fs.writeFileSync(`${tempPath}${FILE_SYSTEM_SEPARATOR}CleanerFile_File3.txt`, 'Test')
 
-        // When Then
+    // When Then
 
-        await cleanerFile.cleanByElement(directories[0]).then((result) => {
-            const directoryDeleted = fs.existsSync(`${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}${directories[0]}`);
-            expect(directoryDeleted).toBe(false);
-        });
-    });
+    await cleanerFile
+      .cleanByList(['CleanerFile_File2.txt', 'CleanerFile_File3.txt'])
+      .then((result) => {
+        const fileDeleted2 = fs.existsSync(
+          `${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}CleanerFile_File2.txt`
+        )
+        const fileDeleted3 = fs.existsSync(
+          `${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}CleanerFile_File3.txt`
+        )
+        expect(fileDeleted2 || fileDeleted3).toBe(false)
+      })
+  })
 
-    it('cleans a directory list', async () => {
+  it('cleans a directory list', async () => {
+    // Given
 
-        // Given
+    let cleanerFile = new CleanerFile()
+    fs.mkdirSync(`${tempPath}${FILE_SYSTEM_SEPARATOR}CleanerFile_Directory2`)
+    fs.mkdirSync(`${tempPath}${FILE_SYSTEM_SEPARATOR}CleanerFile_Directory3`)
 
-        let cleanerFile = new CleanerFile();
+    // When Then
 
-        // When Then
+    await cleanerFile
+      .cleanByList(['CleanerFile_Directory2', 'CleanerFile_Directory3'])
+      .then((result) => {
+        const directoryDeleted2 = fs.existsSync(
+          `${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}CleanerFile_Directory2`
+        )
+        const directoryDeleted3 = fs.existsSync(
+          `${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}CleanerFile_Directory3`
+        )
+        expect(directoryDeleted2 || directoryDeleted3).toBe(false)
+      })
+  })
 
-        await cleanerFile.cleanByList(directories).then(async (result) => {
-            const directoryDeleted1 = fs.existsSync(`${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}${directories[0]}`);
-            const directoryDeleted2 = fs.existsSync(`${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}${directories[1]}`);
-            const directoryDeleted3 = fs.existsSync(`${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}${directories[2]}`);
-            expect(directoryDeleted1 || directoryDeleted2 || directoryDeleted3).toBe(false);
-        });
-    });
+  it('cleans a directory list with files inside', async () => {
+    // Given
 
-    it('cleans a file list', async () => {
+    let cleanerFile = new CleanerFile()
+    fs.mkdirSync(`${tempPath}${FILE_SYSTEM_SEPARATOR}CleanerFile_Directory4`)
+    fs.writeFileSync(
+      `${tempPath}${FILE_SYSTEM_SEPARATOR}CleanerFile_Directory4${FILE_SYSTEM_SEPARATOR}CleanerFile_File4.txt`,
+      'Test'
+    )
+    fs.mkdirSync(`${tempPath}${FILE_SYSTEM_SEPARATOR}CleanerFile_Directory5`)
+    fs.writeFileSync(
+      `${tempPath}${FILE_SYSTEM_SEPARATOR}CleanerFile_Directory5${FILE_SYSTEM_SEPARATOR}CleanerFile_File5.txt`,
+      'Test'
+    )
 
-        // Given
+    // When Then
 
-        let cleanerFile = new CleanerFile();
-
-        // When Then
-
-        await cleanerFile.cleanByList(files).then(async (result) => {
-            const fileDeleted1 = fs.existsSync(`${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}${files[0]}`);
-            const fileDeleted2 = fs.existsSync(`${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}${files[1]}`);
-            const fileDeleted3 = fs.existsSync(`${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}${files[2]}`);
-            expect(fileDeleted1 || fileDeleted2 || fileDeleted3).toBe(false);
-        });
-    });
-
-    it('cleans all directories and files in a directory', async () => {
-
-        // Given
-
-        let cleanerFile = new CleanerFile();
-
-        // When Then
-
-        await cleanerFile.cleanAll().then(async (result) => {
-            const directoryDeleted1 = fs.existsSync(`${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}${directories[0]}`);
-            const directoryDeleted2 = fs.existsSync(`${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}${directories[1]}`);
-            const directoryDeleted3 = fs.existsSync(`${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}${directories[2]}`);
-            const fileDeleted1 = fs.existsSync(`${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}${files[0]}`);
-            const fileDeleted2 = fs.existsSync(`${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}${files[1]}`);
-            const fileDeleted3 = fs.existsSync(`${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}${files[2]}`);
-            expect(directoryDeleted1 || directoryDeleted2 || directoryDeleted3 || fileDeleted1 || fileDeleted2 || fileDeleted3).toBe(false);
-        });
-    });
-});
+    await cleanerFile
+      .cleanByList(['CleanerFile_Directory4', 'CleanerFile_Directory5'])
+      .then((result) => {
+        const directoryDeleted4 = fs.existsSync(
+          `${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}CleanerFile_Directory4`
+        )
+        const directoryDeleted5 = fs.existsSync(
+          `${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}CleanerFile_Directory5`
+        )
+        expect(directoryDeleted4 || directoryDeleted5).toBe(false)
+      })
+  })
+})
 
 // Failure cases test suite
 
 describe('File cleaner tries to', () => {
+  it('clean a not found file or directory', () => {
+    // Given
 
-    it('clean a not found file or directory', async () => {
+    let cleanerFile = new CleanerFile()
 
-        // Given
+    // When Then
 
-        let cleanerFile = new CleanerFile();
+    expect(cleanerFile.cleanByElement('unknown')).rejects.toThrow(CleaningFail)
+  })
 
-        // When Then
+  it('clean a list with not found files or directories', () => {
+    // Given
 
-        await expect(cleanerFile.cleanByElement('unknown')).rejects.toThrow(CleaningFail);
-    });
+    let cleanerFile = new CleanerFile()
 
-    it('clean a list with not found files or directories', async () => {
+    // When Then
 
-        // Given
+    expect(cleanerFile.cleanByList(['unknown'])).rejects.toThrow(CleaningFail)
+  })
 
-        let cleanerFile = new CleanerFile();
+  it('clean an undefined file or directory', () => {
+    // Given
 
-        // When Then
+    let cleanerFile = new CleanerFile()
 
-        await expect(cleanerFile.cleanByList(['unknown'])).rejects.toThrow(CleaningFail);
-    });
+    // When Then
 
-    it('clean an undefined file or directory', async () => {
+    expect(cleanerFile.cleanByElement(undefined)).rejects.toThrow(BadFormat)
+  })
 
-        // Given
+  it('clean an undefined file or directory list', () => {
+    // Given
 
-        let cleanerFile = new CleanerFile();
+    let cleanerFile = new CleanerFile()
 
-        // When Then
+    // When Then
 
-        await expect(cleanerFile.cleanByElement(undefined)).rejects.toThrow(BadFormat);
+    expect(cleanerFile.cleanByList(undefined)).rejects.toThrow(BadFormat)
+  })
 
-    });
+  it('clean a null file or directory', () => {
+    // Given
 
-    it('clean an undefined file or directory list', async () => {
+    let cleanerFile = new CleanerFile()
 
-        // Given
+    // When Then
 
-        let cleanerFile = new CleanerFile();
+    expect(cleanerFile.cleanByElement(null)).rejects.toThrow(BadFormat)
+  })
 
-        // When Then
+  it('clean a null file or directory list', () => {
+    // Given
 
-        await expect(cleanerFile.cleanByList(undefined)).rejects.toThrow(BadFormat);
-    });
+    let cleanerFile = new CleanerFile()
 
-    it('clean a null file or directory', async () => {
+    // When Then
 
-        // Given
+    expect(cleanerFile.cleanByList(null)).rejects.toThrow(BadFormat)
+  })
 
-        let cleanerFile = new CleanerFile();
+  it('clean a file or directory list with undefined directories', () => {
+    // Given
 
-        // When Then
+    let cleanerFile = new CleanerFile()
 
-        await expect(cleanerFile.cleanByElement(null)).rejects.toThrow(BadFormat);
+    // When Then
 
-    });
+    expect(cleanerFile.cleanByList([undefined])).rejects.toThrow(CleaningFail)
+  })
 
-    it('clean a null file or directory list', async () => {
+  it('clean a file or directory list with null directories', () => {
+    // Given
 
-        // Given
+    let cleanerFile = new CleanerFile()
 
-        let cleanerFile = new CleanerFile();
+    // When Then
 
-        // When Then
+    expect(cleanerFile.cleanByList([null])).rejects.toThrow(CleaningFail)
+  })
 
-        await expect(cleanerFile.cleanByList(null)).rejects.toThrow(BadFormat);
-    });
+  it('clean an empty file or directory list', () => {
+    // Given
 
-    it('clean a file or directory list with undefined directories', async () => {
+    let cleanerFile = new CleanerFile()
 
-        // Given
+    // When Then
 
-        let cleanerFile = new CleanerFile();
-
-        // When Then
-
-        await expect(cleanerFile.cleanByList([undefined])).rejects.toThrow(CleaningFail);
-    });
-
-    it('clean a file or directory list with null directories', async () => {
-
-        // Given
-
-        let cleanerFile = new CleanerFile();
-
-        // When Then
-
-        await expect(cleanerFile.cleanByList([null])).rejects.toThrow(CleaningFail);
-    });
-
-    it('clean an empty file or directory list', async () => {
-
-        // Given
-
-        let cleanerFile = new CleanerFile();
-
-        // When Then
-
-        await expect(cleanerFile.cleanByList([])).toBeInstanceOf(Promise);
-    });
-});
+    expect(cleanerFile.cleanByList([])).toBeInstanceOf(Promise)
+  })
+})

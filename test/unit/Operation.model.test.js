@@ -1,175 +1,159 @@
 // Model
-const Operation = require("../../model/Operation.model");
+const Operation = require('../../model/Operation.model')
 // Error
-const BadFormat = require('../../error/BadFormat.error.js');
-const BadOperation = require("../../error/BadOperation.error");
+const BadFormat = require('../../error/BadFormat.error.js')
+const BadOperation = require('../../error/BadOperation.error')
 
 // Happy path test suite
 
 describe('Operation', () => {
+  test('does to string', () => {
+    // Given
 
-    test('does to string', () => {
+    let operationAsObjectGiven = new Operation('READ')
 
-        // Given
+    // When
 
-        let operationAsObjectGiven = new Operation("READ");
+    let operationAsStringGiven = operationAsObjectGiven.toString()
 
-        // When
+    // Then
 
-        let operationAsStringGiven = operationAsObjectGiven.toString();
+    expect(operationAsStringGiven).toStrictEqual('{"name":"READ"}')
+  })
 
-        // Then
+  test('revives as object', () => {
+    // Given
 
-        expect(operationAsStringGiven).toStrictEqual('{"name":"READ"}');
-    });
+    let operationAsStringGiven = '{"name":"READ"}'
+    let operationAsObjectGiven = JSON.parse(operationAsStringGiven)
 
-    test('revives as object', () => {
+    // When
 
-        // Given
+    let operationAsModelGiven = Operation.revive(operationAsObjectGiven)
 
-        let operationAsStringGiven = '{"name":"READ"}';
-        let operationAsObjectGiven = JSON.parse(operationAsStringGiven);
+    // Then
 
-        // When
+    let staticAnalysisCodeQLRequestAsModelExpected = new Operation('READ')
+    expect(operationAsModelGiven).toStrictEqual(staticAnalysisCodeQLRequestAsModelExpected)
+  })
 
-        let operationAsModelGiven = Operation.revive(operationAsObjectGiven);
+  test('checks the valid operation', () => {
+    // Given
 
-        // Then
+    let operations = ['CREATE', 'READ', 'UPDATE', 'DELETE', 'OTHER']
 
-        let staticAnalysisCodeQLRequestAsModelExpected = new Operation("READ");
-        expect(operationAsModelGiven).toStrictEqual(staticAnalysisCodeQLRequestAsModelExpected);
-    });
+    // When
 
-    test('checks the valid operation', () => {
+    let operationsCheck = operations.every((operation) => Operation.check(operation))
 
-        // Given
+    // Then
 
-        let operations = ["CREATE", "READ", "UPDATE", "DELETE", "OTHER"];
+    expect(operationsCheck).toBe(true)
+  })
 
-        // When
+  test('sets the operation', () => {
+    // Given
+    let operationGiven = new Operation('READ')
 
-        let operationsCheck = operations.every(operation => Operation.check(operation));
+    // When
 
-        // Then
+    operationGiven.setName('UPDATE')
 
-        expect(operationsCheck).toBe(true);
-    });
+    // Then
 
-    test('sets the operation', () => {
-
-        // Given
-        let operationGiven = new Operation("READ");
-
-        // When
-
-        operationGiven.setName("UPDATE");
-
-        // Then
-
-        expect(operationGiven.getName()).toStrictEqual("UPDATE");
-    });
-});
-
+    expect(operationGiven.getName()).toStrictEqual('UPDATE')
+  })
+})
 
 // Failure cases test suite
 
 describe('Operation tries to', () => {
+  test('revive an incorrect formatted object', () => {
+    // Given
 
+    let operationAsStringGiven = "{'name':'READ'}"
 
-    test('revive an incorrect formatted object', () => {
+    // When Then
 
-        // Given
+    expect(() => {
+      Operation.revive(operationAsStringGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        let operationAsStringGiven = '{\'name\':\'READ\'}';
+  test('revive an incomplete formatted object', () => {
+    // Given
 
-        // When Then
+    let operationAsStringGiven = '{"name":"}'
 
-        expect(() => {
-            Operation.revive(operationAsStringGiven);
-        }).toThrow(new BadFormat());
-    });
+    // When Then
 
-    test('revive an incomplete formatted object', () => {
+    expect(() => {
+      Operation.revive(operationAsStringGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        // Given
+  test('revive an undefined object', () => {
+    // Given
 
-        let operationAsStringGiven = '{"name":"}';
+    let operationGiven = undefined
 
-        // When Then
+    // When Then
 
-        expect(() => {
-            Operation.revive(operationAsStringGiven);
-        }).toThrow(new BadFormat());
-    });
+    expect(() => {
+      Operation.revive(operationGiven)
+    }).toThrow(new BadFormat())
+  })
 
-    test('revive an undefined object', () => {
+  test('revive a null object', () => {
+    // Given
 
-        // Given
+    let operationGiven = null
 
-        let operationGiven = undefined;
+    // When Then
 
-        // When Then
+    expect(() => {
+      Operation.revive(operationGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        expect(() => {
-            Operation.revive(operationGiven);
-        }).toThrow(new BadFormat());
-    });
+  test('revive a bad operation object', () => {
+    // Given
 
-    test('revive a null object', () => {
+    let operationAsStringGiven = '{"name":"UNKNOWN"}'
+    let operationAsObjectGiven = JSON.parse(operationAsStringGiven)
 
-        // Given
+    // When Then
 
-        let operationGiven = null;
+    expect(() => {
+      Operation.revive(operationAsObjectGiven)
+    }).toThrow(new BadOperation())
+  })
 
-        // When Then
+  test('create an operation without operation name', () => {
+    // Given When Then
 
-        expect(() => {
-            Operation.revive(operationGiven);
-        }).toThrow(new BadFormat());
-    });
+    expect(() => {
+      new Operation('')
+    }).toThrow(new BadOperation())
+  })
 
-    test('revive a bad operation object', () => {
+  test('create a bad operation', () => {
+    // Given When Then
 
-        // Given
+    expect(() => {
+      new Operation('unknown')
+    }).toThrow(new BadOperation())
+  })
 
-        let operationAsStringGiven = '{"name":"UNKNOWN"}';
-        let operationAsObjectGiven = JSON.parse(operationAsStringGiven);
+  test('set a bad operation', () => {
+    // Given
 
-        // When Then
+    let operationAsObjectGiven = new Operation('READ')
 
-        expect(() => {
-            Operation.revive(operationAsObjectGiven);
-        }).toThrow(new BadOperation());
-    });
+    // When Then
 
-    test('create an operation without operation name', () => {
-
-        // Given When Then
-
-        expect(() => {
-            new Operation("");
-        }).toThrow(new BadOperation());
-    });
-
-    test('create a bad operation', () => {
-
-        // Given When Then
-
-        expect(() => {
-            new Operation("unknown");
-        }).toThrow(new BadOperation());
-    });
-
-    test('set a bad operation', () => {
-
-        // Given
-
-        let operationAsObjectGiven = new Operation("READ");
-
-        // When Then
-
-        expect(() => {
-            operationAsObjectGiven.setName("UNKNOWN");
-        }).toThrow(new BadOperation());
-    });
-});
+    expect(() => {
+      operationAsObjectGiven.setName('UNKNOWN')
+    }).toThrow(new BadOperation())
+  })
+})

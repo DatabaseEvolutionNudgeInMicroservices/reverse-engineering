@@ -1,172 +1,156 @@
 // Model
-const Sample = require("../../model/Sample.model");
+const Sample = require('../../model/Sample.model')
 // Error
-const BadFormat = require('../../error/BadFormat.error.js');
+const BadFormat = require('../../error/BadFormat.error.js')
 
 // Happy path test suite
 
 describe('Sample', () => {
+  test('does to string', () => {
+    // Given
 
-    test('does to string', () => {
+    let sampleAsObjectGiven = new Sample('test')
 
-        // Given
+    // When
 
-        let sampleAsObjectGiven = new Sample("test");
+    let sampleAsStringGiven = sampleAsObjectGiven.toString()
 
-        // When
+    // Then
 
-        let sampleAsStringGiven = sampleAsObjectGiven.toString();
+    expect(sampleAsStringGiven).toStrictEqual('{"content":"test"}')
+  })
 
-        // Then
+  test('revives as object', () => {
+    // Given
 
-        expect(sampleAsStringGiven).toStrictEqual('{"content":"test"}');
-    });
+    let sampleAsStringGiven = '{"content":"test"}'
+    let sampleAsObjectGiven = JSON.parse(sampleAsStringGiven)
 
-    test('revives as object', () => {
+    // When
 
-        // Given
+    let sampleAsModelGiven = Sample.revive(sampleAsObjectGiven)
 
-        let sampleAsStringGiven = '{"content":"test"}';
-        let sampleAsObjectGiven = JSON.parse(sampleAsStringGiven);
+    // Then
 
-        // When
+    let staticAnalysisCodeQLRequestAsModelExpected = new Sample('test')
+    expect(sampleAsModelGiven).toStrictEqual(staticAnalysisCodeQLRequestAsModelExpected)
+  })
 
-        let sampleAsModelGiven = Sample.revive(sampleAsObjectGiven);
+  test('sets the sample', () => {
+    // Given
+    let sampleGiven = new Sample('test')
 
-        // Then
+    // When
 
-        let staticAnalysisCodeQLRequestAsModelExpected = new Sample("test");
-        expect(sampleAsModelGiven).toStrictEqual(staticAnalysisCodeQLRequestAsModelExpected);
-    });
+    sampleGiven.setContent('test2')
 
-    test('sets the sample', () => {
+    // Then
 
-        // Given
-        let sampleGiven = new Sample("test");
-
-        // When
-
-        sampleGiven.setContent("test2");
-
-        // Then
-
-        expect(sampleGiven.getContent()).toStrictEqual("test2");
-    });
-});
-
+    expect(sampleGiven.getContent()).toStrictEqual('test2')
+  })
+})
 
 // Failure cases test suite
 
 describe('Sample tries to', () => {
+  test('revive an incorrect formatted object', () => {
+    // Given
 
+    let sampleAsStringGiven = "{'content':'test'}"
 
-    test('revive an incorrect formatted object', () => {
+    // When Then
 
-        // Given
+    expect(() => {
+      Sample.revive(sampleAsStringGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        let sampleAsStringGiven = '{\'content\':\'test\'}';
+  test('revive an incomplete formatted object', () => {
+    // Given
 
-        // When Then
+    let sampleAsStringGiven = '{"content":"}'
 
-        expect(() => {
-            Sample.revive(sampleAsStringGiven);
-        }).toThrow(new BadFormat());
-    });
+    // When Then
 
-    test('revive an incomplete formatted object', () => {
+    expect(() => {
+      Sample.revive(sampleAsStringGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        // Given
+  test('revive an undefined object', () => {
+    // Given
 
-        let sampleAsStringGiven = '{"content":"}';
+    let sampleGiven = undefined
 
-        // When Then
+    // When Then
 
-        expect(() => {
-            Sample.revive(sampleAsStringGiven);
-        }).toThrow(new BadFormat());
-    });
+    expect(() => {
+      Sample.revive(sampleGiven)
+    }).toThrow(new BadFormat())
+  })
 
-    test('revive an undefined object', () => {
+  test('revive a null object', () => {
+    // Given
 
-        // Given
+    let sampleGiven = null
 
-        let sampleGiven = undefined;
+    // When Then
 
-        // When Then
+    expect(() => {
+      Sample.revive(sampleGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        expect(() => {
-            Sample.revive(sampleGiven);
-        }).toThrow(new BadFormat());
-    });
+  test('revive a sample with null content', () => {
+    // Given
 
-    test('revive a null object', () => {
+    let sampleAsStringGiven = '{"content":null}'
+    let sampleAsObjectGiven = JSON.parse(sampleAsStringGiven)
 
-        // Given
+    // When Then
 
-        let sampleGiven = null;
+    expect(() => {
+      Sample.revive(sampleAsObjectGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        // When Then
+  test('create a sample with undefined content', () => {
+    // Given When Then
 
-        expect(() => {
-            Sample.revive(sampleGiven);
-        }).toThrow(new BadFormat());
-    });
+    expect(() => {
+      new Sample(undefined)
+    }).toThrow(new BadFormat())
+  })
 
-    test('revive a sample with null content', () => {
+  test('create a sample with null content', () => {
+    // Given When Then
 
-        // Given
+    expect(() => {
+      new Sample(null)
+    }).toThrow(new BadFormat())
+  })
 
-        let sampleAsStringGiven = '{"content":null}';
-        let sampleAsObjectGiven = JSON.parse(sampleAsStringGiven);
+  test('set a sample undefined content', () => {
+    // Given
 
-        // When Then
+    let sampleAsObjectGiven = new Sample('test')
 
-        expect(() => {
-            Sample.revive(sampleAsObjectGiven);
-        }).toThrow(new BadFormat());
-    });
+    // When Then
 
-    test('create a sample with undefined content', () => {
+    expect(() => {
+      sampleAsObjectGiven.setContent(undefined)
+    }).toThrow(new BadFormat())
+  })
 
-        // Given When Then
+  test('set a sample null content', () => {
+    // Given
 
-        expect(() => {
-            new Sample(undefined);
-        }).toThrow(new BadFormat());
-    });
+    let sampleAsObjectGiven = new Sample('test')
 
-    test('create a sample with null content', () => {
+    // When Then
 
-        // Given When Then
-
-        expect(() => {
-            new Sample(null);
-        }).toThrow(new BadFormat());
-    });
-
-    test('set a sample undefined content', () => {
-
-        // Given
-
-        let sampleAsObjectGiven = new Sample("test");
-
-        // When Then
-
-        expect(() => {
-            sampleAsObjectGiven.setContent(undefined);
-        }).toThrow(new BadFormat());
-    });
-
-    test('set a sample null content', () => {
-
-        // Given
-
-        let sampleAsObjectGiven = new Sample("test");
-
-        // When Then
-
-        expect(() => {
-            sampleAsObjectGiven.setContent(null);
-        }).toThrow(new BadFormat());
-    });
-});
+    expect(() => {
+      sampleAsObjectGiven.setContent(null)
+    }).toThrow(new BadFormat())
+  })
+})

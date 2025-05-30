@@ -1,1570 +1,2114 @@
 // Helpers
 
-const StaticAnalyzerCodeQL = require('../../helper/StaticAnalyzerCodeQL.helper.js');
+const StaticAnalyzerCodeQL = require('../../helper/StaticAnalyzerCodeQL.helper.js')
 
 // Constants
 
-const {FILE_SYSTEM_SEPARATOR} = require('../../helper/Constant.helper');
+const { FILE_SYSTEM_SEPARATOR, TEMP_FOLDER_NAME } = require('../../helper/Constant.helper')
 
 // Libraries
 
-const fs = require('fs');
+const fs = require('fs')
 
 // Errors
 
-const AnalysisFail = require('../../error/AnalysisFail.error.js');
-const BadFormat = require('../../error/BadFormat.error.js');
+const AnalysisFail = require('../../error/AnalysisFail.error.js')
+const BadFormat = require('../../error/BadFormat.error.js')
 
 // Model
 
-const Repository = require("../../model/Repository.model");
-const Directory = require("../../model/Directory.model");
-const File = require("../../model/File.model");
-const CodeFragment = require("../../model/CodeFragment.model");
-const Technology = require("../../model/Technology.model");
-const Operation = require("../../model/Operation.model");
-const Method = require("../../model/Method.model");
-const Sample = require("../../model/Sample.model");
-const Concept = require("../../model/Concept.model");
+const Repository = require('../../model/Repository.model')
+const Directory = require('../../model/Directory.model')
+const File = require('../../model/File.model')
+const CodeFragment = require('../../model/CodeFragment.model')
+const Technology = require('../../model/Technology.model')
+const Operation = require('../../model/Operation.model')
+const Method = require('../../model/Method.model')
+const Sample = require('../../model/Sample.model')
+const Concept = require('../../model/Concept.model')
 
 // Setup
 
-const repositoryList = ['example', 'example-codeql', 'unknown-codeql'];
-const languages = ['javascript'];
+const repositoryList = ['example']
+const languages = ['javascript']
 
-async function clean() {
-    // Cleaning.
+async function prepare(destination) {
+  /// Preparing.
+  fs.mkdirSync(
+    process.cwd() + FILE_SYSTEM_SEPARATOR + TEMP_FOLDER_NAME + FILE_SYSTEM_SEPARATOR + destination
+  )
+  fs.mkdirSync(
+    process.cwd() +
+      FILE_SYSTEM_SEPARATOR +
+      TEMP_FOLDER_NAME +
+      FILE_SYSTEM_SEPARATOR +
+      destination +
+      FILE_SYSTEM_SEPARATOR +
+      repositoryList[0]
+  )
+  fs.copyFileSync(
+    process.cwd() +
+      FILE_SYSTEM_SEPARATOR +
+      'test' +
+      FILE_SYSTEM_SEPARATOR +
+      'unit' +
+      FILE_SYSTEM_SEPARATOR +
+      'asset' +
+      FILE_SYSTEM_SEPARATOR +
+      'index.example.js',
+    process.cwd() +
+      FILE_SYSTEM_SEPARATOR +
+      TEMP_FOLDER_NAME +
+      FILE_SYSTEM_SEPARATOR +
+      destination +
+      FILE_SYSTEM_SEPARATOR +
+      repositoryList[0] +
+      FILE_SYSTEM_SEPARATOR +
+      'index.js'
+  )
+}
 
-    for (let i = 0; i < repositoryList.length; i++) {
-        if (fs.existsSync(process.cwd() + FILE_SYSTEM_SEPARATOR + 'TEMP' + FILE_SYSTEM_SEPARATOR + repositoryList[i])) {
-            await fs.rmdirSync(process.cwd() + FILE_SYSTEM_SEPARATOR + 'TEMP' + FILE_SYSTEM_SEPARATOR + repositoryList[i], {recursive: true});
-        }
+async function clean(destination) {
+  // Cleaning.
+
+  for (let i = 0; i < repositoryList.length; i++) {
+    if (
+      fs.existsSync(
+        process.cwd() +
+          FILE_SYSTEM_SEPARATOR +
+          TEMP_FOLDER_NAME +
+          FILE_SYSTEM_SEPARATOR +
+          destination
+      )
+    ) {
+      await fs.rmSync(
+        process.cwd() +
+          FILE_SYSTEM_SEPARATOR +
+          TEMP_FOLDER_NAME +
+          FILE_SYSTEM_SEPARATOR +
+          destination,
+        { recursive: true }
+      )
     }
+  }
 }
 
 // Happy path test suite
 
 describe('CodeQL static analyzer', () => {
-
-    beforeEach(() => {
-        // Preparing.
-        fs.mkdirSync(process.cwd() + FILE_SYSTEM_SEPARATOR + 'TEMP' + FILE_SYSTEM_SEPARATOR + repositoryList[0]);
-        fs.copyFileSync(process.cwd() + FILE_SYSTEM_SEPARATOR + 'test' + FILE_SYSTEM_SEPARATOR + 'unit' + FILE_SYSTEM_SEPARATOR + 'asset' + FILE_SYSTEM_SEPARATOR + 'index.example.js', process.cwd() + FILE_SYSTEM_SEPARATOR + 'TEMP' + FILE_SYSTEM_SEPARATOR + repositoryList[0] + FILE_SYSTEM_SEPARATOR + 'index.js');
-    });
-
-    afterEach(async () => {
-        await clean();
-    });
-
-    it('initializes a CodeQL static analysis by repository', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-        await staticAnalyzerCodeQL.initializesByElement(repositoryList[0], languages[0]).then((result) => {
-            const repositoryGenerated1 = fs.existsSync(process.cwd() + FILE_SYSTEM_SEPARATOR + 'TEMP' + FILE_SYSTEM_SEPARATOR + repositoryList[0] + '-codeql');
-            const repositoryGenerated2 = fs.existsSync(process.cwd() + FILE_SYSTEM_SEPARATOR + 'TEMP' + FILE_SYSTEM_SEPARATOR + repositoryList[0] + '-codeql' + FILE_SYSTEM_SEPARATOR + 'result');
-            expect(repositoryGenerated1 && repositoryGenerated2).toBe(true);
-        });
-    });
-
-    it('initializes a CodeQL static analysis by repository list', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-
-        await staticAnalyzerCodeQL.initializesByList([repositoryList[0]], languages[0]).then((result) => {
-            const repositoryGenerated1 = fs.existsSync(process.cwd() + FILE_SYSTEM_SEPARATOR + 'TEMP' + FILE_SYSTEM_SEPARATOR + repositoryList[0] + '-codeql');
-            const repositoryGenerated2 = fs.existsSync(process.cwd() + FILE_SYSTEM_SEPARATOR + 'TEMP' + FILE_SYSTEM_SEPARATOR + repositoryList[0] + '-codeql' + FILE_SYSTEM_SEPARATOR + 'result');
-            expect(repositoryGenerated1 && repositoryGenerated2).toBe(true);
-        });
-    });
-
-    it('identifies a CodeQL static analysis by repository', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-        await staticAnalyzerCodeQL.initializesByElement(repositoryList[0], languages[0]).then(async (result) => {
-            await staticAnalyzerCodeQL.identifyByElement(repositoryList[0], languages[0]).then((result) => {
-                const repositoryGenerated1 = fs.existsSync(process.cwd() + FILE_SYSTEM_SEPARATOR + 'TEMP' + FILE_SYSTEM_SEPARATOR + repositoryList[0] + '-codeql' + FILE_SYSTEM_SEPARATOR + 'result');
-                expect(repositoryGenerated1).toBe(true);
-            });
-        });
-    });
-
-    it('identifies a CodeQL static analysis by repository list', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-        await staticAnalyzerCodeQL.initializesByList([repositoryList[0]], languages[0]).then(async (result) => {
-            await staticAnalyzerCodeQL.identifyByList([repositoryList[0]], languages[0]).then((result) => {
-                const repositoryGenerated1 = fs.existsSync(process.cwd() + FILE_SYSTEM_SEPARATOR + 'TEMP' + FILE_SYSTEM_SEPARATOR + repositoryList[0] + '-codeql' + FILE_SYSTEM_SEPARATOR + 'result' + FILE_SYSTEM_SEPARATOR + 'result.csv');
-                expect(repositoryGenerated1).toBe(true);
-            });
-        });
-    });
-
-    it('extracts a CodeQL static analysis result by repository', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-        await staticAnalyzerCodeQL.initializesByElement(repositoryList[0], languages[0]).then(async (result) => {
-            await staticAnalyzerCodeQL.identifyByElement(repositoryList[0], languages[0]).then(async (result) => {
-                await staticAnalyzerCodeQL.extractByElement(repositoryList[0], languages[0]).then((result) => {
-
-                    let isArray = Array.isArray(result) && result.length > 0;
-
-                    console.log(result);
-
-                    const test1 = result.find(item => item.type === 'javascript-api-express-call' && item.repository === 'example' && item.file === 'example/index.js' && item.location === 'example/index.js#L59C1-L80C2' && item.operation === 'READ' && item.method === 'get' && item.sample === '\'/:order_id\'' && item.fileNumberOfLinesOfCode === 85);
-
-                    const test2 = result.find(item => item.type === 'javascript-db-mongo-call' && item.repository === 'example' && item.file === 'example/index.js' && item.location === 'example/index.js#L69C32-L69C79' && item.operation === 'READ' && item.method === 'collection.findOne' && item.sample === '{ _id : ... }' && item.fileNumberOfLinesOfCode === 85);
-
-                    const test3 = result.find(item => item.type === 'javascript-db-redis-call' && item.repository === 'example' && item.file === 'example/index.js' && item.location === 'example/index.js#L31C5-L31C34' && item.operation === 'READ' && item.method === 'get' && item.sample === '\'order_count\'' && item.fileNumberOfLinesOfCode === 85);
-
-                    expect(isArray && (test1 !== undefined) && (test2 !== undefined) && (test3 !== undefined)).toBe(true);
-                });
-            });
-        });
-    });
-
-    it('extracts a CodeQL static analysis result by repository list', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-        await staticAnalyzerCodeQL.initializesByList([repositoryList[0]], languages[0]).then(async (result) => {
-            await staticAnalyzerCodeQL.identifyByList([repositoryList[0]], languages[0]).then(async (result) => {
-                await staticAnalyzerCodeQL.extractByList([repositoryList[0]], languages[0]).then((result) => {
-
-                    let isArray = Array.isArray(result[0]) && result[0].length > 0;
-
-                    // console.log(result[0]);
-
-                    const test1 = result[0].find(item => item.type === 'javascript-api-express-call' && item.repository === 'example' && item.file === 'example/index.js' && item.location === 'example/index.js#L59C1-L80C2' && item.operation === 'READ' && item.method === 'get' && item.sample === '\'/:order_id\'' && item.fileNumberOfLinesOfCode === 85);
-
-                    const test2 = result[0].find(item => item.type === 'javascript-db-mongo-call' && item.repository === 'example' && item.file === 'example/index.js' && item.location === 'example/index.js#L69C32-L69C79' && item.operation === 'READ' && item.method === 'collection.findOne' && item.sample === '{ _id : ... }' && item.fileNumberOfLinesOfCode === 85);
-
-                    const test3 = result[0].find(item => item.type === 'javascript-db-redis-call' && item.repository === 'example' && item.file === 'example/index.js' && item.location === 'example/index.js#L31C5-L31C34' && item.operation === 'READ' && item.method === 'get' && item.sample === '\'order_count\'' && item.fileNumberOfLinesOfCode === 85);
-
-                    expect(isArray && (test1 !== undefined) && (test2 !== undefined) && (test3 !== undefined)).toBe(true);
-                });
-            });
-        });
-    });
-
-    it('interprets a CodeQL static analysis result', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-        await staticAnalyzerCodeQL.initializesByList([repositoryList[0]], languages[0]).then(async (result) => {
-            await staticAnalyzerCodeQL.identifyByList([repositoryList[0]], languages[0]).then(async (result) => {
-                await staticAnalyzerCodeQL.extractByList([repositoryList[0]], languages[0]).then(async (result) => {
-                    await staticAnalyzerCodeQL.interpretByList(result, languages[0]).then((result) => {
-
-                        // console.log(JSON.stringify(result));
-
-                        let test1_1 = result[0].getLocation() === "example/";
-                        let test1_2 = result[0].getDirectories()[0].getLocation() === "example/";
-                        let test1_3 = result[0].getDirectories()[0].getFiles()[0].getLocation() === "example/index.js";
-                        let test1_3_1 = result[0].getDirectories()[0].getFiles()[0].getLinesOfCode() === 85;
-                        let codeFragment1 = result[0].getDirectories()[0].getFiles()[0].getCodeFragments().find(codeFragment => codeFragment.getLocation() === "example/index.js#L59C1-L80C2" && codeFragment.getTechnology().getId() === "javascript-api-express-call");
-                        let test1_4 = codeFragment1.getTechnology().getId() === "javascript-api-express-call";
-                        let test1_5 = codeFragment1.getOperation().getName() === "READ";
-                        let test1_6 = codeFragment1.getMethod().getName() === "get";
-                        let test1_7 = codeFragment1.getSample().getContent() === "'/:order_id'";
-
-                        let test2_1 = result[0].getLocation() === "example/";
-                        let test2_2 = result[0].getDirectories()[0].getLocation() === "example/";
-                        let test2_3 = result[0].getDirectories()[0].getFiles()[0].getLocation() === "example/index.js";
-                        let test2_3_1 = result[0].getDirectories()[0].getFiles()[0].getLinesOfCode() === 85;
-                        let codeFragment2 = result[0].getDirectories()[0].getFiles()[0].getCodeFragments().find(codeFragment => codeFragment.getLocation() === "example/index.js#L69C32-L69C79" && codeFragment.getTechnology().getId() === "javascript-db-mongo-call");
-                        let test2_4 = codeFragment2.getTechnology().getId() === "javascript-db-mongo-call";
-                        let test2_5 = codeFragment2.getOperation().getName() === "READ";
-                        let test2_6 = codeFragment2.getMethod().getName() === "collection.findOne";
-                        let test2_7 = codeFragment2.getSample().getContent() === "{ _id : ... }";
-
-                        let test3_1 = result[0].getLocation() === "example/";
-                        let test3_2 = result[0].getDirectories()[0].getLocation() === "example/";
-                        let test3_3 = result[0].getDirectories()[0].getFiles()[0].getLocation() === "example/index.js";
-                        let test3_3_1 = result[0].getDirectories()[0].getFiles()[0].getLinesOfCode() === 85;
-                        let codeFragment3 = result[0].getDirectories()[0].getFiles()[0].getCodeFragments().find(codeFragment => codeFragment.getLocation() === "example/index.js#L31C5-L31C34" && codeFragment.getTechnology().getId() === "javascript-db-redis-call");
-                        let test3_4 = codeFragment3.getTechnology().getId() === "javascript-db-redis-call";
-                        let test3_5 = codeFragment3.getOperation().getName() === "READ";
-                        let test3_6 = codeFragment3.getMethod().getName() === "get";
-                        let test3_7 = codeFragment3.getSample().getContent() === "'order_count'";
-                        let test3_8 = codeFragment3.getConcepts()[0].getName() === "order count";
-
-                        expect(test1_1 && test1_2 && test1_3 && test1_3_1 && test1_4 && test1_5 && test1_6 && test1_7 && test2_1 && test2_2 && test2_3 && test2_3_1 && test2_4 && test2_5 && test2_6 && test2_7 && test3_1 && test3_2 && test3_3 && test3_3_1 && test3_4 && test3_5 && test3_6 && test3_7 && test3_8).toBe(true);
-                    });
-                });
-            });
-        });
-    });
-
-    it('interprets a CodeQL static analysis result with repository URL', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-        await staticAnalyzerCodeQL.initializesByList([repositoryList[0]], languages[0]).then(async (result) => {
-            await staticAnalyzerCodeQL.identifyByList([repositoryList[0]], languages[0]).then(async (result) => {
-
-                // Creation of the denim file
-                const denimFilePath = process.cwd() + FILE_SYSTEM_SEPARATOR + 'TEMP' + FILE_SYSTEM_SEPARATOR + repositoryList[0] + FILE_SYSTEM_SEPARATOR + 'denim';
-                let url = 'https://github.com/example/example/tree/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa';
-                fs.writeFileSync(denimFilePath, url);
-
-                await staticAnalyzerCodeQL.extractByList([repositoryList[0]], languages[0]).then(async (result) => {
-                    await staticAnalyzerCodeQL.interpretByList(result, languages[0]).then((result) => {
-
-                        //console.log(JSON.stringify(result));
-
-                        let test1_1 = result[0].getLocation() === url + "/";
-                        let test1_2 = result[0].getDirectories()[0].getLocation() === url + "/";
-                        let test1_3 = result[0].getDirectories()[0].getFiles()[0].getLocation() === url + "/index.js";
-                        let test1_3_1 = result[0].getDirectories()[0].getFiles()[0].getLinesOfCode() === 85;
-                        let codeFragment1 = result[0].getDirectories()[0].getFiles()[0].getCodeFragments().find(codeFragment => codeFragment.getLocation() === url + "/index.js#L59C1-L80C2" && codeFragment.getTechnology().getId() === "javascript-api-express-call");
-                        let test1_4 = codeFragment1.getTechnology().getId() === "javascript-api-express-call";
-                        let test1_5 = codeFragment1.getOperation().getName() === "READ";
-                        let test1_6 = codeFragment1.getMethod().getName() === "get";
-                        let test1_7 = codeFragment1.getSample().getContent() === "'/:order_id'";
-
-                        let test2_1 = result[0].getLocation() === url + "/";
-                        let test2_2 = result[0].getDirectories()[0].getLocation() === url + "/";
-                        let test2_3 = result[0].getDirectories()[0].getFiles()[0].getLocation() === url + "/index.js";
-                        let test2_3_1 = result[0].getDirectories()[0].getFiles()[0].getLinesOfCode() === 85;
-                        let codeFragment2 = result[0].getDirectories()[0].getFiles()[0].getCodeFragments().find(codeFragment => codeFragment.getLocation() === url + "/index.js#L69C32-L69C79" && codeFragment.getTechnology().getId() === "javascript-db-mongo-call");
-                        let test2_4 = codeFragment2.getTechnology().getId() === "javascript-db-mongo-call";
-                        let test2_5 = codeFragment2.getOperation().getName() === "READ";
-                        let test2_6 = codeFragment2.getMethod().getName() === "collection.findOne";
-                        let test2_7 = codeFragment2.getSample().getContent() === "{ _id : ... }";
-
-                        let test3_1 = result[0].getLocation() === url + "/";
-                        let test3_2 = result[0].getDirectories()[0].getLocation() === url + "/";
-                        let test3_3 = result[0].getDirectories()[0].getFiles()[0].getLocation() === url + "/index.js";
-                        let test3_3_1 = result[0].getDirectories()[0].getFiles()[0].getLinesOfCode() === 85;
-                        let codeFragment3 = result[0].getDirectories()[0].getFiles()[0].getCodeFragments().find(codeFragment => codeFragment.getLocation() === url + "/index.js#L31C5-L31C34" && codeFragment.getTechnology().getId() === "javascript-db-redis-call");
-                        let test3_4 = codeFragment3.getTechnology().getId() === "javascript-db-redis-call";
-                        let test3_5 = codeFragment3.getOperation().getName() === "READ";
-                        let test3_6 = codeFragment3.getMethod().getName() === "get";
-                        let test3_7 = codeFragment3.getSample().getContent() === "'order_count'";
-                        let test3_8 = codeFragment3.getConcepts()[0].getName() === "order count";
-
-                        expect(test1_1 && test1_2 && test1_3 && test1_3_1 && test1_4 && test1_5 && test1_6 && test1_7 && test2_1 && test2_2 && test2_3 && test2_3_1 && test2_4 && test2_5 && test2_6 && test2_7 && test3_1 && test3_3_1 && test3_2 && test3_3 && test3_4 && test3_5 && test3_6 && test3_7 && test3_8).toBe(true);
-                    });
-                });
-            });
-        });
-    });
-
-    it('gets concepts extracted by NLP', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When
-
-        let nlpExtractedConcepts = staticAnalyzerCodeQL.getConceptsByNLP('room messages message project thread edit' +
-            ' resolve reopen status compile stop user content contacts doc-deleted unarchive destroy raw peek' +
-            ' health_check get_and_flush_if_old flush change accept flush_all_projects flush_queued_projects redis' +
-            ' redis_cluster booking verify comment total build up down file public key count debug editor-event' +
-            ' applied-ops queue-key all dangling date v');
-        // Count : 46
-
-        // Then
-
-        //console.log(nlpExtractedConcepts);
-        //console.log(nlpExtractedConcepts.length);
-        expect(nlpExtractedConcepts).toEqual([
-            'room', 'message', 'message',
-            'project', 'thread', 'edit',
-            'resolve', 'reopen', 'status',
-            'compile', 'stop', 'user',
-            'content', 'contact', 'doc deleted',
-            'unarchive', 'destroy', 'raw',
-            'peek', 'health check', 'get and flush if old',
-            'flush', 'change', 'accept',
-            'flush all project', 'flush queued project', 'redis',
-            'redis cluster', 'booking', 'verify',
-            'comment', 'total', 'build',
-            'up', 'down', 'file',
-            'public', 'key', 'count',
-            'debug', 'editor event', 'applied ops',
-            'queue key', 'all', 'dangling',
-            'date'
-        ]);
-    });
-
-    it('sorts by TD-IDF measure concepts extracted by NLP', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When
-
-        let sortedConcepts = staticAnalyzerCodeQL.sortByTdIdf(['count', 'order count', 'order', 'id', 'order id'], 'count, order count, order id, order count, order, order id, order, order count,' + ' order count, order id, order count, order count, order count');
-
-        // Then
-
-        //console.log(sortedConcepts);
-        expect(sortedConcepts).toEqual([
-                {
-                    name: 'order count', relevancy: 6.137056388801094
-                },
-                {
-                    name: 'order id', relevancy: 4.602792291600821
-                },
-                {
-                    name: 'order', relevancy: 3.6822338332806566
-                },
-                {
-                    name: 'count', relevancy: 2.4548225555204377
-                },
-                {
-                    name: 'id', relevancy: 0.9205584583201641
-                }
-            ]
-        );
-    });
-
-    it('sets a code fragment in the model', async () => {
-
-        // Given
-        let repositories = []
-        let concepts = ['order']
-        let fragment = {
-            type: 'javascript-api-express-call',
-            repository: 'https://www.github.com/user/project/blob/master',
-            file: 'https://www.github.com/user/project/blob/master/src/app/js/app.js',
-            location: 'https://www.github.com/user/project/blob/master/src/app/js/app.js#L1C1-L2C2',
-            operation: 'READ',
-            method: 'get',
-            sample: '\'/order/:order\'',
-            heuristics: "E1E2E3E4E5E6E7E8",
-            score: "8",
-            fileNumberOfLinesOfCode: "10"
-        }
-
-        // When
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        repositories = staticAnalyzerCodeQL.setCodeFragment(fragment, concepts, repositories);
-
-        //console.log(JSON.stringify(repositories))
-
-        // Then
-        expect(repositories).toEqual([new Repository('https://www.github.com/user/project/blob/master/', [
-            new Directory("https://www.github.com/user/project/blob/master/", [
-                new Directory("https://www.github.com/user/project/blob/master/src/", [
-                    new Directory("https://www.github.com/user/project/blob/master/src/app/", [
-                        new Directory("https://www.github.com/user/project/blob/master/src/app/js/", [], [
-                            new File("https://www.github.com/user/project/blob/master/src/app/js/app.js", 10, [
-                                new CodeFragment(
-                                    "https://www.github.com/user/project/blob/master/src/app/js/app.js#L1C1-L2C2",
-                                    new Technology("javascript-api-express-call"),
-                                    new Operation("READ"),
-                                    new Method("get"),
-                                    new Sample("'/order/:order'"),
-                                    [new Concept('order')],
-                                    "E1E2E3E4E5E6E7E8",
-                                    "8"
-                                )
-                            ])
-                        ])
-                    ], [])
-                ], [])
-            ], [])
-        ], [])
-        ])
-    });
-
-    it('gets a repository folder from its name', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When
-
-        let repositoryFolder = staticAnalyzerCodeQL.getRepositoryFolder('example');
-
-        // Then
-
-        expect(repositoryFolder).toContain(process.cwd() + FILE_SYSTEM_SEPARATOR + 'TEMP' + FILE_SYSTEM_SEPARATOR + 'example');
-    });
-
-    it('gets a CodeQL repository folder from its name', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When
-
-        let repositoryFolder = staticAnalyzerCodeQL.getCodeQLRepositoryFolder('example');
-
-        // Then
-
-        expect(repositoryFolder).toContain(process.cwd() + FILE_SYSTEM_SEPARATOR + 'TEMP' + FILE_SYSTEM_SEPARATOR + 'example-codeql');
-    });
-
-    it('gets the query folder', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When
-
-        let repositoryFolder = staticAnalyzerCodeQL.getQueryFolder();
-
-        // Then
-
-        expect(repositoryFolder).toContain('query');
-    });
-
-    it('gets a result CodeQL repository folder from its name', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When
-
-        let repositoryFolder = staticAnalyzerCodeQL.getResultCodeQLRepositoryFile('example');
-
-        // Then
-
-        expect(repositoryFolder).toContain(process.cwd() + FILE_SYSTEM_SEPARATOR + 'TEMP' + FILE_SYSTEM_SEPARATOR + 'example-codeql' + FILE_SYSTEM_SEPARATOR + 'result');
-    });
-
-    it('gets a result CodeQL repository file from its name', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When
-
-        let repositoryFolder = staticAnalyzerCodeQL.getResultCodeQLRepositoryFile('example');
-
-        // Then
-
-        expect(repositoryFolder).toContain(process.cwd() + FILE_SYSTEM_SEPARATOR + 'TEMP' + FILE_SYSTEM_SEPARATOR + 'example-codeql' + FILE_SYSTEM_SEPARATOR + 'result' + FILE_SYSTEM_SEPARATOR + 'result.csv');
-    });
-});
+  it('initializes a CodeQL static analysis by repository', async () => {
+    // Given
+
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    await prepare('StaticAnalyzerCodeQL_1')
+
+    // When Then
+    await staticAnalyzerCodeQL
+      .initializesByElement(repositoryList[0], languages[0], 'StaticAnalyzerCodeQL_1')
+      .then(async (result) => {
+        const repositoryGenerated1 = fs.existsSync(
+          process.cwd() +
+            FILE_SYSTEM_SEPARATOR +
+            TEMP_FOLDER_NAME +
+            FILE_SYSTEM_SEPARATOR +
+            'StaticAnalyzerCodeQL_1' +
+            FILE_SYSTEM_SEPARATOR +
+            repositoryList[0] +
+            '-codeql'
+        )
+        const repositoryGenerated2 = fs.existsSync(
+          process.cwd() +
+            FILE_SYSTEM_SEPARATOR +
+            TEMP_FOLDER_NAME +
+            FILE_SYSTEM_SEPARATOR +
+            'StaticAnalyzerCodeQL_1' +
+            FILE_SYSTEM_SEPARATOR +
+            repositoryList[0] +
+            '-codeql' +
+            FILE_SYSTEM_SEPARATOR +
+            'result'
+        )
+        expect(repositoryGenerated1 && repositoryGenerated2).toBe(true)
+        await clean('StaticAnalyzerCodeQL_1')
+      })
+  })
+
+  it('initializes a CodeQL static analysis by repository list', async () => {
+    // Given
+
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    await prepare('StaticAnalyzerCodeQL_2')
+
+    // When Then
+
+    await staticAnalyzerCodeQL
+      .initializesByList([repositoryList[0]], languages[0], 'StaticAnalyzerCodeQL_2')
+      .then(async (result) => {
+        const repositoryGenerated1 = fs.existsSync(
+          process.cwd() +
+            FILE_SYSTEM_SEPARATOR +
+            TEMP_FOLDER_NAME +
+            FILE_SYSTEM_SEPARATOR +
+            'StaticAnalyzerCodeQL_2' +
+            FILE_SYSTEM_SEPARATOR +
+            repositoryList[0] +
+            '-codeql'
+        )
+        const repositoryGenerated2 = fs.existsSync(
+          process.cwd() +
+            FILE_SYSTEM_SEPARATOR +
+            TEMP_FOLDER_NAME +
+            FILE_SYSTEM_SEPARATOR +
+            'StaticAnalyzerCodeQL_2' +
+            FILE_SYSTEM_SEPARATOR +
+            repositoryList[0] +
+            '-codeql' +
+            FILE_SYSTEM_SEPARATOR +
+            'result'
+        )
+        expect(repositoryGenerated1 && repositoryGenerated2).toBe(true)
+        await clean('StaticAnalyzerCodeQL_2')
+      })
+  })
+
+  it('identifies a CodeQL static analysis by repository', async () => {
+    // Given
+
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    await prepare('StaticAnalyzerCodeQL_3')
+
+    // When Then
+    await staticAnalyzerCodeQL
+      .initializesByElement(repositoryList[0], languages[0], 'StaticAnalyzerCodeQL_3')
+      .then(async (result) => {
+        await staticAnalyzerCodeQL
+          .identifyByElement(repositoryList[0], languages[0], 'StaticAnalyzerCodeQL_3')
+          .then(async (result) => {
+            const repositoryGenerated1 = fs.existsSync(
+              process.cwd() +
+                FILE_SYSTEM_SEPARATOR +
+                TEMP_FOLDER_NAME +
+                FILE_SYSTEM_SEPARATOR +
+                'StaticAnalyzerCodeQL_3' +
+                FILE_SYSTEM_SEPARATOR +
+                repositoryList[0] +
+                '-codeql' +
+                FILE_SYSTEM_SEPARATOR +
+                'result'
+            )
+            expect(repositoryGenerated1).toBe(true)
+            await clean('StaticAnalyzerCodeQL_3')
+          })
+      })
+  })
+
+  it('identifies a CodeQL static analysis by repository list', async () => {
+    // Given
+
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    await prepare('StaticAnalyzerCodeQL_4')
+
+    // When Then
+    await staticAnalyzerCodeQL
+      .initializesByList([repositoryList[0]], languages[0], 'StaticAnalyzerCodeQL_4')
+      .then(async (result) => {
+        await staticAnalyzerCodeQL
+          .identifyByList([repositoryList[0]], languages[0], 'StaticAnalyzerCodeQL_4')
+          .then(async (result) => {
+            const repositoryGenerated1 = fs.existsSync(
+              process.cwd() +
+                FILE_SYSTEM_SEPARATOR +
+                TEMP_FOLDER_NAME +
+                FILE_SYSTEM_SEPARATOR +
+                'StaticAnalyzerCodeQL_4' +
+                FILE_SYSTEM_SEPARATOR +
+                repositoryList[0] +
+                '-codeql' +
+                FILE_SYSTEM_SEPARATOR +
+                'result' +
+                FILE_SYSTEM_SEPARATOR +
+                'result.csv'
+            )
+            expect(repositoryGenerated1).toBe(true)
+            await clean('StaticAnalyzerCodeQL_4')
+          })
+      })
+  })
+
+  it('extracts a CodeQL static analysis result by repository', async () => {
+    // Given
+
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    await prepare('StaticAnalyzerCodeQL_5')
+
+    // When Then
+    await staticAnalyzerCodeQL
+      .initializesByElement(repositoryList[0], languages[0], 'StaticAnalyzerCodeQL_5')
+      .then(async (result) => {
+        await staticAnalyzerCodeQL
+          .identifyByElement(repositoryList[0], languages[0], 'StaticAnalyzerCodeQL_5')
+          .then(async (result) => {
+            await staticAnalyzerCodeQL
+              .extractByElement(repositoryList[0], languages[0], 'StaticAnalyzerCodeQL_5')
+              .then(async (result) => {
+                let isArray = Array.isArray(result) && result.length > 0
+
+                //console.log(result)
+
+                const test1 = result.find(
+                  (item) =>
+                    item.type === 'javascript-api-express-call' &&
+                    item.repository === 'example' &&
+                    item.file === 'example/index.js' &&
+                    item.location === 'example/index.js#L64C1-L85C2' &&
+                    item.operation === 'READ' &&
+                    item.method === 'get' &&
+                    item.sample === "'/:order_id'" &&
+                    item.fileNumberOfLinesOfCode === 90
+                )
+
+                const test2 = result.find(
+                  (item) =>
+                    item.type === 'javascript-db-mongo-call' &&
+                    item.repository === 'example' &&
+                    item.file === 'example/index.js' &&
+                    item.location === 'example/index.js#L74C28-L74C77' &&
+                    item.operation === 'READ' &&
+                    item.method === 'collection.findOne' &&
+                    item.sample === '{ _id : ... }' &&
+                    item.fileNumberOfLinesOfCode === 90
+                )
+
+                const test3 = result.find(
+                  (item) =>
+                    item.type === 'javascript-db-redis-call' &&
+                    item.repository === 'example' &&
+                    item.file === 'example/index.js' &&
+                    item.location === 'example/index.js#L33C3-L34C23' &&
+                    item.operation === 'READ' &&
+                    item.method === 'get' &&
+                    item.sample === "'order_count'" &&
+                    item.fileNumberOfLinesOfCode === 90
+                )
+
+                expect(
+                  isArray && test1 !== undefined && test2 !== undefined && test3 !== undefined
+                ).toBe(true)
+                await clean('StaticAnalyzerCodeQL_5')
+              })
+          })
+      })
+  })
+
+  it('extracts a CodeQL static analysis result by repository list', async () => {
+    // Given
+
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    await prepare('StaticAnalyzerCodeQL_6')
+
+    // When Then
+    await staticAnalyzerCodeQL
+      .initializesByList([repositoryList[0]], languages[0], 'StaticAnalyzerCodeQL_6')
+      .then(async (result) => {
+        await staticAnalyzerCodeQL
+          .identifyByList([repositoryList[0]], languages[0], 'StaticAnalyzerCodeQL_6')
+          .then(async (result) => {
+            await staticAnalyzerCodeQL
+              .extractByList([repositoryList[0]], languages[0], 'StaticAnalyzerCodeQL_6')
+              .then(async (result) => {
+                let isArray = Array.isArray(result[0]) && result[0].length > 0
+
+                // console.log(result[0]);
+
+                const test1 = result[0].find(
+                  (item) =>
+                    item.type === 'javascript-api-express-call' &&
+                    item.repository === 'example' &&
+                    item.file === 'example/index.js' &&
+                    item.location === 'example/index.js#L64C1-L85C2' &&
+                    item.operation === 'READ' &&
+                    item.method === 'get' &&
+                    item.sample === "'/:order_id'" &&
+                    item.fileNumberOfLinesOfCode === 90
+                )
+
+                const test2 = result[0].find(
+                  (item) =>
+                    item.type === 'javascript-db-mongo-call' &&
+                    item.repository === 'example' &&
+                    item.file === 'example/index.js' &&
+                    item.location === 'example/index.js#L74C28-L74C77' &&
+                    item.operation === 'READ' &&
+                    item.method === 'collection.findOne' &&
+                    item.sample === '{ _id : ... }' &&
+                    item.fileNumberOfLinesOfCode === 90
+                )
+
+                const test3 = result[0].find(
+                  (item) =>
+                    item.type === 'javascript-db-redis-call' &&
+                    item.repository === 'example' &&
+                    item.file === 'example/index.js' &&
+                    item.location === 'example/index.js#L33C3-L34C23' &&
+                    item.operation === 'READ' &&
+                    item.method === 'get' &&
+                    item.sample === "'order_count'" &&
+                    item.fileNumberOfLinesOfCode === 90
+                )
+
+                expect(
+                  isArray && test1 !== undefined && test2 !== undefined && test3 !== undefined
+                ).toBe(true)
+                await clean('StaticAnalyzerCodeQL_6')
+              })
+          })
+      })
+  })
+
+  it('interprets a CodeQL static analysis result', async () => {
+    // Given
+
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    await prepare('StaticAnalyzerCodeQL_7')
+
+    // When Then
+    await staticAnalyzerCodeQL
+      .initializesByList([repositoryList[0]], languages[0], 'StaticAnalyzerCodeQL_7')
+      .then(async (result) => {
+        await staticAnalyzerCodeQL
+          .identifyByList([repositoryList[0]], languages[0], 'StaticAnalyzerCodeQL_7')
+          .then(async (result) => {
+            await staticAnalyzerCodeQL
+              .extractByList([repositoryList[0]], languages[0], 'StaticAnalyzerCodeQL_7')
+              .then(async (result) => {
+                await staticAnalyzerCodeQL
+                  .interpretByList(result, languages[0], 'StaticAnalyzerCodeQL_7')
+                  .then(async (result) => {
+                    // console.log(JSON.stringify(result));
+
+                    let test1_1 = result[0].getLocation() === 'example/'
+                    let test1_2 = result[0].getDirectories()[0].getLocation() === 'example/'
+                    let test1_3 =
+                      result[0].getDirectories()[0].getFiles()[0].getLocation() ===
+                      'example/index.js'
+                    let test1_3_1 =
+                      result[0].getDirectories()[0].getFiles()[0].getLinesOfCode() === 90
+                    let codeFragment1 = result[0]
+                      .getDirectories()[0]
+                      .getFiles()[0]
+                      .getCodeFragments()
+                      .find(
+                        (codeFragment) =>
+                          codeFragment.getLocation() === 'example/index.js#L64C1-L85C2' &&
+                          codeFragment.getTechnology().getId() === 'javascript-api-express-call'
+                      )
+                    let test1_4 =
+                      codeFragment1.getTechnology().getId() === 'javascript-api-express-call'
+                    let test1_5 = codeFragment1.getOperation().getName() === 'READ'
+                    let test1_6 = codeFragment1.getMethod().getName() === 'get'
+                    let test1_7 = codeFragment1.getSample().getContent() === "'/:order_id'"
+
+                    let test2_1 = result[0].getLocation() === 'example/'
+                    let test2_2 = result[0].getDirectories()[0].getLocation() === 'example/'
+                    let test2_3 =
+                      result[0].getDirectories()[0].getFiles()[0].getLocation() ===
+                      'example/index.js'
+                    let test2_3_1 =
+                      result[0].getDirectories()[0].getFiles()[0].getLinesOfCode() === 90
+                    let codeFragment2 = result[0]
+                      .getDirectories()[0]
+                      .getFiles()[0]
+                      .getCodeFragments()
+                      .find(
+                        (codeFragment) =>
+                          codeFragment.getLocation() === 'example/index.js#L74C28-L74C77' &&
+                          codeFragment.getTechnology().getId() === 'javascript-db-mongo-call'
+                      )
+                    let test2_4 =
+                      codeFragment2.getTechnology().getId() === 'javascript-db-mongo-call'
+                    let test2_5 = codeFragment2.getOperation().getName() === 'READ'
+                    let test2_6 = codeFragment2.getMethod().getName() === 'collection.findOne'
+                    let test2_7 = codeFragment2.getSample().getContent() === '{ _id : ... }'
+
+                    let test3_1 = result[0].getLocation() === 'example/'
+                    let test3_2 = result[0].getDirectories()[0].getLocation() === 'example/'
+                    let test3_3 =
+                      result[0].getDirectories()[0].getFiles()[0].getLocation() ===
+                      'example/index.js'
+                    let test3_3_1 =
+                      result[0].getDirectories()[0].getFiles()[0].getLinesOfCode() === 90
+                    let codeFragment3 = result[0]
+                      .getDirectories()[0]
+                      .getFiles()[0]
+                      .getCodeFragments()
+                      .find(
+                        (codeFragment) =>
+                          codeFragment.getLocation() === 'example/index.js#L33C3-L34C23' &&
+                          codeFragment.getTechnology().getId() === 'javascript-db-redis-call'
+                      )
+                    let test3_4 =
+                      codeFragment3.getTechnology().getId() === 'javascript-db-redis-call'
+                    let test3_5 = codeFragment3.getOperation().getName() === 'READ'
+                    let test3_6 = codeFragment3.getMethod().getName() === 'get'
+                    let test3_7 = codeFragment3.getSample().getContent() === "'order_count'"
+                    let test3_8 = codeFragment3.getConcepts()[0].getName() === 'order count'
+
+                    expect(
+                      test1_1 &&
+                        test1_2 &&
+                        test1_3 &&
+                        test1_3_1 &&
+                        test1_4 &&
+                        test1_5 &&
+                        test1_6 &&
+                        test1_7 &&
+                        test2_1 &&
+                        test2_2 &&
+                        test2_3 &&
+                        test2_3_1 &&
+                        test2_4 &&
+                        test2_5 &&
+                        test2_6 &&
+                        test2_7 &&
+                        test3_1 &&
+                        test3_2 &&
+                        test3_3 &&
+                        test3_3_1 &&
+                        test3_4 &&
+                        test3_5 &&
+                        test3_6 &&
+                        test3_7 &&
+                        test3_8
+                    ).toBe(true)
+
+                    await clean('StaticAnalyzerCodeQL_7')
+                  })
+              })
+          })
+      })
+  })
+
+  it('interprets a CodeQL static analysis result with repository URL', async () => {
+    // Given
+
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    await prepare('StaticAnalyzerCodeQL_8')
+
+    // When Then
+    await staticAnalyzerCodeQL
+      .initializesByList([repositoryList[0]], languages[0], 'StaticAnalyzerCodeQL_8')
+      .then(async (result) => {
+        await staticAnalyzerCodeQL
+          .identifyByList([repositoryList[0]], languages[0], 'StaticAnalyzerCodeQL_8')
+          .then(async (result) => {
+            // Creation of the denim file
+            const denimFilePath =
+              process.cwd() +
+              FILE_SYSTEM_SEPARATOR +
+              TEMP_FOLDER_NAME +
+              FILE_SYSTEM_SEPARATOR +
+              'StaticAnalyzerCodeQL_8' +
+              FILE_SYSTEM_SEPARATOR +
+              repositoryList[0] +
+              FILE_SYSTEM_SEPARATOR +
+              'denim'
+            let url =
+              'https://github.com/example/example/tree/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
+            fs.writeFileSync(denimFilePath, url)
+
+            await staticAnalyzerCodeQL
+              .extractByList([repositoryList[0]], languages[0], 'StaticAnalyzerCodeQL_8')
+              .then(async (result) => {
+                await staticAnalyzerCodeQL
+                  .interpretByList(result, languages[0], 'StaticAnalyzerCodeQL_8')
+                  .then(async (result) => {
+                    //console.log(JSON.stringify(result));
+
+                    let test1_1 = result[0].getLocation() === url + '/'
+                    let test1_2 = result[0].getDirectories()[0].getLocation() === url + '/'
+                    let test1_3 =
+                      result[0].getDirectories()[0].getFiles()[0].getLocation() ===
+                      url + '/index.js'
+                    let test1_3_1 =
+                      result[0].getDirectories()[0].getFiles()[0].getLinesOfCode() === 90
+                    let codeFragment1 = result[0]
+                      .getDirectories()[0]
+                      .getFiles()[0]
+                      .getCodeFragments()
+                      .find(
+                        (codeFragment) =>
+                          codeFragment.getLocation() === url + '/index.js#L64C1-L85C2' &&
+                          codeFragment.getTechnology().getId() === 'javascript-api-express-call'
+                      )
+                    let test1_4 =
+                      codeFragment1.getTechnology().getId() === 'javascript-api-express-call'
+                    let test1_5 = codeFragment1.getOperation().getName() === 'READ'
+                    let test1_6 = codeFragment1.getMethod().getName() === 'get'
+                    let test1_7 = codeFragment1.getSample().getContent() === "'/:order_id'"
+
+                    let test2_1 = result[0].getLocation() === url + '/'
+                    let test2_2 = result[0].getDirectories()[0].getLocation() === url + '/'
+                    let test2_3 =
+                      result[0].getDirectories()[0].getFiles()[0].getLocation() ===
+                      url + '/index.js'
+                    let test2_3_1 =
+                      result[0].getDirectories()[0].getFiles()[0].getLinesOfCode() === 90
+                    let codeFragment2 = result[0]
+                      .getDirectories()[0]
+                      .getFiles()[0]
+                      .getCodeFragments()
+                      .find(
+                        (codeFragment) =>
+                          codeFragment.getLocation() === url + '/index.js#L74C28-L74C77' &&
+                          codeFragment.getTechnology().getId() === 'javascript-db-mongo-call'
+                      )
+                    let test2_4 =
+                      codeFragment2.getTechnology().getId() === 'javascript-db-mongo-call'
+                    let test2_5 = codeFragment2.getOperation().getName() === 'READ'
+                    let test2_6 = codeFragment2.getMethod().getName() === 'collection.findOne'
+                    let test2_7 = codeFragment2.getSample().getContent() === '{ _id : ... }'
+
+                    let test3_1 = result[0].getLocation() === url + '/'
+                    let test3_2 = result[0].getDirectories()[0].getLocation() === url + '/'
+                    let test3_3 =
+                      result[0].getDirectories()[0].getFiles()[0].getLocation() ===
+                      url + '/index.js'
+                    let test3_3_1 =
+                      result[0].getDirectories()[0].getFiles()[0].getLinesOfCode() === 90
+                    let codeFragment3 = result[0]
+                      .getDirectories()[0]
+                      .getFiles()[0]
+                      .getCodeFragments()
+                      .find(
+                        (codeFragment) =>
+                          codeFragment.getLocation() === url + '/index.js#L33C3-L34C23' &&
+                          codeFragment.getTechnology().getId() === 'javascript-db-redis-call'
+                      )
+                    let test3_4 =
+                      codeFragment3.getTechnology().getId() === 'javascript-db-redis-call'
+                    let test3_5 = codeFragment3.getOperation().getName() === 'READ'
+                    let test3_6 = codeFragment3.getMethod().getName() === 'get'
+                    let test3_7 = codeFragment3.getSample().getContent() === "'order_count'"
+                    let test3_8 = codeFragment3.getConcepts()[0].getName() === 'order count'
+
+                    expect(
+                      test1_1 &&
+                        test1_2 &&
+                        test1_3 &&
+                        test1_3_1 &&
+                        test1_4 &&
+                        test1_5 &&
+                        test1_6 &&
+                        test1_7 &&
+                        test2_1 &&
+                        test2_2 &&
+                        test2_3 &&
+                        test2_3_1 &&
+                        test2_4 &&
+                        test2_5 &&
+                        test2_6 &&
+                        test2_7 &&
+                        test3_1 &&
+                        test3_3_1 &&
+                        test3_2 &&
+                        test3_3 &&
+                        test3_4 &&
+                        test3_5 &&
+                        test3_6 &&
+                        test3_7 &&
+                        test3_8
+                    ).toBe(true)
+                    await clean('StaticAnalyzerCodeQL_8')
+                  })
+              })
+          })
+      })
+  })
+
+  it('gets concepts extracted by NLP', async () => {
+    // Given
+
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+
+    // When
+
+    let nlpExtractedConcepts = staticAnalyzerCodeQL.getConceptsByNLP(
+      'room messages message project thread edit' +
+        ' resolve reopen status compile stop user content contacts doc-deleted unarchive destroy raw peek' +
+        ' health_check get_and_flush_if_old flush change accept flush_all_projects flush_queued_projects redis' +
+        ' redis_cluster booking verify comment total build up down file public key count debug editor-event' +
+        ' applied-ops queue-key all dangling date v'
+    )
+    // Count : 46
+
+    // Then
+
+    //console.log(nlpExtractedConcepts);
+    //console.log(nlpExtractedConcepts.length);
+    expect(nlpExtractedConcepts).toEqual([
+      'room',
+      'message',
+      'message',
+      'project',
+      'thread',
+      'edit',
+      'resolve',
+      'reopen',
+      'status',
+      'compile',
+      'stop',
+      'user',
+      'content',
+      'contact',
+      'doc deleted',
+      'unarchive',
+      'destroy',
+      'raw',
+      'peek',
+      'health check',
+      'get and flush if old',
+      'flush',
+      'change',
+      'accept',
+      'flush all project',
+      'flush queued project',
+      'redis',
+      'redis cluster',
+      'booking',
+      'verify',
+      'comment',
+      'total',
+      'build',
+      'up',
+      'down',
+      'file',
+      'public',
+      'key',
+      'count',
+      'debug',
+      'editor event',
+      'applied ops',
+      'queue key',
+      'all',
+      'dangling',
+      'date'
+    ])
+  })
+
+  it('sorts by TD-IDF measure concepts extracted by NLP', async () => {
+    // Given
+
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+
+    // When
+
+    let sortedConcepts = staticAnalyzerCodeQL.sortByTdIdf(
+      ['count', 'order count', 'order', 'id', 'order id'],
+      'count, order count, order id, order count, order, order id, order, order count,' +
+        ' order count, order id, order count, order count, order count'
+    )
+
+    // Then
+
+    //console.log(sortedConcepts);
+    expect(sortedConcepts).toEqual([
+      {
+        name: 'order count',
+        relevancy: 6.137056388801094
+      },
+      {
+        name: 'order id',
+        relevancy: 4.602792291600821
+      },
+      {
+        name: 'order',
+        relevancy: 3.6822338332806566
+      },
+      {
+        name: 'count',
+        relevancy: 2.4548225555204377
+      },
+      {
+        name: 'id',
+        relevancy: 0.9205584583201641
+      }
+    ])
+  })
+
+  it('sets a code fragment in the model', async () => {
+    // Given
+    let repositories = []
+    let concepts = ['order']
+    let fragment = {
+      type: 'javascript-api-express-call',
+      repository: 'https://www.github.com/user/project/blob/master',
+      file: 'https://www.github.com/user/project/blob/master/src/app/js/app.js',
+      location: 'https://www.github.com/user/project/blob/master/src/app/js/app.js#L1C1-L2C2',
+      operation: 'READ',
+      method: 'get',
+      sample: "'/order/:order'",
+      heuristics: 'E1E2E3E4E5E6E7E8',
+      score: '8',
+      fileNumberOfLinesOfCode: '10'
+    }
+
+    // When
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    repositories = staticAnalyzerCodeQL.setCodeFragment(fragment, concepts, repositories)
+
+    //console.log(JSON.stringify(repositories))
+
+    // Then
+    expect(repositories).toEqual([
+      new Repository(
+        'https://www.github.com/user/project/blob/master/',
+        [
+          new Directory(
+            'https://www.github.com/user/project/blob/master/',
+            [
+              new Directory(
+                'https://www.github.com/user/project/blob/master/src/',
+                [
+                  new Directory(
+                    'https://www.github.com/user/project/blob/master/src/app/',
+                    [
+                      new Directory(
+                        'https://www.github.com/user/project/blob/master/src/app/js/',
+                        [],
+                        [
+                          new File(
+                            'https://www.github.com/user/project/blob/master/src/app/js/app.js',
+                            10,
+                            [
+                              new CodeFragment(
+                                'https://www.github.com/user/project/blob/master/src/app/js/app.js#L1C1-L2C2',
+                                new Technology('javascript-api-express-call'),
+                                new Operation('READ'),
+                                new Method('get'),
+                                new Sample("'/order/:order'"),
+                                [new Concept('order')],
+                                'E1E2E3E4E5E6E7E8',
+                                '8'
+                              )
+                            ]
+                          )
+                        ]
+                      )
+                    ],
+                    []
+                  )
+                ],
+                []
+              )
+            ],
+            []
+          )
+        ],
+        []
+      )
+    ])
+  })
+
+  it('gets a repository folder from its name', async () => {
+    // Given
+
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+
+    // When
+
+    let repositoryFolder = staticAnalyzerCodeQL.getRepositoryFolder(
+      'example',
+      'StaticAnalyzerCodeQL_9'
+    )
+
+    // Then
+
+    expect(repositoryFolder).toContain(
+      process.cwd() +
+        FILE_SYSTEM_SEPARATOR +
+        TEMP_FOLDER_NAME +
+        FILE_SYSTEM_SEPARATOR +
+        'StaticAnalyzerCodeQL_9' +
+        FILE_SYSTEM_SEPARATOR +
+        'example'
+    )
+  })
+
+  it('gets a CodeQL repository folder from its name', async () => {
+    // Given
+
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+
+    // When
+
+    let repositoryFolder = staticAnalyzerCodeQL.getCodeQLRepositoryFolder(
+      'example',
+      'StaticAnalyzerCodeQL_10'
+    )
+
+    // Then
+
+    expect(repositoryFolder).toContain(
+      process.cwd() +
+        FILE_SYSTEM_SEPARATOR +
+        TEMP_FOLDER_NAME +
+        FILE_SYSTEM_SEPARATOR +
+        'StaticAnalyzerCodeQL_10' +
+        FILE_SYSTEM_SEPARATOR +
+        'example-codeql'
+    )
+  })
+
+  it('gets the query folder', async () => {
+    // Given
+
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+
+    // When
+
+    let repositoryFolder = staticAnalyzerCodeQL.getQueryFolder()
+
+    // Then
+
+    expect(repositoryFolder).toContain('query')
+  })
+
+  it('gets a result CodeQL repository folder from its name', async () => {
+    // Given
+
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+
+    // When
+
+    let repositoryFolder = staticAnalyzerCodeQL.getResultCodeQLRepositoryFile(
+      'example',
+      'StaticAnalyzerCodeQL_11'
+    )
+
+    // Then
+
+    expect(repositoryFolder).toContain(
+      process.cwd() +
+        FILE_SYSTEM_SEPARATOR +
+        TEMP_FOLDER_NAME +
+        FILE_SYSTEM_SEPARATOR +
+        'StaticAnalyzerCodeQL_11' +
+        FILE_SYSTEM_SEPARATOR +
+        'example-codeql' +
+        FILE_SYSTEM_SEPARATOR +
+        'result'
+    )
+  })
+
+  it('gets a result CodeQL repository file from its name', async () => {
+    // Given
+
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+
+    // When
+
+    let repositoryFolder = staticAnalyzerCodeQL.getResultCodeQLRepositoryFile(
+      'example',
+      'StaticAnalyzerCodeQL_12'
+    )
+
+    // Then
+
+    expect(repositoryFolder).toContain(
+      process.cwd() +
+        FILE_SYSTEM_SEPARATOR +
+        TEMP_FOLDER_NAME +
+        FILE_SYSTEM_SEPARATOR +
+        'StaticAnalyzerCodeQL_12' +
+        FILE_SYSTEM_SEPARATOR +
+        'example-codeql' +
+        FILE_SYSTEM_SEPARATOR +
+        'result' +
+        FILE_SYSTEM_SEPARATOR +
+        'result.csv'
+    )
+  })
+})
 
 // Failure cases test suite
 
 describe('CodeQL static analyzer tries to', () => {
+  afterEach(async () => {
+    await clean()
+  })
 
-    afterEach(async () => {
-        await clean();
-    });
+  it('initialize a CodeQL static analysis by not found repository', async () => {
+    // Given
 
-    it('initialize a CodeQL static analysis by not found repository', async () => {
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    let repository = 'unknown'
 
-        // Given
+    // When Then
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        let repository = 'unknown';
+    await expect(
+      staticAnalyzerCodeQL.initializesByElement(repository, languages[0], 'StaticAnalyzerCodeQL_13')
+    ).rejects.toThrow(AnalysisFail)
+  })
 
-        // When Then
+  it('initialize a CodeQL static analysis by undefined repository', async () => {
+    // Given
 
-        await expect(staticAnalyzerCodeQL.initializesByElement(repository, languages[0])).rejects.toThrow(AnalysisFail);
-    });
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    let repository = undefined
 
-    it('initialize a CodeQL static analysis by undefined repository', async () => {
+    // When Then
 
-        // Given
+    await expect(
+      staticAnalyzerCodeQL.initializesByElement(repository, languages[0], 'StaticAnalyzerCodeQL_14')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        let repository = undefined;
+  it('initialize a CodeQL static analysis by null repository', async () => {
+    // Given
 
-        // When Then
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    let repository = null
 
-        await expect(staticAnalyzerCodeQL.initializesByElement(repository, languages[0])).rejects.toThrow(BadFormat);
+    // When Then
 
-    });
+    await expect(
+      staticAnalyzerCodeQL.initializesByElement(repository, languages[0], 'StaticAnalyzerCodeQL_15')
+    ).rejects.toThrow(BadFormat)
+  })
 
-    it('initialize a CodeQL static analysis by null repository', async () => {
+  it('initialize a CodeQL static analysis by null repository with undefined language', async () => {
+    // Given
 
-        // Given
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    let repository = repositoryList[0]
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        let repository = null;
+    // When Then
 
-        // When Then
+    await expect(
+      staticAnalyzerCodeQL.initializesByElement(repository, undefined, 'StaticAnalyzerCodeQL_16')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        await expect(staticAnalyzerCodeQL.initializesByElement(repository, languages[0])).rejects.toThrow(BadFormat);
+  it('initialize a CodeQL static analysis by null repository with null language', async () => {
+    // Given
 
-    });
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    let repository = repositoryList[0]
 
-    it('initialize a CodeQL static analysis by null repository with undefined language', async () => {
+    // When Then
 
-        // Given
+    await expect(
+      staticAnalyzerCodeQL.initializesByElement(repository, null, 'StaticAnalyzerCodeQL_17')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        let repository = repositoryList[0];
+  it('initialize a CodeQL static analysis by null repository with empty language', async () => {
+    // Given
 
-        // When Then
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    let repository = repositoryList[0]
 
-        await expect(staticAnalyzerCodeQL.initializesByElement(repository, undefined)).rejects.toThrow(BadFormat);
+    // When Then
 
-    });
+    await expect(
+      staticAnalyzerCodeQL.initializesByElement(repository, '', 'StaticAnalyzerCodeQL_18')
+    ).rejects.toThrow(BadFormat)
+  })
 
-    it('initialize a CodeQL static analysis by null repository with null language', async () => {
+  it('initialize a CodeQL static analysis by null repository with unknown language', async () => {
+    // Given
 
-        // Given
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    let repository = repositoryList[0]
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        let repository = repositoryList[0];
+    // When Then
 
-        // When Then
+    await expect(
+      staticAnalyzerCodeQL.initializesByElement(
+        repository,
+        'unknownLanguage',
+        'StaticAnalyzerCodeQL_19'
+      )
+    ).rejects.toThrow(BadFormat)
+  })
 
-        await expect(staticAnalyzerCodeQL.initializesByElement(repository, null)).rejects.toThrow(BadFormat);
+  it('initialize a CodeQL static analysis by repository list with not found repositories', async () => {
+    // Given
+
+    let repositoryList = ['unknown']
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+
+    // When Then
+
+    await expect(
+      staticAnalyzerCodeQL.initializesByList(
+        repositoryList,
+        languages[0],
+        'StaticAnalyzerCodeQL_20'
+      )
+    ).rejects.toThrow(AnalysisFail)
+  })
+
+  it('initialize a CodeQL static analysis by undefined repository list', async () => {
+    // Given
 
-    });
+    let repositoryList = undefined
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-    it('initialize a CodeQL static analysis by null repository with empty language', async () => {
+    // When Then
 
-        // Given
+    await expect(
+      staticAnalyzerCodeQL.initializesByList(
+        repositoryList,
+        languages[0],
+        'StaticAnalyzerCodeQL_21'
+      )
+    ).rejects.toThrow(BadFormat)
+  })
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        let repository = repositoryList[0];
+  it('initialize a CodeQL static analysis by null repository list', async () => {
+    // Given
 
-        // When Then
+    let repositoryList = null
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        await expect(staticAnalyzerCodeQL.initializesByElement(repository, '')).rejects.toThrow(BadFormat);
+    // When Then
 
-    });
+    await expect(
+      staticAnalyzerCodeQL.initializesByList(
+        repositoryList,
+        languages[0],
+        'StaticAnalyzerCodeQL_22'
+      )
+    ).rejects.toThrow(BadFormat)
+  })
 
-    it('initialize a CodeQL static analysis by null repository with unknown language', async () => {
+  it('initialize a CodeQL static analysis by repository list with undefined repositories', async () => {
+    // Given
 
-        // Given
+    let repositoryList = [undefined]
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        let repository = repositoryList[0];
+    // When Then
 
-        // When Then
+    await expect(
+      staticAnalyzerCodeQL.initializesByList(
+        repositoryList,
+        languages[0],
+        'StaticAnalyzerCodeQL_23'
+      )
+    ).rejects.toThrow(AnalysisFail)
+  })
 
-        await expect(staticAnalyzerCodeQL.initializesByElement(repository, 'unknownLanguage')).rejects.toThrow(BadFormat);
+  it('initialize a CodeQL static analysis by repository list with null repositories', async () => {
+    // Given
 
-    });
+    let repositoryList = [null]
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-    it('initialize a CodeQL static analysis by repository list with not found repositories', async () => {
+    // When Then
 
-        // Given
+    await expect(
+      staticAnalyzerCodeQL.initializesByList(
+        repositoryList,
+        languages[0],
+        'StaticAnalyzerCodeQL_24'
+      )
+    ).rejects.toThrow(AnalysisFail)
+  })
 
-        let repositoryList = ['unknown'];
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+  it('initialize a CodeQL static analysis by empty repository list', async () => {
+    // Given
 
-        // When Then
+    let repositoryList = []
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        await expect(staticAnalyzerCodeQL.initializesByList(repositoryList, languages[0])).rejects.toThrow(AnalysisFail);
-    });
+    // When Then
 
-    it('initialize a CodeQL static analysis by undefined repository list', async () => {
+    await expect(
+      staticAnalyzerCodeQL.initializesByList(
+        repositoryList,
+        languages[0],
+        'StaticAnalyzerCodeQL_25'
+      )
+    ).rejects.toThrow(BadFormat)
+  })
 
-        // Given
+  it('initialize a CodeQL static analysis by repository list with undefined language', async () => {
+    // Given
 
-        let repositoryList = undefined;
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        // When Then
+    // When Then
 
-        await expect(staticAnalyzerCodeQL.initializesByList(repositoryList, languages[0])).rejects.toThrow(BadFormat);
-    });
+    await expect(
+      staticAnalyzerCodeQL.initializesByList(repositoryList, undefined, 'StaticAnalyzerCodeQL_26')
+    ).rejects.toThrow(BadFormat)
+  })
 
-    it('initialize a CodeQL static analysis by null repository list', async () => {
+  it('initialize a CodeQL static analysis by repository list with null language', async () => {
+    // Given
 
-        // Given
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        let repositoryList = null;
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    // When Then
 
-        // When Then
+    await expect(
+      staticAnalyzerCodeQL.initializesByList(repositoryList, null, 'StaticAnalyzerCodeQL_27')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        await expect(staticAnalyzerCodeQL.initializesByList(repositoryList, languages[0])).rejects.toThrow(BadFormat);
-    });
+  it('initialize a CodeQL static analysis by repository list with empty language', async () => {
+    // Given
 
-    it('initialize a CodeQL static analysis by repository list with undefined repositories', async () => {
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        // Given
+    // When Then
 
-        let repositoryList = [undefined];
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    await expect(
+      staticAnalyzerCodeQL.initializesByList(repositoryList, '', 'StaticAnalyzerCodeQL_28')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        // When Then
+  it('initialize a CodeQL static analysis by repository list with unknown language', async () => {
+    // Given
 
-        await expect(staticAnalyzerCodeQL.initializesByList(repositoryList, languages[0])).rejects.toThrow(AnalysisFail);
-    });
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-    it('initialize a CodeQL static analysis by repository list with null repositories', async () => {
+    // When Then
 
-        // Given
+    await expect(
+      staticAnalyzerCodeQL.initializesByList(
+        repositoryList,
+        'unknownLanguage',
+        'StaticAnalyzerCodeQL_29'
+      )
+    ).rejects.toThrow(BadFormat)
+  })
 
-        let repositoryList = [null];
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+  it('identify a CodeQL static analysis by not found repository', async () => {
+    // Given
 
-        // When Then
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    let repository = 'unknown'
 
-        await expect(staticAnalyzerCodeQL.initializesByList(repositoryList, languages[0])).rejects.toThrow(AnalysisFail);
-    });
+    // When Then
 
-    it('initialize a CodeQL static analysis by empty repository list', async () => {
+    await expect(
+      staticAnalyzerCodeQL.identifyByElement(repository, languages[0], 'StaticAnalyzerCodeQL_30')
+    ).rejects.toThrow(AnalysisFail)
+  })
 
-        // Given
+  it('identify a CodeQL static analysis by undefined repository', async () => {
+    // Given
 
-        let repositoryList = [];
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    let repository = undefined
 
-        // When Then
+    // When Then
 
-        await expect(staticAnalyzerCodeQL.initializesByList(repositoryList, languages[0])).rejects.toThrow(BadFormat);
-    });
+    await expect(
+      staticAnalyzerCodeQL.identifyByElement(repository, languages[0], 'StaticAnalyzerCodeQL_31')
+    ).rejects.toThrow(BadFormat)
+  })
 
-    it('initialize a CodeQL static analysis by repository list with undefined language', async () => {
+  it('identify a CodeQL static analysis by null repository', async () => {
+    // Given
 
-        // Given
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    let repository = null
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    // When Then
 
-        // When Then
+    await expect(
+      staticAnalyzerCodeQL.identifyByElement(repository, languages[0], 'StaticAnalyzerCodeQL_32')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        await expect(staticAnalyzerCodeQL.initializesByList(repositoryList, undefined)).rejects.toThrow(BadFormat);
-    });
+  it('identify a CodeQL static analysis by null repository with undefined language', async () => {
+    // Given
 
-    it('initialize a CodeQL static analysis by repository list with null language', async () => {
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    let repository = repositoryList[0]
 
-        // Given
+    // When Then
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    await expect(
+      staticAnalyzerCodeQL.identifyByElement(repository, undefined, 'StaticAnalyzerCodeQL_33')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        // When Then
+  it('identify a CodeQL static analysis by null repository with null language', async () => {
+    // Given
 
-        await expect(staticAnalyzerCodeQL.initializesByList(repositoryList, null)).rejects.toThrow(BadFormat);
-    });
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    let repository = repositoryList[0]
 
-    it('initialize a CodeQL static analysis by repository list with empty language', async () => {
+    // When Then
 
-        // Given
+    await expect(
+      staticAnalyzerCodeQL.identifyByElement(repository, null, 'StaticAnalyzerCodeQL_34')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+  it('identify a CodeQL static analysis by null repository with empty language', async () => {
+    // Given
 
-        // When Then
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    let repository = repositoryList[0]
 
-        await expect(staticAnalyzerCodeQL.initializesByList(repositoryList, '')).rejects.toThrow(BadFormat);
-    });
+    // When Then
 
-    it('initialize a CodeQL static analysis by repository list with unknown language', async () => {
+    await expect(
+      staticAnalyzerCodeQL.identifyByElement(repository, '', 'StaticAnalyzerCodeQL_35')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        // Given
+  it('identify a CodeQL static analysis by null repository with unknown language', async () => {
+    // Given
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    let repository = repositoryList[0]
 
-        // When Then
+    // When Then
 
-        await expect(staticAnalyzerCodeQL.initializesByList(repositoryList, 'unknownLanguage')).rejects.toThrow(BadFormat);
-    });
+    await expect(
+      staticAnalyzerCodeQL.identifyByElement(
+        repository,
+        'unknownLanguage',
+        'StaticAnalyzerCodeQL_36'
+      )
+    ).rejects.toThrow(BadFormat)
+  })
 
-    it('identify a CodeQL static analysis by not found repository', async () => {
+  it('identify a CodeQL static analysis by repository list with not found repositories', async () => {
+    // Given
 
-        // Given
+    let repositoryList = ['unknown']
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        let repository = 'unknown';
+    // When Then
 
-        // When Then
+    await expect(
+      staticAnalyzerCodeQL.identifyByList(repositoryList, languages[0], 'StaticAnalyzerCodeQL_37')
+    ).rejects.toThrow(AnalysisFail)
+  })
 
-        await expect(staticAnalyzerCodeQL.identifyByElement(repository, languages[0])).rejects.toThrow(AnalysisFail);
-    });
+  it('identify a CodeQL static analysis by undefined repository list', async () => {
+    // Given
 
-    it('identify a CodeQL static analysis by undefined repository', async () => {
+    let repositoryList = undefined
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        // Given
+    // When Then
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        let repository = undefined;
+    await expect(
+      staticAnalyzerCodeQL.identifyByList(repositoryList, languages[0], 'StaticAnalyzerCodeQL_38')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        // When Then
+  it('identify a CodeQL static analysis by null repository list', async () => {
+    // Given
 
-        await expect(staticAnalyzerCodeQL.identifyByElement(repository, languages[0])).rejects.toThrow(BadFormat);
+    let repositoryList = null
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-    });
+    // When Then
 
-    it('identify a CodeQL static analysis by null repository', async () => {
+    await expect(
+      staticAnalyzerCodeQL.identifyByList(repositoryList, languages[0], 'StaticAnalyzerCodeQL_39')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        // Given
+  it('identify a CodeQL static analysis by repository list with undefined repositories', async () => {
+    // Given
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        let repository = null;
+    let repositoryList = [undefined]
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        // When Then
+    // When Then
 
-        await expect(staticAnalyzerCodeQL.identifyByElement(repository, languages[0])).rejects.toThrow(BadFormat);
+    await expect(
+      staticAnalyzerCodeQL.identifyByList(repositoryList, languages[0], 'StaticAnalyzerCodeQL_40')
+    ).rejects.toThrow(AnalysisFail)
+  })
 
-    });
+  it('identify a CodeQL static analysis by repository list with null repositories', async () => {
+    // Given
 
-    it('identify a CodeQL static analysis by null repository with undefined language', async () => {
+    let repositoryList = [null]
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        // Given
+    // When Then
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        let repository = repositoryList[0];
+    await expect(
+      staticAnalyzerCodeQL.identifyByList(repositoryList, languages[0], 'StaticAnalyzerCodeQL_41')
+    ).rejects.toThrow(AnalysisFail)
+  })
 
-        // When Then
+  it('identify a CodeQL static analysis by empty repository list', async () => {
+    // Given
 
-        await expect(staticAnalyzerCodeQL.identifyByElement(repository, undefined)).rejects.toThrow(BadFormat);
+    let repositoryList = []
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-    });
+    // When Then
 
-    it('identify a CodeQL static analysis by null repository with null language', async () => {
+    await expect(
+      staticAnalyzerCodeQL.identifyByList(repositoryList, languages[0], 'StaticAnalyzerCodeQL_42')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        // Given
+  it('identify a CodeQL static analysis by repository list with undefined language', async () => {
+    // Given
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        let repository = repositoryList[0];
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        // When Then
+    // When Then
 
-        await expect(staticAnalyzerCodeQL.identifyByElement(repository, null)).rejects.toThrow(BadFormat);
+    await expect(
+      staticAnalyzerCodeQL.identifyByList(repositoryList, undefined, 'StaticAnalyzerCodeQL_43')
+    ).rejects.toThrow(BadFormat)
+  })
 
-    });
+  it('identify a CodeQL static analysis by repository list with null language', async () => {
+    // Given
 
-    it('identify a CodeQL static analysis by null repository with empty language', async () => {
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        // Given
+    // When Then
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        let repository = repositoryList[0];
+    await expect(
+      staticAnalyzerCodeQL.identifyByList(repositoryList, null, 'StaticAnalyzerCodeQL_44')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        // When Then
+  it('identify a CodeQL static analysis by repository list with empty language', async () => {
+    // Given
 
-        await expect(staticAnalyzerCodeQL.identifyByElement(repository, '')).rejects.toThrow(BadFormat);
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-    });
+    // When Then
 
-    it('identify a CodeQL static analysis by null repository with unknown language', async () => {
+    await expect(
+      staticAnalyzerCodeQL.identifyByList(repositoryList, '', 'StaticAnalyzerCodeQL_45')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        // Given
+  it('identify a CodeQL static analysis by repository list with unknown language', async () => {
+    // Given
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        let repository = repositoryList[0];
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        // When Then
+    // When Then
 
-        await expect(staticAnalyzerCodeQL.identifyByElement(repository, 'unknownLanguage')).rejects.toThrow(BadFormat);
+    await expect(
+      staticAnalyzerCodeQL.identifyByList(
+        repositoryList,
+        'unknownLanguage',
+        'StaticAnalyzerCodeQL_46'
+      )
+    ).rejects.toThrow(BadFormat)
+  })
 
-    });
+  it('extract a CodeQL static analysis by not found repository', async () => {
+    // Given
 
-    it('identify a CodeQL static analysis by repository list with not found repositories', async () => {
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    let repository = 'unknown'
 
-        // Given
+    // When Then
 
-        let repositoryList = ['unknown'];
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    await expect(
+      staticAnalyzerCodeQL.extractByElement(repository, languages[0], 'StaticAnalyzerCodeQL_47')
+    ).rejects.toThrow(AnalysisFail)
+  })
 
-        // When Then
+  it('extract a CodeQL static analysis by undefined repository', async () => {
+    // Given
 
-        await expect(staticAnalyzerCodeQL.identifyByList(repositoryList, languages[0])).rejects.toThrow(AnalysisFail);
-    });
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    let repository = undefined
 
-    it('identify a CodeQL static analysis by undefined repository list', async () => {
+    // When Then
 
-        // Given
+    await expect(
+      staticAnalyzerCodeQL.extractByElement(repository, languages[0], 'StaticAnalyzerCodeQL_48')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        let repositoryList = undefined;
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+  it('extract a CodeQL static analysis by null repository', async () => {
+    // Given
 
-        // When Then
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    let repository = null
 
-        await expect(staticAnalyzerCodeQL.identifyByList(repositoryList, languages[0])).rejects.toThrow(BadFormat);
-    });
+    // When Then
 
-    it('identify a CodeQL static analysis by null repository list', async () => {
+    await expect(
+      staticAnalyzerCodeQL.extractByElement(repository, languages[0], 'StaticAnalyzerCodeQL_49')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        // Given
+  it('extract a CodeQL static analysis by repository with undefined language', async () => {
+    // Given
 
-        let repositoryList = null;
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    let repository = repositoryList[0]
 
-        // When Then
+    // When Then
 
-        await expect(staticAnalyzerCodeQL.identifyByList(repositoryList, languages[0])).rejects.toThrow(BadFormat);
-    });
+    await expect(
+      staticAnalyzerCodeQL.extractByElement(repository, undefined, 'StaticAnalyzerCodeQL_50')
+    ).rejects.toThrow(BadFormat)
+  })
 
-    it('identify a CodeQL static analysis by repository list with undefined repositories', async () => {
+  it('extract a CodeQL static analysis by repository with null language', async () => {
+    // Given
 
-        // Given
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    let repository = repositoryList[0]
 
-        let repositoryList = [undefined];
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    // When Then
 
-        // When Then
+    await expect(
+      staticAnalyzerCodeQL.extractByElement(repository, null, 'StaticAnalyzerCodeQL_51')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        await expect(staticAnalyzerCodeQL.identifyByList(repositoryList, languages[0])).rejects.toThrow(AnalysisFail);
-    });
+  it('extract a CodeQL static analysis by repository with empty language', async () => {
+    // Given
 
-    it('identify a CodeQL static analysis by repository list with null repositories', async () => {
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    let repository = repositoryList[0]
 
-        // Given
+    // When Then
 
-        let repositoryList = [null];
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    await expect(
+      staticAnalyzerCodeQL.extractByElement(repository, '', 'StaticAnalyzerCodeQL_52')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        // When Then
+  it('extract a CodeQL static analysis by repository with unknown language', async () => {
+    // Given
 
-        await expect(staticAnalyzerCodeQL.identifyByList(repositoryList, languages[0])).rejects.toThrow(AnalysisFail);
-    });
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    let repository = repositoryList[0]
 
-    it('identify a CodeQL static analysis by empty repository list', async () => {
+    // When Then
 
-        // Given
+    await expect(
+      staticAnalyzerCodeQL.extractByElement(
+        repository,
+        'unknownLanguage',
+        'StaticAnalyzerCodeQL_53'
+      )
+    ).rejects.toThrow(BadFormat)
+  })
 
-        let repositoryList = [];
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+  it('extract a CodeQL static analysis by repository list with not found repositories', async () => {
+    // Given
 
-        // When Then
+    let repositoryList = ['unknown']
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        await expect(staticAnalyzerCodeQL.identifyByList(repositoryList, languages[0])).rejects.toThrow(BadFormat);
-    });
+    // When Then
 
-    it('identify a CodeQL static analysis by repository list with undefined language', async () => {
+    await expect(
+      staticAnalyzerCodeQL.extractByList(repositoryList, languages[0], 'StaticAnalyzerCodeQL_54')
+    ).rejects.toThrow(AnalysisFail)
+  })
 
-        // Given
+  it('extract a CodeQL static analysis by undefined repository list', async () => {
+    // Given
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    let repositoryList = undefined
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        // When Then
+    // When Then
 
-        await expect(staticAnalyzerCodeQL.identifyByList(repositoryList, undefined)).rejects.toThrow(BadFormat);
-    });
+    await expect(
+      staticAnalyzerCodeQL.extractByList(repositoryList, languages[0], 'StaticAnalyzerCodeQL_55')
+    ).rejects.toThrow(BadFormat)
+  })
 
-    it('identify a CodeQL static analysis by repository list with null language', async () => {
+  it('extract a CodeQL static analysis by null repository list', async () => {
+    // Given
 
-        // Given
+    let repositoryList = null
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    // When Then
 
-        // When Then
+    await expect(
+      staticAnalyzerCodeQL.extractByList(repositoryList, languages[0], 'StaticAnalyzerCodeQL_56')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        await expect(staticAnalyzerCodeQL.identifyByList(repositoryList, null)).rejects.toThrow(BadFormat);
-    });
+  it('extract a CodeQL static analysis by repository list with undefined repositories', async () => {
+    // Given
 
-    it('identify a CodeQL static analysis by repository list with empty language', async () => {
+    let repositoryList = [undefined]
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        // Given
+    // When Then
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    await expect(
+      staticAnalyzerCodeQL.extractByList(repositoryList, languages[0], 'StaticAnalyzerCodeQL_57')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        // When Then
+  it('extract a CodeQL static analysis by repository list with null repositories', async () => {
+    // Given
 
-        await expect(staticAnalyzerCodeQL.identifyByList(repositoryList, '')).rejects.toThrow(BadFormat);
-    });
+    let repositoryList = [null]
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-    it('identify a CodeQL static analysis by repository list with unknown language', async () => {
+    // When Then
 
-        // Given
+    await expect(
+      staticAnalyzerCodeQL.extractByList(repositoryList, languages[0], 'StaticAnalyzerCodeQL_58')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+  it('extract a CodeQL static analysis by empty repository list', async () => {
+    // Given
 
-        // When Then
+    let repositoryList = []
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        await expect(staticAnalyzerCodeQL.identifyByList(repositoryList, 'unknownLanguage')).rejects.toThrow(BadFormat);
-    });
+    // When Then
 
-    it('extract a CodeQL static analysis by not found repository', async () => {
+    await expect(
+      staticAnalyzerCodeQL.extractByList(repositoryList, languages[0], 'StaticAnalyzerCodeQL_59')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        // Given
+  it('extract a CodeQL static analysis by repository list with undefined language', async () => {
+    // Given
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        let repository = 'unknown';
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        // When Then
+    // When Then
 
-        await expect(staticAnalyzerCodeQL.extractByElement(repository, languages[0])).rejects.toThrow(AnalysisFail);
-    });
+    await expect(
+      staticAnalyzerCodeQL.extractByList(repositoryList, undefined, 'StaticAnalyzerCodeQL_60')
+    ).rejects.toThrow(BadFormat)
+  })
 
-    it('extract a CodeQL static analysis by undefined repository', async () => {
+  it('extract a CodeQL static analysis by repository list with null language', async () => {
+    // Given
 
-        // Given
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        let repository = undefined;
+    // When Then
 
-        // When Then
+    await expect(
+      staticAnalyzerCodeQL.extractByList(repositoryList, null, 'StaticAnalyzerCodeQL_61')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        await expect(staticAnalyzerCodeQL.extractByElement(repository, languages[0])).rejects.toThrow(BadFormat);
+  it('extract a CodeQL static analysis by repository list with empty language', async () => {
+    // Given
 
-    });
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-    it('extract a CodeQL static analysis by null repository', async () => {
+    // When Then
 
-        // Given
+    await expect(
+      staticAnalyzerCodeQL.extractByList(repositoryList, '', 'StaticAnalyzerCodeQL_61')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        let repository = null;
+  it('extract a CodeQL static analysis by repository list with unknown language', async () => {
+    // Given
 
-        // When Then
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        await expect(staticAnalyzerCodeQL.extractByElement(repository, languages[0])).rejects.toThrow(BadFormat);
+    // When Then
 
-    });
+    await expect(
+      staticAnalyzerCodeQL.extractByList(
+        repositoryList,
+        'unknownLanguage',
+        'StaticAnalyzerCodeQL_62'
+      )
+    ).rejects.toThrow(BadFormat)
+  })
 
-    it('extract a CodeQL static analysis by repository with undefined language', async () => {
+  it('interpret a CodeQL static analysis by undefined repository list', async () => {
+    // Given
 
-        // Given
+    let repositoryList = undefined
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        let repository = repositoryList[0];
+    // When Then
 
-        // When Then
+    await expect(
+      staticAnalyzerCodeQL.interpretByList(repositoryList, languages[0], 'StaticAnalyzerCodeQL_63')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        await expect(staticAnalyzerCodeQL.extractByElement(repository, undefined)).rejects.toThrow(BadFormat);
+  it('interpret a CodeQL static analysis by null repository list', async () => {
+    // Given
 
-    });
+    let repositoryList = null
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-    it('extract a CodeQL static analysis by repository with null language', async () => {
+    // When Then
 
-        // Given
+    await expect(
+      staticAnalyzerCodeQL.interpretByList(repositoryList, languages[0], 'StaticAnalyzerCodeQL_64')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        let repository = repositoryList[0];
+  it('interpret a CodeQL static analysis by empty repository list', async () => {
+    // Given
 
-        // When Then
+    let repositoryList = []
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        await expect(staticAnalyzerCodeQL.extractByElement(repository, null)).rejects.toThrow(BadFormat);
+    // When Then
 
-    });
+    await expect(
+      staticAnalyzerCodeQL.interpretByList(repositoryList, languages[0], 'StaticAnalyzerCodeQL_65')
+    ).rejects.toThrow(BadFormat)
+  })
 
-    it('extract a CodeQL static analysis by repository with empty language', async () => {
+  it('interpret a CodeQL static analysis by repository list with undefined language', async () => {
+    // Given
 
-        // Given
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        let repository = repositoryList[0];
+    // When Then
 
-        // When Then
+    await expect(
+      staticAnalyzerCodeQL.interpretByList(repositoryList, undefined, 'StaticAnalyzerCodeQL_66')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        await expect(staticAnalyzerCodeQL.extractByElement(repository, '')).rejects.toThrow(BadFormat);
+  it('interpret a CodeQL static analysis by repository list with null language', async () => {
+    // Given
 
-    });
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-    it('extract a CodeQL static analysis by repository with unknown language', async () => {
+    // When Then
 
-        // Given
+    await expect(
+      staticAnalyzerCodeQL.interpretByList(repositoryList, null, 'StaticAnalyzerCodeQL_67')
+    ).rejects.toThrow(BadFormat)
+  })
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        let repository = repositoryList[0];
+  it('interpret a CodeQL static analysis by repository list with empty language', async () => {
+    // Given
 
-        // When Then
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        await expect(staticAnalyzerCodeQL.extractByElement(repository, 'unknownLanguage')).rejects.toThrow(BadFormat);
+    // When Then
 
-    });
+    await expect(
+      staticAnalyzerCodeQL.interpretByList(repositoryList, '', 'StaticAnalyzerCodeQL_68')
+    ).rejects.toThrow(BadFormat)
+  })
 
-    it('extract a CodeQL static analysis by repository list with not found repositories', async () => {
+  it('interpret a CodeQL static analysis by repository list with unknown language', async () => {
+    // Given
 
-        // Given
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        let repositoryList = ['unknown'];
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    // When Then
 
-        // When Then
+    await expect(
+      staticAnalyzerCodeQL.interpretByList(
+        repositoryList,
+        'unknownLanguage',
+        'StaticAnalyzerCodeQL_69'
+      )
+    ).rejects.toThrow(BadFormat)
+  })
 
-        await expect(staticAnalyzerCodeQL.extractByList(repositoryList, languages[0])).rejects.toThrow(AnalysisFail);
-    });
+  it('get concepts extracted by NPL from null data', async () => {
+    // Given
 
-    it('extract a CodeQL static analysis by undefined repository list', async () => {
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        // Given
+    // When Then
 
-        let repositoryList = undefined;
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    expect(staticAnalyzerCodeQL.getConceptsByNLP(null)).toEqual([])
+  })
 
-        // When Then
+  it('get concepts extracted by NPL from undefined data', async () => {
+    // Given
 
-        await expect(staticAnalyzerCodeQL.extractByList(repositoryList, languages[0])).rejects.toThrow(BadFormat);
-    });
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-    it('extract a CodeQL static analysis by null repository list', async () => {
+    // When Then
 
-        // Given
+    expect(staticAnalyzerCodeQL.getConceptsByNLP(undefined)).toEqual([])
+  })
 
-        let repositoryList = null;
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+  it('get concepts extracted by NPL from empty data', async () => {
+    // Given
 
-        // When Then
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        await expect(staticAnalyzerCodeQL.extractByList(repositoryList, languages[0])).rejects.toThrow(BadFormat);
-    });
+    // When Then
 
-    it('extract a CodeQL static analysis by repository list with undefined repositories', async () => {
+    expect(staticAnalyzerCodeQL.getConceptsByNLP('')).toEqual([])
+  })
 
-        // Given
+  it('sort by TD-IDF concepts extracted by NPL from null data', async () => {
+    // Given
 
-        let repositoryList = [undefined];
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        // When Then
+    // When Then
 
-        await expect(staticAnalyzerCodeQL.extractByList(repositoryList, languages[0])).rejects.toThrow(BadFormat);
-    });
+    expect(
+      staticAnalyzerCodeQL.sortByTdIdf(
+        null,
+        'count, order count, order id, order count, order, order id, order, order count,' +
+          ' order count, order id, order count, order count, order count'
+      )
+    ).toEqual([])
+  })
 
-    it('extract a CodeQL static analysis by repository list with null repositories', async () => {
+  it('sort by TD-IDF concepts extracted by NPL from undefined data', async () => {
+    // Given
 
-        // Given
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        let repositoryList = [null];
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    // When Then
 
-        // When Then
+    expect(
+      staticAnalyzerCodeQL.sortByTdIdf(
+        undefined,
+        'count, order count, order id, order count, order, order id, order, order count,' +
+          ' order count, order id, order count, order count, order count'
+      )
+    ).toEqual([])
+  })
 
-        await expect(staticAnalyzerCodeQL.extractByList(repositoryList, languages[0])).rejects.toThrow(BadFormat);
-    });
+  it('sort by TD-IDF concepts extracted by NPL from empty data', async () => {
+    // Given
 
-    it('extract a CodeQL static analysis by empty repository list', async () => {
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        // Given
+    // When Then
 
-        let repositoryList = [];
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    expect(
+      staticAnalyzerCodeQL.sortByTdIdf(
+        [],
+        'count, order count, order id, order count, order, order id, order, order count,' +
+          ' order count, order id, order count, order count, order count'
+      )
+    ).toEqual([])
+  })
 
-        // When Then
+  it('sort by TD-IDF concepts extracted by NPL from null reference document', async () => {
+    // Given
 
-        await expect(staticAnalyzerCodeQL.extractByList(repositoryList, languages[0])).rejects.toThrow(BadFormat);
-    });
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-    it('extract a CodeQL static analysis by repository list with undefined language', async () => {
+    // When Then
 
-        // Given
+    expect(
+      staticAnalyzerCodeQL.sortByTdIdf(['count', 'order count', 'order', 'id', 'order id'], null)
+    ).toEqual(['count', 'order count', 'order', 'id', 'order id'])
+  })
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+  it('sort by TD-IDF concepts extracted by NPL from undefined reference document', async () => {
+    // Given
 
-        // When Then
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        await expect(staticAnalyzerCodeQL.extractByList(repositoryList, undefined)).rejects.toThrow(BadFormat);
-    });
+    // When Then
 
-    it('extract a CodeQL static analysis by repository list with null language', async () => {
+    expect(
+      staticAnalyzerCodeQL.sortByTdIdf(
+        ['count', 'order count', 'order', 'id', 'order id'],
+        undefined
+      )
+    ).toEqual(['count', 'order count', 'order', 'id', 'order id'])
+  })
 
-        // Given
+  it('sort by TD-IDF concepts extracted by NPL from empty reference document', async () => {
+    // Given
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        // When Then
+    // When Then
 
-        await expect(staticAnalyzerCodeQL.extractByList(repositoryList, null)).rejects.toThrow(BadFormat);
-    });
+    expect(
+      staticAnalyzerCodeQL.sortByTdIdf(['count', 'order count', 'order', 'id', 'order id'], '')
+    ).toEqual(['count', 'order count', 'order', 'id', 'order id'])
+  })
 
-    it('extract a CodeQL static analysis by repository list with empty language', async () => {
+  it('set an undefined code fragment in the model', async () => {
+    // Given
+    let repositories = []
+    let concepts = ['order']
+    let fragment = undefined
 
-        // Given
+    // When
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    repositories = staticAnalyzerCodeQL.setCodeFragment(fragment, concepts, repositories)
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    // Then
+    expect(repositories).toEqual([])
+  })
 
-        // When Then
+  it('set a null code fragment in the model', async () => {
+    // Given
+    let repositories = []
+    let concepts = ['order']
+    let fragment = null
 
-        await expect(staticAnalyzerCodeQL.extractByList(repositoryList, '')).rejects.toThrow(BadFormat);
-    });
+    // When
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    repositories = staticAnalyzerCodeQL.setCodeFragment(fragment, concepts, repositories)
 
-    it('extract a CodeQL static analysis by repository list with unknown language', async () => {
+    // Then
+    expect(repositories).toEqual([])
+  })
 
-        // Given
+  it('set an undefined concepts list in the model', async () => {
+    // Given
+    let repositories = []
+    let concepts = undefined
+    let fragment = {
+      type: 'javascript-api-express-call',
+      repository: 'https://www.github.com/user/project/blob/master',
+      file: 'https://www.github.com/user/project/blob/master/src/app/js/app.js',
+      location: 'https://www.github.com/user/project/blob/master/src/app/js/app.js#L1C1-L2C2',
+      operation: 'READ',
+      method: 'get',
+      sample: "'/order/:order'",
+      heuristics: 'E1E2E3E4E5E6E7E8',
+      score: '8'
+    }
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    // When
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    repositories = staticAnalyzerCodeQL.setCodeFragment(fragment, concepts, repositories)
 
-        // When Then
+    // Then
+    expect(repositories).toEqual([])
+  })
 
-        await expect(staticAnalyzerCodeQL.extractByList(repositoryList, 'unknownLanguage')).rejects.toThrow(BadFormat);
-    });
+  it('set a null concepts list in the model', async () => {
+    // Given
+    let repositories = []
+    let concepts = null
+    let fragment = {
+      type: 'javascript-api-express-call',
+      repository: 'https://www.github.com/user/project/blob/master/',
+      file: 'https://www.github.com/user/project/blob/master/src/app/js/app.js',
+      location: 'https://www.github.com/user/project/blob/master/src/app/js/app.js#L1C1-L2C2',
+      operation: 'READ',
+      method: 'get',
+      sample: "'/order/:order'",
+      heuristics: 'E1E2E3E4E5E6E7E8',
+      score: '8'
+    }
 
-    it('interpret a CodeQL static analysis by undefined repository list', async () => {
+    // When
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    repositories = staticAnalyzerCodeQL.setCodeFragment(fragment, concepts, repositories)
 
-        // Given
+    // Then
+    expect(repositories).toEqual([])
+  })
 
-        let repositoryList = undefined;
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+  it('set an undefined repositories list in the model', async () => {
+    // Given
+    let repositories = undefined
+    let concepts = ['order']
+    let fragment = {
+      type: 'javascript-api-express-call',
+      repository: 'https://www.github.com/user/project/blob/master/',
+      file: 'https://www.github.com/user/project/blob/master/src/app/js/app.js',
+      location: 'https://www.github.com/user/project/blob/master/src/app/js/app.js#L1C1-L2C2',
+      operation: 'READ',
+      method: 'get',
+      sample: "'/order/:order'",
+      heuristics: 'E1E2E3E4E5E6E7E8',
+      score: '8'
+    }
 
-        // When Then
+    // When
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    repositories = staticAnalyzerCodeQL.setCodeFragment(fragment, concepts, repositories)
 
-        await expect(staticAnalyzerCodeQL.interpretByList(repositoryList, languages[0])).rejects.toThrow(BadFormat);
-    });
+    // Then
+    expect(repositories).toEqual(undefined)
+  })
 
-    it('interpret a CodeQL static analysis by null repository list', async () => {
+  it('set a null repositories list in the model', async () => {
+    // Given
+    let repositories = null
+    let concepts = ['order']
+    let fragment = {
+      type: 'javascript-api-express-call',
+      repository: 'https://www.github.com/user/project/blob/master/',
+      file: 'https://www.github.com/user/project/blob/master/src/app/js/app.js',
+      location: 'https://www.github.com/user/project/blob/master/src/app/js/app.js#L1C1-L2C2',
+      operation: 'READ',
+      method: 'get',
+      sample: "'/order/:order'",
+      heuristics: 'E1E2E3E4E5E6E7E8',
+      score: '8'
+    }
 
-        // Given
+    // When
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
+    repositories = staticAnalyzerCodeQL.setCodeFragment(fragment, concepts, repositories)
 
-        let repositoryList = null;
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    // Then
+    expect(repositories).toEqual(null)
+  })
 
-        // When Then
+  it('get a repository folder from a null name', async () => {
+    // Given
 
-        await expect(staticAnalyzerCodeQL.interpretByList(repositoryList, languages[0])).rejects.toThrow(BadFormat);
-    });
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-    it('interpret a CodeQL static analysis by empty repository list', async () => {
+    // When Then
 
-        // Given
+    expect(() => {
+      staticAnalyzerCodeQL.getRepositoryFolder(null, 'StaticAnalyzerCodeQL_70')
+    }).toThrow(BadFormat)
+  })
 
-        let repositoryList = [];
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+  it('get a repository folder from a undefined name', async () => {
+    // Given
 
-        // When Then
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        await expect(staticAnalyzerCodeQL.interpretByList(repositoryList, languages[0])).rejects.toThrow(BadFormat);
-    });
+    // When Then
 
-    it('interpret a CodeQL static analysis by repository list with undefined language', async () => {
+    expect(() => {
+      staticAnalyzerCodeQL.getRepositoryFolder(undefined)
+    }).toThrow(BadFormat)
+  })
 
-        // Given
+  it('get a repository folder from an empty name', async () => {
+    // Given
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        // When Then
+    // When Then
 
-        await expect(staticAnalyzerCodeQL.interpretByList(repositoryList, undefined)).rejects.toThrow(BadFormat);
-    });
+    expect(() => {
+      staticAnalyzerCodeQL.getRepositoryFolder('', 'StaticAnalyzerCodeQL_71')
+    }).toThrow(BadFormat)
+  })
 
-    it('interpret a CodeQL static analysis by repository list with null language', async () => {
+  it('get a CodeQL repository folder from a null name', async () => {
+    // Given
 
-        // Given
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    // When Then
 
-        // When Then
+    expect(() => {
+      staticAnalyzerCodeQL.getCodeQLRepositoryFolder(null, 'StaticAnalyzerCodeQL_72')
+    }).toThrow(BadFormat)
+  })
 
-        await expect(staticAnalyzerCodeQL.interpretByList(repositoryList, null)).rejects.toThrow(BadFormat);
-    });
+  it('get a CodeQL repository folder from a undefined name', async () => {
+    // Given
 
-    it('interpret a CodeQL static analysis by repository list with empty language', async () => {
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        // Given
+    // When Then
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    expect(() => {
+      staticAnalyzerCodeQL.getCodeQLRepositoryFolder(undefined, 'StaticAnalyzerCodeQL_73')
+    }).toThrow(BadFormat)
+  })
 
-        // When Then
+  it('get a CodeQL repository folder from an empty name', async () => {
+    // Given
 
-        await expect(staticAnalyzerCodeQL.interpretByList(repositoryList, '')).rejects.toThrow(BadFormat);
-    });
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-    it('interpret a CodeQL static analysis by repository list with unknown language', async () => {
+    // When Then
 
-        // Given
+    expect(() => {
+      staticAnalyzerCodeQL.getCodeQLRepositoryFolder('', 'StaticAnalyzerCodeQL_74')
+    }).toThrow(BadFormat)
+  })
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+  it('get a result CodeQL repository folder from a null name', async () => {
+    // Given
 
-        // When Then
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        await expect(staticAnalyzerCodeQL.interpretByList(repositoryList, 'unknownLanguage')).rejects.toThrow(BadFormat);
-    });
+    // When Then
 
-    it('get concepts extracted by NPL from null data', async () => {
+    expect(() => {
+      staticAnalyzerCodeQL.getResultCodeQLRepositoryFolder(null, 'StaticAnalyzerCodeQL_75')
+    }).toThrow(BadFormat)
+  })
 
-        // Given
+  it('get a result CodeQL repository folder from a undefined name', async () => {
+    // Given
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        // When Then
+    // When Then
 
-        expect(staticAnalyzerCodeQL.getConceptsByNLP(null)).toEqual([]);
-    });
+    expect(() => {
+      staticAnalyzerCodeQL.getResultCodeQLRepositoryFolder(undefined, 'StaticAnalyzerCodeQL_76')
+    }).toThrow(BadFormat)
+  })
 
-    it('get concepts extracted by NPL from undefined data', async () => {
+  it('get a result CodeQL repository folder from an empty name', async () => {
+    // Given
 
-        // Given
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    // When Then
 
-        // When Then
+    expect(() => {
+      staticAnalyzerCodeQL.getResultCodeQLRepositoryFolder('', 'StaticAnalyzerCodeQL_77')
+    }).toThrow(BadFormat)
+  })
 
-        expect(staticAnalyzerCodeQL.getConceptsByNLP(undefined)).toEqual([]);
-    });
+  it('get a result CodeQL repository file from a null name', async () => {
+    // Given
 
-    it('get concepts extracted by NPL from empty data', async () => {
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        // Given
+    // When Then
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+    expect(() => {
+      staticAnalyzerCodeQL.getResultCodeQLRepositoryFile(null, 'StaticAnalyzerCodeQL_78')
+    }).toThrow(BadFormat)
+  })
 
-        // When Then
+  it('get a result CodeQL repository file from a undefined name', async () => {
+    // Given
 
-        expect(staticAnalyzerCodeQL.getConceptsByNLP("")).toEqual([]);
-    });
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-    it('sort by TD-IDF concepts extracted by NPL from null data', async () => {
+    // When Then
 
-        // Given
+    expect(() => {
+      staticAnalyzerCodeQL.getResultCodeQLRepositoryFile(undefined, 'StaticAnalyzerCodeQL_79')
+    }).toThrow(BadFormat)
+  })
 
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
+  it('get a result CodeQL repository file from an empty name', async () => {
+    // Given
 
-        // When Then
+    let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL()
 
-        expect(staticAnalyzerCodeQL.sortByTdIdf(null, "count, order count, order id, order count, order, order id, order, order count," + " order count, order id, order count, order count, order count")).toEqual([]);
-    });
+    // When Then
 
-    it('sort by TD-IDF concepts extracted by NPL from undefined data', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-
-        expect(staticAnalyzerCodeQL.sortByTdIdf(undefined, "count, order count, order id, order count, order, order id, order, order count," + " order count, order id, order count, order count, order count")).toEqual([]);
-    });
-
-    it('sort by TD-IDF concepts extracted by NPL from empty data', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-
-        expect(staticAnalyzerCodeQL.sortByTdIdf([], "count, order count, order id, order count, order, order id, order, order count," + " order count, order id, order count, order count, order count")).toEqual([]);
-    });
-
-    it('sort by TD-IDF concepts extracted by NPL from null reference document', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-
-        expect(staticAnalyzerCodeQL.sortByTdIdf(['count', 'order count', 'order', 'id', 'order id'], null)).toEqual(['count', 'order count', 'order', 'id', 'order id']);
-    });
-
-    it('sort by TD-IDF concepts extracted by NPL from undefined reference document', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-
-        expect(staticAnalyzerCodeQL.sortByTdIdf(['count', 'order count', 'order', 'id', 'order id'], undefined)).toEqual(['count', 'order count', 'order', 'id', 'order id']);
-    });
-
-    it('sort by TD-IDF concepts extracted by NPL from empty reference document', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-
-        expect(staticAnalyzerCodeQL.sortByTdIdf(['count', 'order count', 'order', 'id', 'order id'], "")).toEqual(['count', 'order count', 'order', 'id', 'order id']);
-    });
-
-    it('set an undefined code fragment in the model', async () => {
-
-        // Given
-        let repositories = [];
-        let concepts = ['order'];
-        let fragment = undefined;
-
-        // When
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        repositories = staticAnalyzerCodeQL.setCodeFragment(fragment, concepts, repositories);
-
-        // Then
-        expect(repositories).toEqual([]);
-    });
-
-    it('set a null code fragment in the model', async () => {
-
-        // Given
-        let repositories = [];
-        let concepts = ['order'];
-        let fragment = null;
-
-        // When
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        repositories = staticAnalyzerCodeQL.setCodeFragment(fragment, concepts, repositories);
-
-        // Then
-        expect(repositories).toEqual([]);
-    });
-
-    it('set an undefined concepts list in the model', async () => {
-
-        // Given
-        let repositories = [];
-        let concepts = undefined;
-        let fragment = {
-            type: 'javascript-api-express-call',
-            repository: 'https://www.github.com/user/project/blob/master',
-            file: 'https://www.github.com/user/project/blob/master/src/app/js/app.js',
-            location: 'https://www.github.com/user/project/blob/master/src/app/js/app.js#L1C1-L2C2',
-            operation: 'READ',
-            method: 'get',
-            sample: '\'/order/:order\'',
-            heuristics: "E1E2E3E4E5E6E7E8",
-            score: "8"
-        };
-
-        // When
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        repositories = staticAnalyzerCodeQL.setCodeFragment(fragment, concepts, repositories);
-
-        // Then
-        expect(repositories).toEqual([]);
-    });
-
-    it('set a null concepts list in the model', async () => {
-
-        // Given
-        let repositories = [];
-        let concepts = null;
-        let fragment = {
-            type: 'javascript-api-express-call',
-            repository: 'https://www.github.com/user/project/blob/master/',
-            file: 'https://www.github.com/user/project/blob/master/src/app/js/app.js',
-            location: 'https://www.github.com/user/project/blob/master/src/app/js/app.js#L1C1-L2C2',
-            operation: 'READ',
-            method: 'get',
-            sample: '\'/order/:order\'',
-            heuristics: "E1E2E3E4E5E6E7E8",
-            score: "8"
-        };
-
-        // When
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        repositories = staticAnalyzerCodeQL.setCodeFragment(fragment, concepts, repositories);
-
-        // Then
-        expect(repositories).toEqual([]);
-    });
-
-    it('set an undefined repositories list in the model', async () => {
-
-        // Given
-        let repositories = undefined;
-        let concepts = ['order'];
-        let fragment = {
-            type: 'javascript-api-express-call',
-            repository: 'https://www.github.com/user/project/blob/master/',
-            file: 'https://www.github.com/user/project/blob/master/src/app/js/app.js',
-            location: 'https://www.github.com/user/project/blob/master/src/app/js/app.js#L1C1-L2C2',
-            operation: 'READ',
-            method: 'get',
-            sample: '\'/order/:order\'',
-            heuristics: "E1E2E3E4E5E6E7E8",
-            score: "8"
-        };
-
-        // When
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        repositories = staticAnalyzerCodeQL.setCodeFragment(fragment, concepts, repositories);
-
-        // Then
-        expect(repositories).toEqual(undefined);
-    });
-
-    it('set a null repositories list in the model', async () => {
-
-        // Given
-        let repositories = null;
-        let concepts = ['order'];
-        let fragment = {
-            type: 'javascript-api-express-call',
-            repository: 'https://www.github.com/user/project/blob/master/',
-            file: 'https://www.github.com/user/project/blob/master/src/app/js/app.js',
-            location: 'https://www.github.com/user/project/blob/master/src/app/js/app.js#L1C1-L2C2',
-            operation: 'READ',
-            method: 'get',
-            sample: '\'/order/:order\'',
-            heuristics: "E1E2E3E4E5E6E7E8",
-            score: "8"
-        };
-
-        // When
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-        repositories = staticAnalyzerCodeQL.setCodeFragment(fragment, concepts, repositories);
-
-        // Then
-        expect(repositories).toEqual(null);
-    });
-
-    it('get a repository folder from a null name', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-
-        expect(() => {
-            staticAnalyzerCodeQL.getRepositoryFolder(null);
-        }).toThrow(BadFormat);
-    });
-
-    it('get a repository folder from a undefined name', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-
-        expect(() => {
-            staticAnalyzerCodeQL.getRepositoryFolder(undefined);
-        }).toThrow(BadFormat);
-    });
-
-    it('get a repository folder from an empty name', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-
-        expect(() => {
-            staticAnalyzerCodeQL.getRepositoryFolder('');
-        }).toThrow(BadFormat);
-    });
-
-    it('get a CodeQL repository folder from a null name', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-
-        expect(() => {
-            staticAnalyzerCodeQL.getCodeQLRepositoryFolder(null);
-        }).toThrow(BadFormat);
-    });
-
-    it('get a CodeQL repository folder from a undefined name', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-
-        expect(() => {
-            staticAnalyzerCodeQL.getCodeQLRepositoryFolder(undefined);
-        }).toThrow(BadFormat);
-    });
-
-    it('get a CodeQL repository folder from an empty name', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-
-        expect(() => {
-            staticAnalyzerCodeQL.getCodeQLRepositoryFolder('');
-        }).toThrow(BadFormat);
-    });
-
-    it('get a result CodeQL repository folder from a null name', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-
-        expect(() => {
-            staticAnalyzerCodeQL.getResultCodeQLRepositoryFolder(null);
-        }).toThrow(BadFormat);
-    });
-
-    it('get a result CodeQL repository folder from a undefined name', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-
-        expect(() => {
-            staticAnalyzerCodeQL.getResultCodeQLRepositoryFolder(undefined);
-        }).toThrow(BadFormat);
-    });
-
-    it('get a result CodeQL repository folder from an empty name', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-
-        expect(() => {
-            staticAnalyzerCodeQL.getResultCodeQLRepositoryFolder('');
-        }).toThrow(BadFormat);
-    });
-
-    it('get a result CodeQL repository file from a null name', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-
-        expect(() => {
-            staticAnalyzerCodeQL.getResultCodeQLRepositoryFile(null);
-        }).toThrow(BadFormat);
-    });
-
-    it('get a result CodeQL repository file from a undefined name', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-
-        expect(() => {
-            staticAnalyzerCodeQL.getResultCodeQLRepositoryFile(undefined);
-        }).toThrow(BadFormat);
-    });
-
-    it('get a result CodeQL repository file from an empty name', async () => {
-
-        // Given
-
-        let staticAnalyzerCodeQL = new StaticAnalyzerCodeQL();
-
-        // When Then
-
-        expect(() => {
-            staticAnalyzerCodeQL.getResultCodeQLRepositoryFile('');
-        }).toThrow(BadFormat);
-    });
-});
+    expect(() => {
+      staticAnalyzerCodeQL.getResultCodeQLRepositoryFile('', 'StaticAnalyzerCodeQL_80')
+    }).toThrow(BadFormat)
+  })
+})

@@ -1,208 +1,189 @@
 // Model
-const Technology = require("../../model/Technology.model");
+const Technology = require('../../model/Technology.model')
 // Error
-const BadFormat = require('../../error/BadFormat.error.js');
+const BadFormat = require('../../error/BadFormat.error.js')
 
 // Happy path test suite
 
 describe('Technology', () => {
+  test('does to string', () => {
+    // Given
 
-    test('does to string', () => {
+    let technologyAsObjectGiven = new Technology('javascript-db-redis')
 
-        // Given
+    // When
 
-        let technologyAsObjectGiven = new Technology("javascript-db-redis");
+    let technologyAsStringGiven = technologyAsObjectGiven.toString()
 
-        // When
+    // Then
 
-        let technologyAsStringGiven = technologyAsObjectGiven.toString();
+    expect(technologyAsStringGiven).toStrictEqual('{"id":"javascript-db-redis"}')
+  })
 
-        // Then
+  test('revives as object', () => {
+    // Given
 
-        expect(technologyAsStringGiven).toStrictEqual('{"id":"javascript-db-redis"}');
-    });
+    let technologyAsStringGiven = '{"id":"javascript-db-redis"}'
+    let technologyAsObjectGiven = JSON.parse(technologyAsStringGiven)
 
-    test('revives as object', () => {
+    // When
 
-        // Given
+    let technologyAsModelGiven = Technology.revive(technologyAsObjectGiven)
 
-        let technologyAsStringGiven = '{"id":"javascript-db-redis"}';
-        let technologyAsObjectGiven = JSON.parse(technologyAsStringGiven);
+    // Then
 
-        // When
+    let staticAnalysisCodeQLRequestAsModelExpected = new Technology('javascript-db-redis')
+    expect(technologyAsModelGiven).toStrictEqual(staticAnalysisCodeQLRequestAsModelExpected)
+  })
 
-        let technologyAsModelGiven = Technology.revive(technologyAsObjectGiven);
+  test('sets the technology', () => {
+    // Given
+    let technologyGiven = new Technology('javascript-db-redis')
 
-        // Then
+    // When
 
-        let staticAnalysisCodeQLRequestAsModelExpected = new Technology("javascript-db-redis");
-        expect(technologyAsModelGiven).toStrictEqual(staticAnalysisCodeQLRequestAsModelExpected);
-    });
+    technologyGiven.setId('javascript-db-mongo')
 
-    test('sets the technology', () => {
+    // Then
 
-        // Given
-        let technologyGiven = new Technology("javascript-db-redis");
-
-        // When
-
-        technologyGiven.setId("javascript-db-mongo");
-
-        // Then
-
-        expect(technologyGiven.getId()).toStrictEqual("javascript-db-mongo");
-    });
-});
-
+    expect(technologyGiven.getId()).toStrictEqual('javascript-db-mongo')
+  })
+})
 
 // Failure cases test suite
 
 describe('Technology tries to', () => {
+  test('revive an incorrect formatted object', () => {
+    // Given
 
+    let technologyAsStringGiven = "{'id':'hello'}"
 
-    test('revive an incorrect formatted object', () => {
+    // When Then
 
-        // Given
+    expect(() => {
+      Technology.revive(technologyAsStringGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        let technologyAsStringGiven = '{\'id\':\'hello\'}';
+  test('revive an incomplete formatted object', () => {
+    // Given
 
-        // When Then
+    let technologyAsStringGiven = '{"id":"}'
 
-        expect(() => {
-            Technology.revive(technologyAsStringGiven);
-        }).toThrow(new BadFormat());
-    });
+    // When Then
 
-    test('revive an incomplete formatted object', () => {
+    expect(() => {
+      Technology.revive(technologyAsStringGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        // Given
+  test('revive an undefined object', () => {
+    // Given
 
-        let technologyAsStringGiven = '{"id":"}';
+    let technologyGiven = undefined
 
-        // When Then
+    // When Then
 
-        expect(() => {
-            Technology.revive(technologyAsStringGiven);
-        }).toThrow(new BadFormat());
-    });
+    expect(() => {
+      Technology.revive(technologyGiven)
+    }).toThrow(new BadFormat())
+  })
 
-    test('revive an undefined object', () => {
+  test('revive a null object', () => {
+    // Given
 
-        // Given
+    let technologyGiven = null
 
-        let technologyGiven = undefined;
+    // When Then
 
-        // When Then
+    expect(() => {
+      Technology.revive(technologyGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        expect(() => {
-            Technology.revive(technologyGiven);
-        }).toThrow(new BadFormat());
-    });
+  test('revive a technology with null id', () => {
+    // Given
 
-    test('revive a null object', () => {
+    let technologyAsStringGiven = '{"name":null}'
+    let technologyAsObjectGiven = JSON.parse(technologyAsStringGiven)
 
-        // Given
+    // When Then
 
-        let technologyGiven = null;
+    expect(() => {
+      Technology.revive(technologyAsObjectGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        // When Then
+  test('revive a technology with empty id', () => {
+    // Given
 
-        expect(() => {
-            Technology.revive(technologyGiven);
-        }).toThrow(new BadFormat());
-    });
+    let technologyAsStringGiven = '{"name":""}'
+    let technologyAsObjectGiven = JSON.parse(technologyAsStringGiven)
 
-    test('revive a technology with null id', () => {
+    // When Then
 
-        // Given
+    expect(() => {
+      Technology.revive(technologyAsObjectGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        let technologyAsStringGiven = '{"name":null}';
-        let technologyAsObjectGiven = JSON.parse(technologyAsStringGiven);
+  test('create a technology with undefined id', () => {
+    // Given When Then
 
-        // When Then
+    expect(() => {
+      let technologyGiven = new Technology(undefined)
+    }).toThrow(new BadFormat())
+  })
 
-        expect(() => {
-            Technology.revive(technologyAsObjectGiven);
-        }).toThrow(new BadFormat());
-    });
+  test('create a technology with null id', () => {
+    // Given When Then
 
-    test('revive a technology with empty id', () => {
+    expect(() => {
+      let technologyGiven = new Technology(null)
+    }).toThrow(new BadFormat())
+  })
 
-        // Given
+  test('create a technology with empty id', () => {
+    // Given When Then
 
-        let technologyAsStringGiven = '{"name":""}';
-        let technologyAsObjectGiven = JSON.parse(technologyAsStringGiven);
+    expect(() => {
+      let technologyGiven = new Technology('')
+    }).toThrow(new BadFormat())
+  })
 
-        // When Then
+  test('set a technology undefined id', () => {
+    // Given
 
-        expect(() => {
-            Technology.revive(technologyAsObjectGiven);
-        }).toThrow(new BadFormat());
-    });
+    let technologyAsObjectGiven = new Technology('javascript-api-express')
 
-    test('create a technology with undefined id', () => {
+    // When Then
 
-        // Given When Then
+    expect(() => {
+      technologyAsObjectGiven.setId(undefined)
+    }).toThrow(new BadFormat())
+  })
 
-        expect(() => {
-            let technologyGiven = new Technology(undefined);
-        }).toThrow(new BadFormat());
-    });
+  test('set a technology null id', () => {
+    // Given
 
-    test('create a technology with null id', () => {
+    let technologyAsObjectGiven = new Technology('javascript-api-express')
 
-        // Given When Then
+    // When Then
 
-        expect(() => {
-            let technologyGiven = new Technology(null);
-        }).toThrow(new BadFormat());
-    });
+    expect(() => {
+      technologyAsObjectGiven.setId(null)
+    }).toThrow(new BadFormat())
+  })
 
-    test('create a technology with empty id', () => {
+  test('set a technology empty id', () => {
+    // Given
 
-        // Given When Then
+    let technologyAsObjectGiven = new Technology('javascript-api-express')
 
-        expect(() => {
-            let technologyGiven = new Technology("");
-        }).toThrow(new BadFormat());
-    });
+    // When Then
 
-    test('set a technology undefined id', () => {
-
-        // Given
-
-        let technologyAsObjectGiven = new Technology("javascript-api-express");
-
-        // When Then
-
-        expect(() => {
-            technologyAsObjectGiven.setId(undefined);
-        }).toThrow(new BadFormat());
-    });
-
-    test('set a technology null id', () => {
-
-        // Given
-
-        let technologyAsObjectGiven = new Technology("javascript-api-express");
-
-        // When Then
-
-        expect(() => {
-            technologyAsObjectGiven.setId(null);
-        }).toThrow(new BadFormat());
-    });
-
-    test('set a technology empty id', () => {
-
-        // Given
-
-        let technologyAsObjectGiven = new Technology("javascript-api-express");
-
-        // When Then
-
-        expect(() => {
-            technologyAsObjectGiven.setId(undefined);
-        }).toThrow(new BadFormat());
-    });
-});
+    expect(() => {
+      technologyAsObjectGiven.setId(undefined)
+    }).toThrow(new BadFormat())
+  })
+})

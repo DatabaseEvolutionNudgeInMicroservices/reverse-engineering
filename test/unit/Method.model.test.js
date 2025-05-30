@@ -1,208 +1,189 @@
 // Model
-const Method = require("../../model/Method.model");
+const Method = require('../../model/Method.model')
 // Error
-const BadFormat = require('../../error/BadFormat.error.js');
+const BadFormat = require('../../error/BadFormat.error.js')
 
 // Happy path test suite
 
 describe('Method', () => {
+  test('does to string', () => {
+    // Given
 
-    test('does to string', () => {
+    let methodAsObjectGiven = new Method('find')
 
-        // Given
+    // When
 
-        let methodAsObjectGiven = new Method("find");
+    let methodAsStringGiven = methodAsObjectGiven.toString()
 
-        // When
+    // Then
 
-        let methodAsStringGiven = methodAsObjectGiven.toString();
+    expect(methodAsStringGiven).toStrictEqual('{"name":"find"}')
+  })
 
-        // Then
+  test('revives as object', () => {
+    // Given
 
-        expect(methodAsStringGiven).toStrictEqual('{"name":"find"}');
-    });
+    let methodAsStringGiven = '{"name":"find"}'
+    let methodAsObjectGiven = JSON.parse(methodAsStringGiven)
 
-    test('revives as object', () => {
+    // When
 
-        // Given
+    let methodAsModelGiven = Method.revive(methodAsObjectGiven)
 
-        let methodAsStringGiven = '{"name":"find"}';
-        let methodAsObjectGiven = JSON.parse(methodAsStringGiven);
+    // Then
 
-        // When
+    let staticAnalysisCodeQLRequestAsModelExpected = new Method('find')
+    expect(methodAsModelGiven).toStrictEqual(staticAnalysisCodeQLRequestAsModelExpected)
+  })
 
-        let methodAsModelGiven = Method.revive(methodAsObjectGiven);
+  test('sets the method', () => {
+    // Given
+    let methodGiven = new Method('find')
 
-        // Then
+    // When
 
-        let staticAnalysisCodeQLRequestAsModelExpected = new Method("find");
-        expect(methodAsModelGiven).toStrictEqual(staticAnalysisCodeQLRequestAsModelExpected);
-    });
+    methodGiven.setName('findOne')
 
-    test('sets the method', () => {
+    // Then
 
-        // Given
-        let methodGiven = new Method("find");
-
-        // When
-
-        methodGiven.setName("findOne");
-
-        // Then
-
-        expect(methodGiven.getName()).toStrictEqual("findOne");
-    });
-});
-
+    expect(methodGiven.getName()).toStrictEqual('findOne')
+  })
+})
 
 // Failure cases test suite
 
 describe('Method tries to', () => {
+  test('revive an incorrect formatted object', () => {
+    // Given
 
+    let methodAsStringGiven = "{'name':'find'}"
 
-    test('revive an incorrect formatted object', () => {
+    // When Then
 
-        // Given
+    expect(() => {
+      Method.revive(methodAsStringGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        let methodAsStringGiven = '{\'name\':\'find\'}';
+  test('revive an incomplete formatted object', () => {
+    // Given
 
-        // When Then
+    let methodAsStringGiven = '{"name":"}'
 
-        expect(() => {
-            Method.revive(methodAsStringGiven);
-        }).toThrow(new BadFormat());
-    });
+    // When Then
 
-    test('revive an incomplete formatted object', () => {
+    expect(() => {
+      Method.revive(methodAsStringGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        // Given
+  test('revive an undefined object', () => {
+    // Given
 
-        let methodAsStringGiven = '{"name":"}';
+    let methodGiven = undefined
 
-        // When Then
+    // When Then
 
-        expect(() => {
-            Method.revive(methodAsStringGiven);
-        }).toThrow(new BadFormat());
-    });
+    expect(() => {
+      Method.revive(methodGiven)
+    }).toThrow(new BadFormat())
+  })
 
-    test('revive an undefined object', () => {
+  test('revive a null object', () => {
+    // Given
 
-        // Given
+    let methodGiven = null
 
-        let methodGiven = undefined;
+    // When Then
 
-        // When Then
+    expect(() => {
+      Method.revive(methodGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        expect(() => {
-            Method.revive(methodGiven);
-        }).toThrow(new BadFormat());
-    });
+  test('revive a method with null name', () => {
+    // Given
 
-    test('revive a null object', () => {
+    let methodAsStringGiven = '{"name":null}'
+    let methodAsObjectGiven = JSON.parse(methodAsStringGiven)
 
-        // Given
+    // When Then
 
-        let methodGiven = null;
+    expect(() => {
+      Method.revive(methodAsObjectGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        // When Then
+  test('revive a method with empty name', () => {
+    // Given
 
-        expect(() => {
-            Method.revive(methodGiven);
-        }).toThrow(new BadFormat());
-    });
+    let methodAsStringGiven = '{"name":""}'
+    let methodAsObjectGiven = JSON.parse(methodAsStringGiven)
 
-    test('revive a method with null name', () => {
+    // When Then
 
-        // Given
+    expect(() => {
+      Method.revive(methodAsObjectGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        let methodAsStringGiven = '{"name":null}';
-        let methodAsObjectGiven = JSON.parse(methodAsStringGiven);
+  test('create a method with undefined name', () => {
+    // Given When Then
 
-        // When Then
+    expect(() => {
+      new Method(undefined)
+    }).toThrow(new BadFormat())
+  })
 
-        expect(() => {
-            Method.revive(methodAsObjectGiven);
-        }).toThrow(new BadFormat());
-    });
+  test('create a method with null name', () => {
+    // Given When Then
 
-    test('revive a method with empty name', () => {
+    expect(() => {
+      new Method(null)
+    }).toThrow(new BadFormat())
+  })
 
-        // Given
+  test('create a method with empty name', () => {
+    // Given When Then
 
-        let methodAsStringGiven = '{"name":""}';
-        let methodAsObjectGiven = JSON.parse(methodAsStringGiven);
+    expect(() => {
+      new Method('')
+    }).toThrow(new BadFormat())
+  })
 
-        // When Then
+  test('set a method undefined name', () => {
+    // Given
 
-        expect(() => {
-            Method.revive(methodAsObjectGiven);
-        }).toThrow(new BadFormat());
-    });
+    let methodAsObjectGiven = new Method('find')
 
-    test('create a method with undefined name', () => {
+    // When Then
 
-        // Given When Then
+    expect(() => {
+      methodAsObjectGiven.setName(undefined)
+    }).toThrow(new BadFormat())
+  })
 
-        expect(() => {
-            new Method(undefined);
-        }).toThrow(new BadFormat());
-    });
+  test('set a method null name', () => {
+    // Given
 
-    test('create a method with null name', () => {
+    let methodAsObjectGiven = new Method('find')
 
-        // Given When Then
+    // When Then
 
-        expect(() => {
-            new Method(null);
-        }).toThrow(new BadFormat());
-    });
+    expect(() => {
+      methodAsObjectGiven.setName(null)
+    }).toThrow(new BadFormat())
+  })
 
-    test('create a method with empty name', () => {
+  test('set a method empty name', () => {
+    // Given
 
-        // Given When Then
+    let methodAsObjectGiven = new Method('find')
 
-        expect(() => {
-            new Method("");
-        }).toThrow(new BadFormat());
-    });
+    // When Then
 
-    test('set a method undefined name', () => {
-
-        // Given
-
-        let methodAsObjectGiven = new Method("find");
-
-        // When Then
-
-        expect(() => {
-            methodAsObjectGiven.setName(undefined);
-        }).toThrow(new BadFormat());
-    });
-
-    test('set a method null name', () => {
-
-        // Given
-
-        let methodAsObjectGiven = new Method("find");
-
-        // When Then
-
-        expect(() => {
-            methodAsObjectGiven.setName(null);
-        }).toThrow(new BadFormat());
-    });
-
-    test('set a method empty name', () => {
-
-        // Given
-
-        let methodAsObjectGiven = new Method("find");
-
-        // When Then
-
-        expect(() => {
-            methodAsObjectGiven.setName(undefined);
-        }).toThrow(new BadFormat());
-    });
-});
+    expect(() => {
+      methodAsObjectGiven.setName(undefined)
+    }).toThrow(new BadFormat())
+  })
+})

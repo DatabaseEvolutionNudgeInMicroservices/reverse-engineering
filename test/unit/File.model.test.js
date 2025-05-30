@@ -1,418 +1,444 @@
 // Model
-const File = require("../../model/File.model");
+const File = require('../../model/File.model')
 // Error
-const BadFormat = require('../../error/BadFormat.error.js');
+const BadFormat = require('../../error/BadFormat.error.js')
 
 // Happy path test suite
 
 describe('File', () => {
+  test('does to string', () => {
+    // Given
 
-    test('does to string', () => {
+    let fileAsObjectGiven = new File(
+      'https://www.github.com/user/project/blob/master/js/app/app.js',
+      10,
+      []
+    )
 
-        // Given
+    // When
 
-        let fileAsObjectGiven = new File("https://www.github.com/user/project/blob/master/js/app/app.js", 10, []);
+    let fileAsStringGiven = fileAsObjectGiven.toString()
 
-        // When
+    // Then
 
-        let fileAsStringGiven = fileAsObjectGiven.toString();
+    expect(fileAsStringGiven).toStrictEqual(
+      '{"location":"https://www.github.com/user/project/blob/master/js/app/app.js","linesOfCode":10,"codeFragments":[]}'
+    )
+  })
 
-        // Then
+  test('revives as object', () => {
+    // Given
 
-        expect(fileAsStringGiven).toStrictEqual('{"location":"https://www.github.com/user/project/blob/master/js/app/app.js","linesOfCode":10,"codeFragments":[]}');
-    });
+    let fileAsStringGiven =
+      '{"location":"https://www.github.com/user/project/blob/master/js/app/app.js","linesOfCode":10,"codeFragments":[]}'
+    let fileAsObjectGiven = JSON.parse(fileAsStringGiven)
 
-    test('revives as object', () => {
+    // When
 
-        // Given
+    let fileAsModelGiven = File.revive(fileAsObjectGiven)
 
-        let fileAsStringGiven = '{"location":"https://www.github.com/user/project/blob/master/js/app/app.js","linesOfCode":10,"codeFragments":[]}';
-        let fileAsObjectGiven = JSON.parse(fileAsStringGiven);
+    // Then
 
-        // When
+    let staticAnalysisCodeQLRequestAsModelExpected = new File(
+      'https://www.github.com/user/project/blob/master/js/app/app.js',
+      10,
+      []
+    )
+    expect(fileAsModelGiven).toStrictEqual(staticAnalysisCodeQLRequestAsModelExpected)
+  })
 
-        let fileAsModelGiven = File.revive(fileAsObjectGiven);
+  test('sets the file', () => {
+    // Given
+    let fileGiven = new File(
+      'https://www.github.com/user/project/blob/master/js/app/app.js',
+      10,
+      []
+    )
 
-        // Then
+    // When
 
-        let staticAnalysisCodeQLRequestAsModelExpected = new File("https://www.github.com/user/project/blob/master/js/app/app.js", 10, []);
-        expect(fileAsModelGiven).toStrictEqual(staticAnalysisCodeQLRequestAsModelExpected);
-    });
+    fileGiven.setLocation('https://www.github.com/user/project/blob/master/app.js', 100, [])
 
-    test('sets the file', () => {
+    // Then
 
-        // Given
-        let fileGiven = new File("https://www.github.com/user/project/blob/master/js/app/app.js", 10, []);
-
-        // When
-
-        fileGiven.setLocation("https://www.github.com/user/project/blob/master/app.js", 100, []);
-
-        // Then
-
-        expect(fileGiven.getLocation()).toStrictEqual("https://www.github.com/user/project/blob/master/app.js");
-    });
-});
+    expect(fileGiven.getLocation()).toStrictEqual(
+      'https://www.github.com/user/project/blob/master/app.js'
+    )
+  })
+})
 
 // Failure cases test suite
 
 describe('File tries to', () => {
+  test('revive an incorrectly formatted object', () => {
+    // Given
 
+    let fileAsStringGiven =
+      "{'location':'https://www.github.com/user/project/blob/master/js/app/app.js'}"
 
-    test('revive an incorrectly formatted object', () => {
+    // When Then
 
-        // Given
+    expect(() => {
+      File.revive(fileAsStringGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        let fileAsStringGiven = '{\'location\':\'https://www.github.com/user/project/blob/master/js/app/app.js\'}';
+  test('revive an incomplete formatted object', () => {
+    // Given
 
-        // When Then
+    let fileAsStringGiven =
+      '{"location":"https://www.github.com/user/project/blob/master/js/app/app.js"}'
 
-        expect(() => {
-            File.revive(fileAsStringGiven);
-        }).toThrow(new BadFormat());
-    });
+    // When Then
 
-    test('revive an incomplete formatted object', () => {
+    expect(() => {
+      File.revive(fileAsStringGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        // Given
+  test('revive an undefined object', () => {
+    // Given
 
-        let fileAsStringGiven = '{"location":"https://www.github.com/user/project/blob/master/js/app/app.js"}';
+    let fileGiven = undefined
 
-        // When Then
+    // When Then
 
-        expect(() => {
-            File.revive(fileAsStringGiven);
-        }).toThrow(new BadFormat());
-    });
+    expect(() => {
+      File.revive(fileGiven)
+    }).toThrow(new BadFormat())
+  })
 
-    test('revive an undefined object', () => {
+  test('revive a null object', () => {
+    // Given
 
-        // Given
+    let fileGiven = null
 
-        let fileGiven = undefined;
+    // When Then
 
-        // When Then
+    expect(() => {
+      File.revive(fileGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        expect(() => {
-            File.revive(fileGiven);
-        }).toThrow(new BadFormat());
-    });
+  test('revive a file with null location', () => {
+    // Given
 
-    test('revive a null object', () => {
+    let fileAsStringGiven = '{"location":null,"linesOfCode":10,"codeFragments":[]}'
+    let fileAsObjectGiven = JSON.parse(fileAsStringGiven)
 
-        // Given
+    // When Then
 
-        let fileGiven = null;
+    expect(() => {
+      File.revive(fileAsObjectGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        // When Then
+  test('revive a file with empty location', () => {
+    // Given
 
-        expect(() => {
-            File.revive(fileGiven);
-        }).toThrow(new BadFormat());
-    });
+    let fileAsStringGiven = '{"location":"","linesOfCode":"10","codeFragments":[]}'
+    let fileAsObjectGiven = JSON.parse(fileAsStringGiven)
 
-    test('revive a file with null location', () => {
+    // When Then
 
-        // Given
+    expect(() => {
+      File.revive(fileAsObjectGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        let fileAsStringGiven = '{"location":null,"linesOfCode":10,"codeFragments":[]}';
-        let fileAsObjectGiven = JSON.parse(fileAsStringGiven);
+  test('revive a file with empty null lines of code', () => {
+    // Given
 
-        // When Then
+    let fileAsStringGiven =
+      '{"location":"https://www.github.com/user/project/blob/master/js/app/app.js","linesOfCode":null,"codeFragments":[]}'
+    let fileAsObjectGiven = JSON.parse(fileAsStringGiven)
 
-        expect(() => {
-            File.revive(fileAsObjectGiven);
-        }).toThrow(new BadFormat());
-    });
+    // When Then
 
-    test('revive a file with empty location', () => {
+    expect(() => {
+      File.revive(fileAsObjectGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        // Given
+  test('revive a file with empty lines of code', () => {
+    // Given
 
-        let fileAsStringGiven = '{"location":"","linesOfCode":"10","codeFragments":[]}';
-        let fileAsObjectGiven = JSON.parse(fileAsStringGiven);
+    let fileAsStringGiven =
+      '{"location":"https://www.github.com/user/project/blob/master/js/app/app.js","linesOfCode":"","codeFragments":[]}'
+    let fileAsObjectGiven = JSON.parse(fileAsStringGiven)
 
-        // When Then
+    // When Then
 
-        expect(() => {
-            File.revive(fileAsObjectGiven);
-        }).toThrow(new BadFormat());
-    });
+    expect(() => {
+      File.revive(fileAsObjectGiven)
+    }).toThrow(new BadFormat())
+  })
 
-    test('revive a file with empty null lines of code', () => {
+  test('revive a file with negative lines of code', () => {
+    // Given
 
-        // Given
+    let fileAsStringGiven =
+      '{"location":"https://www.github.com/user/project/blob/master/js/app/app.js","linesOfCode":-1,"codeFragments":[]}'
+    let fileAsObjectGiven = JSON.parse(fileAsStringGiven)
 
-        let fileAsStringGiven = '{"location":"https://www.github.com/user/project/blob/master/js/app/app.js","linesOfCode":null,"codeFragments":[]}';
-        let fileAsObjectGiven = JSON.parse(fileAsStringGiven);
+    // When Then
 
-        // When Then
+    expect(() => {
+      File.revive(fileAsObjectGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        expect(() => {
-            File.revive(fileAsObjectGiven);
-        }).toThrow(new BadFormat());
-    });
+  test('revive a file with alphabetic lines of code', () => {
+    // Given
 
-    test('revive a file with empty lines of code', () => {
+    let fileAsStringGiven =
+      '{"location":"https://www.github.com/user/project/blob/master/js/app/app.js","linesOfCode":"two","codeFragments":[]}'
+    let fileAsObjectGiven = JSON.parse(fileAsStringGiven)
 
-        // Given
+    // When Then
 
-        let fileAsStringGiven = '{"location":"https://www.github.com/user/project/blob/master/js/app/app.js","linesOfCode":"","codeFragments":[]}';
-        let fileAsObjectGiven = JSON.parse(fileAsStringGiven);
+    expect(() => {
+      File.revive(fileAsObjectGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        // When Then
+  test('create a file with undefined location', () => {
+    // Given When Then
 
-        expect(() => {
-            File.revive(fileAsObjectGiven);
-        }).toThrow(new BadFormat());
-    });
+    expect(() => {
+      new File(undefined, 10, [])
+    }).toThrow(new BadFormat())
+  })
 
-    test('revive a file with negative lines of code', () => {
+  test('create a file with null location', () => {
+    // Given When Then
 
-        // Given
+    expect(() => {
+      new File(null, 10, [])
+    }).toThrow(new BadFormat())
+  })
 
-        let fileAsStringGiven = '{"location":"https://www.github.com/user/project/blob/master/js/app/app.js","linesOfCode":-1,"codeFragments":[]}';
-        let fileAsObjectGiven = JSON.parse(fileAsStringGiven);
+  test('create a file with empty location', () => {
+    // Given When Then
 
-        // When Then
+    expect(() => {
+      new File('', 10, [])
+    }).toThrow(new BadFormat())
+  })
 
-        expect(() => {
-            File.revive(fileAsObjectGiven);
-        }).toThrow(new BadFormat());
-    });
+  test('create a file with undefined lines of code', () => {
+    // Given When Then
 
-    test('revive a file with alphabetic lines of code', () => {
+    expect(() => {
+      new File('https://www.github.com/user/project/blob/master/js/app/app.js', undefined, [])
+    }).toThrow(new BadFormat())
+  })
 
-        // Given
+  test('create a file with null lines of code', () => {
+    // Given When Then
 
-        let fileAsStringGiven = '{"location":"https://www.github.com/user/project/blob/master/js/app/app.js","linesOfCode":"two","codeFragments":[]}';
-        let fileAsObjectGiven = JSON.parse(fileAsStringGiven);
+    expect(() => {
+      new File('https://www.github.com/user/project/blob/master/js/app/app.js', null, [])
+    }).toThrow(new BadFormat())
+  })
 
-        // When Then
+  test('create a file with empty lines of code', () => {
+    // Given When Then
 
-        expect(() => {
-            File.revive(fileAsObjectGiven);
-        }).toThrow(new BadFormat());
-    });
+    expect(() => {
+      new File('https://www.github.com/user/project/blob/master/js/app/app.js', '', [])
+    }).toThrow(new BadFormat())
+  })
 
-    test('create a file with undefined location', () => {
+  test('create a file with alphabetic lines of code', () => {
+    // Given When Then
 
-        // Given When Then
+    expect(() => {
+      new File('https://www.github.com/user/project/blob/master/js/app/app.js', 'two', [])
+    }).toThrow(new BadFormat())
+  })
 
-        expect(() => {
-            new File(undefined, 10, []);
-        }).toThrow(new BadFormat());
-    });
+  test('create a file with negative lines of code', () => {
+    // Given When Then
 
-    test('create a file with null location', () => {
+    expect(() => {
+      new File('https://www.github.com/user/project/blob/master/js/app/app.js', -1, [])
+    }).toThrow(new BadFormat())
+  })
 
-        // Given When Then
+  test('create a file with undefined code fragments', () => {
+    // Given When Then
 
-        expect(() => {
-            new File(null, 10, []);
-        }).toThrow(new BadFormat());
-    });
+    expect(() => {
+      new File('https://www.github.com/user/project/blob/master/js/app/app.js', 10, undefined)
+    }).toThrow(new BadFormat())
+  })
 
-    test('create a file with empty location', () => {
+  test('create a file with null code fragments', () => {
+    // Given When Then
 
-        // Given When Then
+    expect(() => {
+      new File('https://www.github.com/user/project/blob/master/js/app/app.js', 10, null)
+    }).toThrow(new BadFormat())
+  })
 
-        expect(() => {
-            new File("", 10, []);
-        }).toThrow(new BadFormat());
-    });
+  test('set a file undefined location', () => {
+    // Given
 
+    let fileAsObjectGiven = new File(
+      'https://www.github.com/user/project/blob/master/js/app/app.js',
+      10,
+      []
+    )
 
-    test('create a file with undefined lines of code', () => {
+    // When Then
 
-        // Given When Then
+    expect(() => {
+      fileAsObjectGiven.setLocation(undefined)
+    }).toThrow(new BadFormat())
+  })
 
-        expect(() => {
-            new File("https://www.github.com/user/project/blob/master/js/app/app.js", undefined, []);
-        }).toThrow(new BadFormat());
-    });
+  test('set a file null location', () => {
+    // Given
 
-    test('create a file with null lines of code', () => {
+    let fileAsObjectGiven = new File(
+      'https://www.github.com/user/project/blob/master/js/app/app.js',
+      10,
+      []
+    )
 
-        // Given When Then
+    // When Then
 
-        expect(() => {
-            new File("https://www.github.com/user/project/blob/master/js/app/app.js", null, []);
-        }).toThrow(new BadFormat());
-    });
+    expect(() => {
+      fileAsObjectGiven.setLocation(null)
+    }).toThrow(new BadFormat())
+  })
 
-    test('create a file with empty lines of code', () => {
+  test('set a file empty location', () => {
+    // Given
 
-        // Given When Then
+    let fileAsObjectGiven = new File(
+      'https://www.github.com/user/project/blob/master/js/app/app.js',
+      10,
+      []
+    )
 
-        expect(() => {
-            new File("https://www.github.com/user/project/blob/master/js/app/app.js", "", []);
-        }).toThrow(new BadFormat());
-    });
+    // When Then
 
-    test('create a file with alphabetic lines of code', () => {
+    expect(() => {
+      fileAsObjectGiven.setLocation(undefined)
+    }).toThrow(new BadFormat())
+  })
 
-        // Given When Then
+  test('set an undefined lines of code', () => {
+    // Given
 
-        expect(() => {
-            new File("https://www.github.com/user/project/blob/master/js/app/app.js", "two", []);
-        }).toThrow(new BadFormat());
-    });
+    let fileAsObjectGiven = new File(
+      'https://www.github.com/user/project/blob/master/js/app/app.js',
+      10,
+      []
+    )
 
-    test('create a file with negative lines of code', () => {
+    // When Then
 
-        // Given When Then
+    expect(() => {
+      fileAsObjectGiven.setLinesOfCode(undefined)
+    }).toThrow(new BadFormat())
+  })
 
-        expect(() => {
-            new File("https://www.github.com/user/project/blob/master/js/app/app.js", -1, []);
-        }).toThrow(new BadFormat());
-    });
+  test('set a null lines of code', () => {
+    // Given
 
-    test('create a file with undefined code fragments', () => {
+    let fileAsObjectGiven = new File(
+      'https://www.github.com/user/project/blob/master/js/app/app.js',
+      10,
+      []
+    )
 
-        // Given When Then
+    // When Then
 
-        expect(() => {
-            new File("https://www.github.com/user/project/blob/master/js/app/app.js", 10, undefined);
-        }).toThrow(new BadFormat());
-    });
+    expect(() => {
+      fileAsObjectGiven.setLinesOfCode(null)
+    }).toThrow(new BadFormat())
+  })
 
-    test('create a file with null code fragments', () => {
+  test('set a empty lines of code', () => {
+    // Given
 
-        // Given When Then
+    let fileAsObjectGiven = new File(
+      'https://www.github.com/user/project/blob/master/js/app/app.js',
+      10,
+      []
+    )
 
-        expect(() => {
-            new File("https://www.github.com/user/project/blob/master/js/app/app.js", 10, null);
-        }).toThrow(new BadFormat());
-    });
+    // When Then
 
-    test('set a file undefined location', () => {
+    expect(() => {
+      fileAsObjectGiven.setLinesOfCode('')
+    }).toThrow(new BadFormat())
+  })
 
-        // Given
+  test('set an alphabetic lines of code', () => {
+    // Given
 
-        let fileAsObjectGiven = new File("https://www.github.com/user/project/blob/master/js/app/app.js", 10, []);
+    let fileAsObjectGiven = new File(
+      'https://www.github.com/user/project/blob/master/js/app/app.js',
+      10,
+      []
+    )
 
-        // When Then
+    // When Then
 
-        expect(() => {
-            fileAsObjectGiven.setLocation(undefined);
-        }).toThrow(new BadFormat());
-    });
+    expect(() => {
+      fileAsObjectGiven.setLinesOfCode('two')
+    }).toThrow(new BadFormat())
+  })
 
-    test('set a file null location', () => {
+  test('set a negative lines of code', () => {
+    // Given
 
-        // Given
+    let fileAsObjectGiven = new File(
+      'https://www.github.com/user/project/blob/master/js/app/app.js',
+      10,
+      []
+    )
 
-        let fileAsObjectGiven = new File("https://www.github.com/user/project/blob/master/js/app/app.js", 10, []);
+    // When Then
 
-        // When Then
+    expect(() => {
+      fileAsObjectGiven.setLinesOfCode(-1)
+    }).toThrow(new BadFormat())
+  })
 
-        expect(() => {
-            fileAsObjectGiven.setLocation(null);
-        }).toThrow(new BadFormat());
-    });
+  test('set undefined code fragments', () => {
+    // Given
 
-    test('set a file empty location', () => {
+    let fileAsObjectGiven = new File(
+      'https://www.github.com/user/project/blob/master/js/app/app.js',
+      10,
+      []
+    )
 
-        // Given
+    // When Then
 
-        let fileAsObjectGiven = new File("https://www.github.com/user/project/blob/master/js/app/app.js", 10, []);
+    expect(() => {
+      fileAsObjectGiven.setCodeFragments(undefined)
+    }).toThrow(new BadFormat())
+  })
 
-        // When Then
+  test('set null code fragments', () => {
+    // Given
 
-        expect(() => {
-            fileAsObjectGiven.setLocation(undefined);
-        }).toThrow(new BadFormat());
-    });
+    let fileAsObjectGiven = new File(
+      'https://www.github.com/user/project/blob/master/js/app/app.js',
+      10,
+      []
+    )
 
-    test('set an undefined lines of code', () => {
+    // When Then
 
-        // Given
-
-        let fileAsObjectGiven = new File("https://www.github.com/user/project/blob/master/js/app/app.js", 10, []);
-
-        // When Then
-
-        expect(() => {
-            fileAsObjectGiven.setLinesOfCode(undefined);
-        }).toThrow(new BadFormat());
-    });
-
-    test('set a null lines of code', () => {
-
-        // Given
-
-        let fileAsObjectGiven = new File("https://www.github.com/user/project/blob/master/js/app/app.js", 10, []);
-
-        // When Then
-
-        expect(() => {
-            fileAsObjectGiven.setLinesOfCode(null);
-        }).toThrow(new BadFormat());
-    });
-
-    test('set a empty lines of code', () => {
-
-        // Given
-
-        let fileAsObjectGiven = new File("https://www.github.com/user/project/blob/master/js/app/app.js", 10, []);
-
-        // When Then
-
-        expect(() => {
-            fileAsObjectGiven.setLinesOfCode("");
-        }).toThrow(new BadFormat());
-    });
-
-    test('set an alphabetic lines of code', () => {
-
-        // Given
-
-        let fileAsObjectGiven = new File("https://www.github.com/user/project/blob/master/js/app/app.js", 10, []);
-
-        // When Then
-
-        expect(() => {
-            fileAsObjectGiven.setLinesOfCode("two");
-        }).toThrow(new BadFormat());
-    });
-
-    test('set a negative lines of code', () => {
-
-        // Given
-
-        let fileAsObjectGiven = new File("https://www.github.com/user/project/blob/master/js/app/app.js", 10, []);
-
-        // When Then
-
-        expect(() => {
-            fileAsObjectGiven.setLinesOfCode(-1);
-        }).toThrow(new BadFormat());
-    });
-
-    test('set undefined code fragments', () => {
-
-        // Given
-
-        let fileAsObjectGiven = new File("https://www.github.com/user/project/blob/master/js/app/app.js", 10, []);
-
-        // When Then
-
-        expect(() => {
-            fileAsObjectGiven.setCodeFragments(undefined);
-        }).toThrow(new BadFormat());
-    });
-
-    test('set null code fragments', () => {
-
-        // Given
-
-        let fileAsObjectGiven = new File("https://www.github.com/user/project/blob/master/js/app/app.js", 10, []);
-
-        // When Then
-
-        expect(() => {
-            fileAsObjectGiven.setCodeFragments(null);
-        }).toThrow(new BadFormat());
-    });
-});
+    expect(() => {
+      fileAsObjectGiven.setCodeFragments(null)
+    }).toThrow(new BadFormat())
+  })
+})

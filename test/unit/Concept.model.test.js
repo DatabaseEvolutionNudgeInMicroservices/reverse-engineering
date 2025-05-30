@@ -1,211 +1,192 @@
 // Model
 
-const Concept = require("../../model/Concept.model");
+const Concept = require('../../model/Concept.model')
 
 // Error
 
-const BadFormat = require('../../error/BadFormat.error.js');
+const BadFormat = require('../../error/BadFormat.error.js')
 
 // Happy path test suite
 
 describe('Concept', () => {
+  test('does to string', () => {
+    // Given
 
-    test('does to string', () => {
+    let conceptAsObjectGiven = new Concept('user')
 
-        // Given
+    // When
 
-        let conceptAsObjectGiven = new Concept("user");
+    let conceptAsStringGiven = conceptAsObjectGiven.toString()
 
-        // When
+    // Then
 
-        let conceptAsStringGiven = conceptAsObjectGiven.toString();
+    expect(conceptAsStringGiven).toStrictEqual('{"name":"user"}')
+  })
 
-        // Then
+  test('revives as object', () => {
+    // Given
 
-        expect(conceptAsStringGiven).toStrictEqual('{"name":"user"}');
-    });
+    let conceptAsStringGiven = '{"name":"user"}'
+    let conceptAsObjectGiven = JSON.parse(conceptAsStringGiven)
 
-    test('revives as object', () => {
+    // When
 
-        // Given
+    let conceptAsModelGiven = Concept.revive(conceptAsObjectGiven)
 
-        let conceptAsStringGiven = '{"name":"user"}';
-        let conceptAsObjectGiven = JSON.parse(conceptAsStringGiven);
+    // Then
 
-        // When
+    let staticAnalysisCodeQLRequestAsModelExpected = new Concept('user')
+    expect(conceptAsModelGiven).toStrictEqual(staticAnalysisCodeQLRequestAsModelExpected)
+  })
 
-        let conceptAsModelGiven = Concept.revive(conceptAsObjectGiven);
+  test('sets the concept', () => {
+    // Given
+    let conceptGiven = new Concept('users')
 
-        // Then
+    // When
 
-        let staticAnalysisCodeQLRequestAsModelExpected = new Concept("user");
-        expect(conceptAsModelGiven).toStrictEqual(staticAnalysisCodeQLRequestAsModelExpected);
-    });
+    conceptGiven.setName('user')
 
-    test('sets the concept', () => {
+    // Then
 
-        // Given
-        let conceptGiven = new Concept("users");
-
-        // When
-
-        conceptGiven.setName("user");
-
-        // Then
-
-        expect(conceptGiven.getName()).toStrictEqual("user");
-    });
-});
-
+    expect(conceptGiven.getName()).toStrictEqual('user')
+  })
+})
 
 // Failure cases test suite
 
 describe('Concept tries to', () => {
+  test('revive an incorrect formatted object', () => {
+    // Given
 
+    let conceptAsStringGiven = "{'name':'user'}"
 
-    test('revive an incorrect formatted object', () => {
+    // When Then
 
-        // Given
+    expect(() => {
+      Concept.revive(conceptAsStringGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        let conceptAsStringGiven = '{\'name\':\'user\'}';
+  test('revive an incomplete formatted object', () => {
+    // Given
 
-        // When Then
+    let conceptAsStringGiven = '{"name":"}'
 
-        expect(() => {
-            Concept.revive(conceptAsStringGiven);
-        }).toThrow(new BadFormat());
-    });
+    // When Then
 
-    test('revive an incomplete formatted object', () => {
+    expect(() => {
+      Concept.revive(conceptAsStringGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        // Given
+  test('revive an undefined object', () => {
+    // Given
 
-        let conceptAsStringGiven = '{"name":"}';
+    let conceptGiven = undefined
 
-        // When Then
+    // When Then
 
-        expect(() => {
-            Concept.revive(conceptAsStringGiven);
-        }).toThrow(new BadFormat());
-    });
+    expect(() => {
+      Concept.revive(conceptGiven)
+    }).toThrow(new BadFormat())
+  })
 
-    test('revive an undefined object', () => {
+  test('revive a null object', () => {
+    // Given
 
-        // Given
+    let conceptGiven = null
 
-        let conceptGiven = undefined;
+    // When Then
 
-        // When Then
+    expect(() => {
+      Concept.revive(conceptGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        expect(() => {
-            Concept.revive(conceptGiven);
-        }).toThrow(new BadFormat());
-    });
+  test('revive a concept with null name', () => {
+    // Given
 
-    test('revive a null object', () => {
+    let conceptAsStringGiven = '{"name":null}'
+    let conceptAsObjectGiven = JSON.parse(conceptAsStringGiven)
 
-        // Given
+    // When Then
 
-        let conceptGiven = null;
+    expect(() => {
+      Concept.revive(conceptAsObjectGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        // When Then
+  test('revive a concept with empty name', () => {
+    // Given
 
-        expect(() => {
-            Concept.revive(conceptGiven);
-        }).toThrow(new BadFormat());
-    });
+    let conceptAsStringGiven = '{"name":""}'
+    let conceptAsObjectGiven = JSON.parse(conceptAsStringGiven)
 
-    test('revive a concept with null name', () => {
+    // When Then
 
-        // Given
+    expect(() => {
+      Concept.revive(conceptAsObjectGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        let conceptAsStringGiven = '{"name":null}';
-        let conceptAsObjectGiven = JSON.parse(conceptAsStringGiven);
+  test('create a concept with undefined name', () => {
+    // Given When Then
 
-        // When Then
+    expect(() => {
+      new Concept(undefined)
+    }).toThrow(new BadFormat())
+  })
 
-        expect(() => {
-            Concept.revive(conceptAsObjectGiven);
-        }).toThrow(new BadFormat());
-    });
+  test('create a concept with null name', () => {
+    // Given When Then
 
-    test('revive a concept with empty name', () => {
+    expect(() => {
+      new Concept(null)
+    }).toThrow(new BadFormat())
+  })
 
-        // Given
+  test('create a concept with empty name', () => {
+    // Given When Then
 
-        let conceptAsStringGiven = '{"name":""}';
-        let conceptAsObjectGiven = JSON.parse(conceptAsStringGiven);
+    expect(() => {
+      new Concept('')
+    }).toThrow(new BadFormat())
+  })
 
-        // When Then
+  test('set a concept undefined name', () => {
+    // Given
 
-        expect(() => {
-            Concept.revive(conceptAsObjectGiven);
-        }).toThrow(new BadFormat());
-    });
+    let conceptAsObjectGiven = new Concept('user')
 
-    test('create a concept with undefined name', () => {
+    // When Then
 
-        // Given When Then
+    expect(() => {
+      conceptAsObjectGiven.setName(undefined)
+    }).toThrow(new BadFormat())
+  })
 
-        expect(() => {
-            new Concept(undefined);
-        }).toThrow(new BadFormat());
-    });
+  test('set a concept null name', () => {
+    // Given
 
-    test('create a concept with null name', () => {
+    let conceptAsObjectGiven = new Concept('user')
 
-        // Given When Then
+    // When Then
 
-        expect(() => {
-            new Concept(null);
-        }).toThrow(new BadFormat());
-    });
+    expect(() => {
+      conceptAsObjectGiven.setName(null)
+    }).toThrow(new BadFormat())
+  })
 
-    test('create a concept with empty name', () => {
+  test('set a concept empty name', () => {
+    // Given
 
-        // Given When Then
+    let conceptAsObjectGiven = new Concept('user')
 
-        expect(() => {
-            new Concept("");
-        }).toThrow(new BadFormat());
-    });
+    // When Then
 
-    test('set a concept undefined name', () => {
-
-        // Given
-
-        let conceptAsObjectGiven = new Concept("user");
-
-        // When Then
-
-        expect(() => {
-            conceptAsObjectGiven.setName(undefined);
-        }).toThrow(new BadFormat());
-    });
-
-    test('set a concept null name', () => {
-
-        // Given
-
-        let conceptAsObjectGiven = new Concept("user");
-
-        // When Then
-
-        expect(() => {
-            conceptAsObjectGiven.setName(null);
-        }).toThrow(new BadFormat());
-    });
-
-    test('set a concept empty name', () => {
-
-        // Given
-
-        let conceptAsObjectGiven = new Concept("user");
-
-        // When Then
-
-        expect(() => {
-            conceptAsObjectGiven.setName(undefined);
-        }).toThrow(new BadFormat());
-    });
-});
+    expect(() => {
+      conceptAsObjectGiven.setName(undefined)
+    }).toThrow(new BadFormat())
+  })
+})

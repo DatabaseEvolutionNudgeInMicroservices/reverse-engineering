@@ -1,256 +1,272 @@
 // Model
-const Directory = require("../../model/Directory.model");
+const Directory = require('../../model/Directory.model')
 // Error
-const BadFormat = require('../../error/BadFormat.error.js');
+const BadFormat = require('../../error/BadFormat.error.js')
 
 // Happy path test suite
 
 describe('Directory', () => {
+  test('does to string', () => {
+    // Given
 
-    test('does to string', () => {
+    let directoryAsObjectGiven = new Directory(
+      'https://www.github.com/user/project/blob/master/app/',
+      [],
+      []
+    )
 
-        // Given
+    // When
 
-        let directoryAsObjectGiven = new Directory("https://www.github.com/user/project/blob/master/app/", [], []);
+    let directoryAsStringGiven = directoryAsObjectGiven.toString()
 
-        // When
+    // Then
 
-        let directoryAsStringGiven = directoryAsObjectGiven.toString();
+    expect(directoryAsStringGiven).toStrictEqual(
+      '{"location":"https://www.github.com/user/project/blob/master/app/","directories":[],"files":[]}'
+    )
+  })
 
-        // Then
+  test('revives as object', () => {
+    // Given
 
-        expect(directoryAsStringGiven).toStrictEqual('{"location":"https://www.github.com/user/project/blob/master/app/","directories":[],"files":[]}');
-    });
+    let directoryAsStringGiven =
+      '{"location":"https://www.github.com/user/project/blob/master/app/","directories":[],"files":[]}'
+    let directoryAsObjectGiven = JSON.parse(directoryAsStringGiven)
 
-    test('revives as object', () => {
+    // When
 
-        // Given
+    let directoryAsModelGiven = Directory.revive(directoryAsObjectGiven)
 
-        let directoryAsStringGiven = '{"location":"https://www.github.com/user/project/blob/master/app/","directories":[],"files":[]}';
-        let directoryAsObjectGiven = JSON.parse(directoryAsStringGiven);
+    // Then
 
-        // When
+    let staticAnalysisCodeQLRequestAsModelExpected = new Directory(
+      'https://www.github.com/user/project/blob/master/app/',
+      [],
+      []
+    )
+    expect(directoryAsModelGiven).toStrictEqual(staticAnalysisCodeQLRequestAsModelExpected)
+  })
 
-        let directoryAsModelGiven = Directory.revive(directoryAsObjectGiven);
+  test('sets the directory', () => {
+    // Given
+    let directoryGiven = new Directory(
+      'https://www.github.com/user/project/blob/master/app/',
+      [],
+      []
+    )
 
-        // Then
+    // When
 
-        let staticAnalysisCodeQLRequestAsModelExpected = new Directory("https://www.github.com/user/project/blob/master/app/", [], []);
-        expect(directoryAsModelGiven).toStrictEqual(staticAnalysisCodeQLRequestAsModelExpected);
-    });
+    directoryGiven.setLocation('https://www.github.com/user/project/blob/master/app/js/')
+    directoryGiven.setDirectories([])
+    directoryGiven.setFiles([])
 
-    test('sets the directory', () => {
+    // Then
 
-        // Given
-        let directoryGiven = new Directory("https://www.github.com/user/project/blob/master/app/", [], []);
-
-        // When
-
-        directoryGiven.setLocation("https://www.github.com/user/project/blob/master/app/js/");
-        directoryGiven.setDirectories([]);
-        directoryGiven.setFiles([]);
-
-        // Then
-
-        expect(directoryGiven.getLocation()).toStrictEqual("https://www.github.com/user/project/blob/master/app/js/");
-        expect(directoryGiven.getFiles()).toStrictEqual([]);
-        expect(directoryGiven.getDirectories()).toStrictEqual([]);
-    });
-});
-
+    expect(directoryGiven.getLocation()).toStrictEqual(
+      'https://www.github.com/user/project/blob/master/app/js/'
+    )
+    expect(directoryGiven.getFiles()).toStrictEqual([])
+    expect(directoryGiven.getDirectories()).toStrictEqual([])
+  })
+})
 
 // Failure cases test suite
 
 describe('Directory tries to', () => {
+  test('revive an incorrect formatted object', () => {
+    // Given
 
+    let directoryAsStringGiven =
+      "{'location':'https://www.github.com/user/project/blob/master/app.js#L0C0L1C1\"'}"
 
-    test('revive an incorrect formatted object', () => {
+    // When Then
 
-        // Given
+    expect(() => {
+      Directory.revive(directoryAsStringGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        let directoryAsStringGiven = '{\'location\':\'https://www.github.com/user/project/blob/master/app.js#L0C0L1C1"\'}';
+  test('revive an incomplete object', () => {
+    // Given
 
-        // When Then
+    let directoryAsStringGiven =
+      '{"location":"https://www.github.com/user/project/blob/master/app/"}'
 
-        expect(() => {
-            Directory.revive(directoryAsStringGiven);
-        }).toThrow(new BadFormat());
-    });
+    // When Then
 
-    test('revive an incomplete object', () => {
+    expect(() => {
+      Directory.revive(directoryAsStringGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        // Given
+  test('revive an undefined object', () => {
+    // Given
 
-        let directoryAsStringGiven = '{"location":"https://www.github.com/user/project/blob/master/app/"}';
+    let directoryGiven = undefined
 
-        // When Then
+    // When Then
 
-        expect(() => {
-            Directory.revive(directoryAsStringGiven);
-        }).toThrow(new BadFormat());
-    });
+    expect(() => {
+      Directory.revive(directoryGiven)
+    }).toThrow(new BadFormat())
+  })
 
-    test('revive an undefined object', () => {
+  test('revive a null object', () => {
+    // Given
 
-        // Given
+    let directoryGiven = null
 
-        let directoryGiven = undefined;
+    // When Then
 
-        // When Then
+    expect(() => {
+      Directory.revive(directoryGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        expect(() => {
-            Directory.revive(directoryGiven);
-        }).toThrow(new BadFormat());
-    });
+  test('revive a directory with null location', () => {
+    // Given
 
-    test('revive a null object', () => {
+    let directoryAsStringGiven = '{"location":null,"directories":[],"files":[]}'
+    let directoryAsObjectGiven = JSON.parse(directoryAsStringGiven)
 
-        // Given
+    // When Then
 
-        let directoryGiven = null;
+    expect(() => {
+      Directory.revive(directoryAsObjectGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        // When Then
+  test('revive a directory with empty location', () => {
+    // Given
 
-        expect(() => {
-            Directory.revive(directoryGiven);
-        }).toThrow(new BadFormat());
-    });
+    let directoryAsStringGiven = '{"location":"","directories":[],"files":[]}'
+    let directoryAsObjectGiven = JSON.parse(directoryAsStringGiven)
 
-    test('revive a directory with null location', () => {
+    // When Then
 
-        // Given
+    expect(() => {
+      Directory.revive(directoryAsObjectGiven)
+    }).toThrow(new BadFormat())
+  })
 
-        let directoryAsStringGiven = '{"location":null,"directories":[],"files":[]}';
-        let directoryAsObjectGiven = JSON.parse(directoryAsStringGiven);
+  test('create a directory with undefined location', () => {
+    // Given When Then
 
-        // When Then
+    expect(() => {
+      new Directory(undefined, [])
+    }).toThrow(new BadFormat())
+  })
 
-        expect(() => {
-            Directory.revive(directoryAsObjectGiven);
-        }).toThrow(new BadFormat());
-    });
+  test('create a directory with null location', () => {
+    // Given When Then
 
-    test('revive a directory with empty location', () => {
+    expect(() => {
+      new Directory(null, [])
+    }).toThrow(new BadFormat())
+  })
 
-        // Given
+  test('create a directory with empty location', () => {
+    // Given When Then
 
-        let directoryAsStringGiven = '{"location":"","directories":[],"files":[]}';
-        let directoryAsObjectGiven = JSON.parse(directoryAsStringGiven);
+    expect(() => {
+      new Directory('', [])
+    }).toThrow(new BadFormat())
+  })
 
-        // When Then
-
-        expect(() => {
-            Directory.revive(directoryAsObjectGiven);
-        }).toThrow(new BadFormat());
-    });
-
-    test('create a directory with undefined location', () => {
-
-        // Given When Then
-
-        expect(() => {
-            new Directory(undefined, []);
-        }).toThrow(new BadFormat());
-    });
-
-    test('create a directory with null location', () => {
-
-        // Given When Then
-
-        expect(() => {
-            new Directory(null, []);
-        }).toThrow(new BadFormat());
-    });
-
-    test('create a directory with empty location', () => {
-
-        // Given When Then
-
-        expect(() => {
-            new Directory("", []);
-        }).toThrow(new BadFormat());
-    });
-
-    test('create a directory with undefined files', () => {
-
-        // Given When Then
-
-        expect(() => {
-            new Directory("https://www.github.com/user/project/blob/master/app/", undefined);
-        }).toThrow(new BadFormat());
-    });
-
-    test('create a directory with null files', () => {
-
-        // Given When Then
-
-        expect(() => {
-            new Directory("https://www.github.com/user/project/blob/master/app/", null);
-        }).toThrow(new BadFormat());
-    });
-
-    test('set a directory undefined location', () => {
-
-        // Given
-
-        let directoryAsObjectGiven = new Directory("https://www.github.com/user/project/blob/master/app/", [], []);
-
-        // When Then
-
-        expect(() => {
-            directoryAsObjectGiven.setLocation(undefined);
-        }).toThrow(new BadFormat());
-    });
-
-    test('set a directory null location', () => {
-
-        // Given
-
-        let directoryAsObjectGiven = new Directory("https://www.github.com/user/project/blob/master/app/", [], []);
-
-        // When Then
-
-        expect(() => {
-            directoryAsObjectGiven.setLocation(null);
-        }).toThrow(new BadFormat());
-    });
-
-    test('set a directory empty location', () => {
-
-        // Given
-
-        let directoryAsObjectGiven = new Directory("https://www.github.com/user/project/blob/master/app/", [], []);
-
-        // When Then
-
-        expect(() => {
-            directoryAsObjectGiven.setLocation(undefined);
-        }).toThrow(new BadFormat());
-    });
-
-    test('set a directory undefined files', () => {
-
-        // Given
-
-        let directoryAsObjectGiven = new Directory("https://www.github.com/user/project/blob/master/app/", [], []);
-
-        // When Then
-
-        expect(() => {
-            directoryAsObjectGiven.setFiles(undefined);
-        }).toThrow(new BadFormat());
-    });
-
-    test('set a directory null files', () => {
-
-        // Given
-
-        let directoryAsObjectGiven = new Directory("https://www.github.com/user/project/blob/master/app/", [], []);
-
-        // When Then
-
-        expect(() => {
-            directoryAsObjectGiven.setFiles(null);
-        }).toThrow(new BadFormat());
-    });
-});
+  test('create a directory with undefined files', () => {
+    // Given When Then
+
+    expect(() => {
+      new Directory('https://www.github.com/user/project/blob/master/app/', undefined)
+    }).toThrow(new BadFormat())
+  })
+
+  test('create a directory with null files', () => {
+    // Given When Then
+
+    expect(() => {
+      new Directory('https://www.github.com/user/project/blob/master/app/', null)
+    }).toThrow(new BadFormat())
+  })
+
+  test('set a directory undefined location', () => {
+    // Given
+
+    let directoryAsObjectGiven = new Directory(
+      'https://www.github.com/user/project/blob/master/app/',
+      [],
+      []
+    )
+
+    // When Then
+
+    expect(() => {
+      directoryAsObjectGiven.setLocation(undefined)
+    }).toThrow(new BadFormat())
+  })
+
+  test('set a directory null location', () => {
+    // Given
+
+    let directoryAsObjectGiven = new Directory(
+      'https://www.github.com/user/project/blob/master/app/',
+      [],
+      []
+    )
+
+    // When Then
+
+    expect(() => {
+      directoryAsObjectGiven.setLocation(null)
+    }).toThrow(new BadFormat())
+  })
+
+  test('set a directory empty location', () => {
+    // Given
+
+    let directoryAsObjectGiven = new Directory(
+      'https://www.github.com/user/project/blob/master/app/',
+      [],
+      []
+    )
+
+    // When Then
+
+    expect(() => {
+      directoryAsObjectGiven.setLocation(undefined)
+    }).toThrow(new BadFormat())
+  })
+
+  test('set a directory undefined files', () => {
+    // Given
+
+    let directoryAsObjectGiven = new Directory(
+      'https://www.github.com/user/project/blob/master/app/',
+      [],
+      []
+    )
+
+    // When Then
+
+    expect(() => {
+      directoryAsObjectGiven.setFiles(undefined)
+    }).toThrow(new BadFormat())
+  })
+
+  test('set a directory null files', () => {
+    // Given
+
+    let directoryAsObjectGiven = new Directory(
+      'https://www.github.com/user/project/blob/master/app/',
+      [],
+      []
+    )
+
+    // When Then
+
+    expect(() => {
+      directoryAsObjectGiven.setFiles(null)
+    }).toThrow(new BadFormat())
+  })
+})

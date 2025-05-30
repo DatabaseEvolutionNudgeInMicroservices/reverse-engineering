@@ -1,298 +1,234 @@
 {
-	"info": {
-		"_postman_id": "b4f8aebd-5739-4ab1-a2e3-c193b4dcb909",
-		"name": "DENIM Reverse Engineering Tests",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "30513630"
-	},
-	"item": [
-		{
-			"name": ":3000 /static/language/javascript/repository/zip TEMP",
-			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {}
-			},
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "file",
-							"type": "file",
-							"src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/unit/asset/example.zip"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:3000/static/language/javascript/repository/zip",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"static",
-						"language",
-						"javascript",
-						"repository",
-						"zip"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": ":3000 /static/language/javascript/repository/zip 200 repository",
-			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {}
-			},
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "file",
-							"type": "file",
-							"src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/unit/asset/example.zip"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:3000/static/language/javascript/repository/zip",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"static",
-						"language",
-						"javascript",
-						"repository",
-						"zip"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": ":3000 /static/language/javascript/repository/zip 400 repository empty",
-			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {}
-			},
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "file",
-							"type": "file",
-							"src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/unit/asset/empty.zip"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:3000/static/language/javascript/repository/zip",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"static",
-						"language",
-						"javascript",
-						"repository",
-						"zip"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": ":3000 /static/language/javascript/repository/zip 400 repository not existent",
-			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {}
-			},
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "file",
-							"type": "file",
-							"src": []
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:3000/static/language/javascript/repository/zip",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "3000",
-					"path": [
-						"static",
-						"language",
-						"javascript",
-						"repository",
-						"zip"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": ":8080 /static/language/javascript/repository/zip TEMP",
-			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {}
-			},
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "file",
-							"type": "file",
-							"src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/unit/asset/example.zip"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:8080/static/language/javascript/repository/zip",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"static",
-						"language",
-						"javascript",
-						"repository",
-						"zip"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": ":8080 /static/language/javascript/repository/zip 200 repository",
-			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {}
-			},
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "file",
-							"type": "file",
-							"src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/unit/asset/example.zip"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:8080/static/language/javascript/repository/zip",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"static",
-						"language",
-						"javascript",
-						"repository",
-						"zip"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": ":8080 /static/language/javascript/repository/zip 400 repository empty",
-			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {}
-			},
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "file",
-							"type": "file",
-							"src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/unit/asset/empty.zip"
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:8080/static/language/javascript/repository/zip",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"static",
-						"language",
-						"javascript",
-						"repository",
-						"zip"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": ":8080 /static/language/javascript/repository/zip 400 repository not existent",
-			"protocolProfileBehavior": {
-				"disabledSystemHeaders": {}
-			},
-			"request": {
-				"method": "POST",
-				"header": [],
-				"body": {
-					"mode": "formdata",
-					"formdata": [
-						{
-							"key": "file",
-							"type": "file",
-							"src": []
-						}
-					]
-				},
-				"url": {
-					"raw": "http://localhost:8080/static/language/javascript/repository/zip",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"static",
-						"language",
-						"javascript",
-						"repository",
-						"zip"
-					]
-				}
-			},
-			"response": []
-		}
-	]
+  "info": {
+    "_postman_id": "b4f8aebd-5739-4ab1-a2e3-c193b4dcb909",
+    "name": "DENIM Reverse Engineering Tests",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "30513630"
+  },
+  "item": [
+    {
+      "name": ":3000 /static/language/javascript/repository/zip TEMP",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {}
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/example.zip"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:3000/static/language/javascript/repository/zip",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["static", "language", "javascript", "repository", "zip"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": ":3000 /static/language/javascript/repository/zip 200 repository",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {}
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/example.zip"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:3000/static/language/javascript/repository/zip",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["static", "language", "javascript", "repository", "zip"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": ":3000 /static/language/javascript/repository/zip 400 repository empty",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {}
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/empty.zip"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:3000/static/language/javascript/repository/zip",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["static", "language", "javascript", "repository", "zip"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": ":3000 /static/language/javascript/repository/zip 400 repository not existent",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {}
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": []
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:3000/static/language/javascript/repository/zip",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "3000",
+          "path": ["static", "language", "javascript", "repository", "zip"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": ":8080 /static/language/javascript/repository/zip TEMP",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {}
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/example.zip"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8080/static/language/javascript/repository/zip",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["static", "language", "javascript", "repository", "zip"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": ":8080 /static/language/javascript/repository/zip 200 repository",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {}
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/example.zip"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8080/static/language/javascript/repository/zip",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["static", "language", "javascript", "repository", "zip"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": ":8080 /static/language/javascript/repository/zip 400 repository empty",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {}
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/empty.zip"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8080/static/language/javascript/repository/zip",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["static", "language", "javascript", "repository", "zip"]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": ":8080 /static/language/javascript/repository/zip 400 repository not existent",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {}
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": []
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8080/static/language/javascript/repository/zip",
+          "protocol": "http",
+          "host": ["localhost"],
+          "port": "8080",
+          "path": ["static", "language", "javascript", "repository", "zip"]
+        }
+      },
+      "response": []
+    }
+  ]
 }

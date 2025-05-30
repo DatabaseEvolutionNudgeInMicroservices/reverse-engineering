@@ -16,77 +16,77 @@ variables:
 # Application building
 
 building:
-   stage: build
-   only:
-     - master # Restricts the building to the master branch.
-     - develop # Restricts the building to the develop branch.
-   script:
-     - echo "--Building--"
+  stage: build
+  only:
+    - master # Restricts the building to the master branch.
+    - develop # Restricts the building to the develop branch.
+  script:
+    - echo "--Building--"
 
-     # npm
+    # npm
 
-     - npm install # Installs the dependencies.
+    - npm install # Installs the dependencies.
 
-     # Swagger
+    # Swagger
 
-     - npm run swagger # Generates the application documentation (Swagger).
+    - npm run swagger # Generates the application documentation (Swagger).
 
-     # CodeQL: Directories
+    # CodeQL: Directories
 
-     - New-Item -Name "lib" -ItemType "directory" # Creates the lib directory.
-     - cd lib
-     - New-Item -Name "codeql-cli" -ItemType "directory" # Creates the codeql-cli directory.
-     - New-Item -Name "codeql-lib" -ItemType "directory" # Creates the codeql-lib directory.
-     - cd ..
+    - New-Item -Name "lib" -ItemType "directory" # Creates the lib directory.
+    - cd lib
+    - New-Item -Name "codeql-cli" -ItemType "directory" # Creates the codeql-cli directory.
+    - New-Item -Name "codeql-lib" -ItemType "directory" # Creates the codeql-lib directory.
+    - cd ..
 
-     # CodeQL: CLI
+    # CodeQL: CLI
 
-     - git clone git@gitlab.unamur.be:denim/codeql-cli-2.13.0.git lib/codeql-cli # Downloads the CodeQL CLI.
-     - '& ${env:ProgramFiles}\7-Zip\7z.exe x -olib/codeql-cli lib/codeql-cli/codeql-cli.zip' # Unzips the CodeQL CLI.
-     - Remove-Item -Path lib/codeql-cli/codeql-cli.zip
-     #- Move-Item -Path ${env:ProgramFiles}/codeql/codeql-cli -Destination lib/codeql-cli # CodeQL CLI moving to right folder.
+    - git clone git@gitlab.unamur.be:denim/codeql-cli-2.13.0.git lib/codeql-cli # Downloads the CodeQL CLI.
+    - '& ${env:ProgramFiles}\7-Zip\7z.exe x -olib/codeql-cli lib/codeql-cli/codeql-cli.zip' # Unzips the CodeQL CLI.
+    - Remove-Item -Path lib/codeql-cli/codeql-cli.zip
+    #- Move-Item -Path ${env:ProgramFiles}/codeql/codeql-cli -Destination lib/codeql-cli # CodeQL CLI moving to right folder.
 
-     # CodeQL: libraries
+    # CodeQL: libraries
 
-     - git clone git@gitlab.unamur.be:denim/codeql-lib-2.13.0.git lib/codeql-lib # Downloads the CodeQL CLI.
-     - '& ${env:ProgramFiles}\7-Zip\7z.exe x -olib/codeql-lib lib/codeql-lib/codeql-lib.zip' # Unzips the CodeQL CLI.
-     - Remove-Item -Path lib/codeql-lib/codeql-lib.zip
-     #- Move-Item -Path ${env:ProgramFiles}/codeql/codeql-lib -Destination lib/codeql-lib # CodeQL CLI moving to right folder.
+    - git clone git@gitlab.unamur.be:denim/codeql-lib-2.13.0.git lib/codeql-lib # Downloads the CodeQL CLI.
+    - '& ${env:ProgramFiles}\7-Zip\7z.exe x -olib/codeql-lib lib/codeql-lib/codeql-lib.zip' # Unzips the CodeQL CLI.
+    - Remove-Item -Path lib/codeql-lib/codeql-lib.zip
+    #- Move-Item -Path ${env:ProgramFiles}/codeql/codeql-lib -Destination lib/codeql-lib # CodeQL CLI moving to right folder.
 
-     # Environment variables
+    # Environment variables
 
-     - New-Item -Name ".env" -ItemType "file" # Creates the environment variables file.
-     - Add-Content .env 'FILE_SYSTEM_SEPARATOR="\"' # Adds the file system separator environment variable for Windows.
-     - New-Item -Name "TEMP" -ItemType "directory" # Creates the temporary working directory for analysis files.
+    - New-Item -Name ".env" -ItemType "file" # Creates the environment variables file.
+    - Add-Content .env 'FILE_SYSTEM_SEPARATOR="\"' # Adds the file system separator environment variable for Windows.
+    - New-Item -Name "TEMP" -ItemType "directory" # Creates the temporary working directory for analysis files.
 
 # Unit testing
 
 unit-testing:
-   stage: test
-   only:
-     - master # Restricts the unit testing to the master branch.
-     - develop # Restricts the unit testing to the develop branch.
-   variables:
-     GIT_STRATEGY: none # Skips the 'git fetch'.
-   script:
-     - echo "--Unit testing--"
-     - npm run test_unit # Starts the unit testing.
+  stage: test
+  only:
+    - master # Restricts the unit testing to the master branch.
+    - develop # Restricts the unit testing to the develop branch.
+  variables:
+    GIT_STRATEGY: none # Skips the 'git fetch'.
+  script:
+    - echo "--Unit testing--"
+    - npm run test_unit # Starts the unit testing.
 
 # Integration testing
 
 integration-testing:
-   stage: test
-   only:
-     - master # Restricts the integration testing to the master branch.
-     - develop # Restricts the unit testing to the develop branch.
-   variables:
-     GIT_STRATEGY: none # Skips the 'git fetch'.
-   needs: [ unit-testing ]
-   script:
-     - echo "--Integration testing--"
-     - Set-Content .env 'FILE_SYSTEM_SEPARATOR="/"' # Sets the file system separator environment variable for Linux.
-     - docker-compose up -d # Sets up and starts the docker container via docker-compose started in background.
-     - npm run test_integration # Launches the integration testing.
+  stage: test
+  only:
+    - master # Restricts the integration testing to the master branch.
+    - develop # Restricts the unit testing to the develop branch.
+  variables:
+    GIT_STRATEGY: none # Skips the 'git fetch'.
+  needs: [unit-testing]
+  script:
+    - echo "--Integration testing--"
+    - Set-Content .env 'FILE_SYSTEM_SEPARATOR="/"' # Sets the file system separator environment variable for Linux.
+    - docker-compose up -d # Sets up and starts the docker container via docker-compose started in background.
+    - npm run test_integration # Launches the integration testing.
 
 # Application deployment
 

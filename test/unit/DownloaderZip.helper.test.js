@@ -1,115 +1,135 @@
 // Helpers
 
-const DownloaderZip = require('../../helper/DownloaderZip.helper.js');
+const DownloaderZip = require('../../helper/DownloaderZip.helper.js')
 
 // Libraries
 
-const fs = require('fs');
+const fs = require('fs')
 
 // Constants
 
-const {FILE_SYSTEM_SEPARATOR} = require('../../helper/Constant.helper');
+const { FILE_SYSTEM_SEPARATOR, TEMP_FOLDER_NAME } = require('../../helper/Constant.helper')
 
 // Errors
 
-const DownloadFail = require('../../error/DownloadFail.error.js');
-const BadFormat = require('../../error/BadFormat.error.js');
+const DownloadFail = require('../../error/DownloadFail.error.js')
+const BadFormat = require('../../error/BadFormat.error.js')
 
 // Setup
 
-const zipFileList = ['example'];
-const downloadedRepositoryList = ['example'];
+const tempPath = `${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}`
 
 // Happy path test suite
 
 describe('Zip downloader', () => {
+  it('downloads a zip file', async () => {
+    // Given
 
-    afterEach(async () => {
-        // Cleaning.
-        for (let i = 0; i < downloadedRepositoryList.length; i++) {
-            if (fs.existsSync(process.cwd() + FILE_SYSTEM_SEPARATOR + 'TEMP' + FILE_SYSTEM_SEPARATOR +
-                downloadedRepositoryList[i])) {
-                await fs.rmdirSync(process.cwd() + FILE_SYSTEM_SEPARATOR + 'TEMP' + FILE_SYSTEM_SEPARATOR +
-                    downloadedRepositoryList[i], {recursive: true});
-            }
-        }
-    });
+    let downloaderZip = new DownloaderZip()
 
-    it('downloads a zip file', async () => {
+    // When Then
 
-        // Given
+    await downloaderZip
+      .downloadByElement(
+        process.cwd() +
+          FILE_SYSTEM_SEPARATOR +
+          'test' +
+          FILE_SYSTEM_SEPARATOR +
+          'unit' +
+          FILE_SYSTEM_SEPARATOR +
+          'asset' +
+          FILE_SYSTEM_SEPARATOR +
+          'example' +
+          '.zip',
+        'DownloaderZip_Directory1'
+      )
+      .then((result) => {
+        const repositoryDownloaded = fs.existsSync(
+          tempPath +
+            FILE_SYSTEM_SEPARATOR +
+            'DownloaderZip_Directory1' +
+            FILE_SYSTEM_SEPARATOR +
+            'example'
+        )
+        const returnedDownloadedRepositoryEqualsToGivenRepository =
+          JSON.stringify(result) === JSON.stringify(['example'])
+        expect(repositoryDownloaded && returnedDownloadedRepositoryEqualsToGivenRepository).toBe(
+          true
+        )
 
-        let downloaderZip = new DownloaderZip();
+        // Free
 
-        // When Then
-
-        await downloaderZip.downloadByElement(process.cwd() + FILE_SYSTEM_SEPARATOR + 'test' + FILE_SYSTEM_SEPARATOR + 'unit' + FILE_SYSTEM_SEPARATOR + 'asset' + FILE_SYSTEM_SEPARATOR + zipFileList[0] + '.zip').then((result) => {
-            const repositoryDownloaded = fs.existsSync(process.cwd() + FILE_SYSTEM_SEPARATOR + 'TEMP' + FILE_SYSTEM_SEPARATOR + downloadedRepositoryList[0]);
-            const returnedDownloadedRepositoryEqualsToGivenRepository = JSON.stringify(result) === JSON.stringify(downloadedRepositoryList);
-            expect(repositoryDownloaded && returnedDownloadedRepositoryEqualsToGivenRepository).toBe(true);
-        });
-    });
-});
+        fs.rmSync(`${tempPath}${FILE_SYSTEM_SEPARATOR}DownloaderZip_Directory1`, {
+          recursive: true,
+          force: true
+        })
+      })
+  })
+})
 
 // Failure cases test suite
 
 describe('Zip downloader tries to', () => {
+  it('download a not found zip file path', async () => {
+    // Given
 
-    it('download a not found zip file path', async () => {
+    let downloaderZip = new DownloaderZip()
 
-        // Given
+    // When Then
 
-        let downloaderZip = new DownloaderZip();
+    await expect(downloaderZip.downloadByElement('/unknown')).rejects.toThrow(DownloadFail)
+  })
 
-        // When Then
+  it('download an undefined zip file path', async () => {
+    // Given
 
-        await expect(downloaderZip.downloadByElement('/unknown')).rejects.toThrow(DownloadFail);
-    });
+    let downloaderZip = new DownloaderZip()
 
-    it('download an undefined zip file path', async () => {
+    // When Then
 
-        // Given
+    await expect(downloaderZip.downloadByElement(undefined)).rejects.toThrow(BadFormat)
+  })
 
-        let downloaderZip = new DownloaderZip();
+  it('download a null zip file path', async () => {
+    // Given
 
-        // When Then
+    let downloaderZip = new DownloaderZip()
 
-        await expect(downloaderZip.downloadByElement(undefined)).rejects.toThrow(BadFormat);
-    });
+    // When Then
 
-    it('download a null zip file path', async () => {
+    await expect(downloaderZip.downloadByElement(null)).rejects.toThrow(BadFormat)
+  })
 
-        // Given
+  it('download an empty zip file path', async () => {
+    // Given
 
-        let downloaderZip = new DownloaderZip();
+    let downloaderZip = new DownloaderZip()
 
-        // When Then
+    // When Then
 
-        await expect(downloaderZip.downloadByElement(null)).rejects.toThrow(BadFormat);
-    });
+    await expect(downloaderZip.downloadByElement(undefined)).rejects.toThrow(BadFormat)
+  })
 
-    it('download an empty zip file path', async () => {
+  it('downloads an empty zip file', async () => {
+    // Given
 
-        // Given
+    let downloaderZip = new DownloaderZip()
 
-        let downloaderZip = new DownloaderZip();
+    // When Then
 
-        // When Then
-
-        await expect(downloaderZip.downloadByElement(undefined)).rejects.toThrow(BadFormat);
-    });
-
-    it('downloads an empty zip file', async () => {
-
-        // Given
-
-        let downloaderZip = new DownloaderZip();
-
-        // When Then
-
-        await downloaderZip.downloadByElement(process.cwd() + FILE_SYSTEM_SEPARATOR + 'test' + FILE_SYSTEM_SEPARATOR + 'unit' + FILE_SYSTEM_SEPARATOR + 'asset' + FILE_SYSTEM_SEPARATOR + 'empty.zip').then((result) => {
-            const returnedDownloadedRepositoryEqualsToGivenRepository = JSON.stringify(result) === JSON.stringify([]);
-            expect(returnedDownloadedRepositoryEqualsToGivenRepository).toBe(true);
-        });
-    });
-});
+    await expect(
+      downloaderZip.downloadByElement(
+        process.cwd() +
+          FILE_SYSTEM_SEPARATOR +
+          'test' +
+          FILE_SYSTEM_SEPARATOR +
+          'unit' +
+          FILE_SYSTEM_SEPARATOR +
+          'asset' +
+          FILE_SYSTEM_SEPARATOR +
+          'empty.zip',
+        'DownloaderZip_Directory2'
+      )
+    ).rejects.toThrow(DownloadFail)
+  })
+})
