@@ -20,8 +20,8 @@ You have the tree following options.
 
 #### Launching from Docker Hub (preferred)
 
-- Run with Docker the [DENIM Reverse Engineering image from Docker Hub](https://hub.docker.com/repository/docker/maxiandr/denim-reverse-engineering/general).
-
+- [Docker Hub repository](https://hub.docker.com/r/maxiandr/denim-reverse-engineering).
+ 
 #### Launching from source code
 
 - Create the `/lib` directory and then the `/lib/codeql-cli` and `/lib/codeql-lib` directories.
