@@ -1,6 +1,7 @@
 // Error
 
 const BadFormat = require('../error/BadFormat.error.js')
+const { INPUT_INCORRECTLY_FORMATTED } = require('../error/Constant.error.js')
 
 /**
  * @overview This class represents a technology.
@@ -17,7 +18,7 @@ class Technology {
     if (id !== null && id !== undefined && id.length > 0) {
       this.id = id
     } else {
-      throw new BadFormat()
+      throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
     }
   }
 
@@ -42,7 +43,7 @@ class Technology {
       ) {
         return new Technology(object.id)
       } else {
-        throw new BadFormat()
+        throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
       }
     } catch (error) {
       throw error

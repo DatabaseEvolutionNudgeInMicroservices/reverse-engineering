@@ -1,17 +1,15 @@
-FROM node:16
+FROM node:24.13.0
 
 WORKDIR /usr/src/app
 
+ENV NODE_ENV=production
+
 COPY package*.json ./
 
-RUN apt-get -y update
-
-RUN npm install
-
-COPY .env ./
+RUN npm ci --omit=dev
 
 COPY . .
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start"]
+CMD ["node", "index.js"]

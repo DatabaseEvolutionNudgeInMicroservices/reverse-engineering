@@ -1,6 +1,6 @@
 // Constants
 
-const { FILE_SYSTEM_SEPARATOR, TEMP_FOLDER_NAME } = require('./Constant.helper.js')
+const { TEMP_FOLDER_NAME } = require('./Constant.helper.js')
 
 // Errors
 
@@ -16,6 +16,7 @@ const Downloader = require('./Downloader.helper.js')
 
 const fs = require('fs')
 const AdmZip = require('adm-zip')
+const path = require('path')
 
 /**
  * @overview This class represents a downloader.
@@ -31,10 +32,10 @@ class DownloaderZip extends Downloader {
   /**
    * Downloads an element.
    * @param element {String} The given element.
-   * @param destination [String] The destination.
+   * @param destinationDirectoryRelativePath {String} The destination directory relative path.
    * @returns {Promise} A promise for the downloading.
    */
-  downloadByElement(element, destination) {
+  downloadByElement(element, destinationDirectoryRelativePath) {
     return new Promise((resolve, reject) => {
       if (element !== undefined && element !== null && element.length !== 0) {
         // 1. Acquisition
@@ -46,12 +47,11 @@ class DownloaderZip extends Downloader {
               return
             }
 
-            const extractionFolderPath =
-              process.cwd() +
-              FILE_SYSTEM_SEPARATOR +
-              TEMP_FOLDER_NAME +
-              FILE_SYSTEM_SEPARATOR +
-              destination
+            const extractionFolderPath = path.join(
+              process.cwd(),
+              TEMP_FOLDER_NAME,
+              destinationDirectoryRelativePath
+            )
 
             try {
               const zip = new AdmZip(element) // Load the ZIP file
@@ -59,9 +59,7 @@ class DownloaderZip extends Downloader {
 
               const folders = fs
                 .readdirSync(extractionFolderPath)
-                .filter((file) =>
-                  fs.statSync(extractionFolderPath + FILE_SYSTEM_SEPARATOR + file).isDirectory()
-                )
+                .filter((file) => fs.statSync(path.join(extractionFolderPath, file)).isDirectory())
 
               resolve(folders)
             } catch (extractionError) {

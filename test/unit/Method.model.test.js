@@ -1,7 +1,11 @@
-// Model
+// Models
+
 const Method = require('../../model/Method.model')
-// Error
+
+// Errors
+
 const BadFormat = require('../../error/BadFormat.error.js')
+const { INPUT_INCORRECTLY_FORMATTED } = require('../../error/Constant.error.js')
 
 // Happy path test suite
 
@@ -62,7 +66,7 @@ describe('Method tries to', () => {
 
     expect(() => {
       Method.revive(methodAsStringGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive an incomplete formatted object', () => {
@@ -74,7 +78,7 @@ describe('Method tries to', () => {
 
     expect(() => {
       Method.revive(methodAsStringGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive an undefined object', () => {
@@ -86,7 +90,7 @@ describe('Method tries to', () => {
 
     expect(() => {
       Method.revive(methodGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a null object', () => {
@@ -98,7 +102,7 @@ describe('Method tries to', () => {
 
     expect(() => {
       Method.revive(methodGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a method with null name', () => {
@@ -111,7 +115,7 @@ describe('Method tries to', () => {
 
     expect(() => {
       Method.revive(methodAsObjectGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a method with empty name', () => {
@@ -124,7 +128,7 @@ describe('Method tries to', () => {
 
     expect(() => {
       Method.revive(methodAsObjectGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a method with undefined name', () => {
@@ -132,7 +136,7 @@ describe('Method tries to', () => {
 
     expect(() => {
       new Method(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a method with null name', () => {
@@ -140,7 +144,7 @@ describe('Method tries to', () => {
 
     expect(() => {
       new Method(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a method with empty name', () => {
@@ -148,7 +152,7 @@ describe('Method tries to', () => {
 
     expect(() => {
       new Method('')
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a method undefined name', () => {
@@ -160,7 +164,7 @@ describe('Method tries to', () => {
 
     expect(() => {
       methodAsObjectGiven.setName(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a method null name', () => {
@@ -172,7 +176,7 @@ describe('Method tries to', () => {
 
     expect(() => {
       methodAsObjectGiven.setName(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a method empty name', () => {
@@ -184,6 +188,6 @@ describe('Method tries to', () => {
 
     expect(() => {
       methodAsObjectGiven.setName(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 })

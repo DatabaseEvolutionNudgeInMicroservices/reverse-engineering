@@ -1,11 +1,14 @@
 {
   "name": "denim-reverse-engineering",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "This application enables to reverse-engineer a microservices architecture from a data perspective.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
-    "evaluation": "node evaluation/index.js",
+    "evaluation_ast_identification_precision_recall_f1": "node evaluation/ast/identification/ast_identification_precision_recall_f1.js",
+    "evaluation_ast_identification_heuristics_precision_recall_f1": "node evaluation/ast/identification/ast_identification_heuristics_precision_recall_f1.js",
+    "evaluation_ast_identification_heuristics_frequency": "node evaluation/ast/identification/ast_identification_heuristics_frequency.js",
+    "evaluation_nlptr_identification_precision_recall_f1": "node evaluation/nlptr/identification/nlptr_identification_precision_recall_f1.js",
     "swagger": "node swagger.js",
     "test_unit": "jest --testRegex=^/test/unit/(.*)\\.test\\.js$ --coverage",
     "test_integration": "jest --testRegex=^/test/integration/(.*)\\.test\\.js$",
@@ -22,8 +25,13 @@
     "data"
   ],
   "author": "Maxime ANDRÉ",
+  "contributors": [
+    "Alexandre HENROTTE",
+    "Maxime DE RYCKE"
+  ],
   "license": "ISC",
   "dependencies": {
+    "@xenova/transformers": "2.17.2",
     "adm-zip": "^0.5.16",
     "body-parser": "^1.20.1",
     "cors": "^2.8.5",
@@ -32,6 +40,8 @@
     "express": "^4.18.2",
     "multer": "^1.4.5-lts.1",
     "natural": "^7.1.0",
+    "path": "^0.12.7",
+    "redis": "^4.5.1",
     "sloc": "^0.3.2",
     "swagger-autogen": "^2.22.0",
     "swagger-ui-express": "^4.6.0",
@@ -40,14 +50,18 @@
     "wink-nlp": "^2.2.2"
   },
   "devDependencies": {
+    "eslint": "^9.36.0",
     "jest": "^29.3.1",
-    "prettier": "^3.5.3",
+    "prettier": "3.6.2",
     "supertest": "^6.3.3"
   },
   "jest": {
     "testTimeout": 240000,
     "modulePathIgnorePatterns": [
       "lib"
+    ],
+    "setupFilesAfterEnv": [
+      "<rootDir>/setupTests.js"
     ]
   }
 }

@@ -1,10 +1,11 @@
-// Model
+// Models
 
 const Concept = require('../../model/Concept.model')
 
-// Error
+// Errors
 
 const BadFormat = require('../../error/BadFormat.error.js')
+const { INPUT_INCORRECTLY_FORMATTED } = require('../../error/Constant.error.js')
 
 // Happy path test suite
 
@@ -65,7 +66,7 @@ describe('Concept tries to', () => {
 
     expect(() => {
       Concept.revive(conceptAsStringGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive an incomplete formatted object', () => {
@@ -77,7 +78,7 @@ describe('Concept tries to', () => {
 
     expect(() => {
       Concept.revive(conceptAsStringGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive an undefined object', () => {
@@ -89,7 +90,7 @@ describe('Concept tries to', () => {
 
     expect(() => {
       Concept.revive(conceptGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a null object', () => {
@@ -101,7 +102,7 @@ describe('Concept tries to', () => {
 
     expect(() => {
       Concept.revive(conceptGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a concept with null name', () => {
@@ -114,7 +115,7 @@ describe('Concept tries to', () => {
 
     expect(() => {
       Concept.revive(conceptAsObjectGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a concept with empty name', () => {
@@ -127,7 +128,7 @@ describe('Concept tries to', () => {
 
     expect(() => {
       Concept.revive(conceptAsObjectGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a concept with undefined name', () => {
@@ -135,7 +136,7 @@ describe('Concept tries to', () => {
 
     expect(() => {
       new Concept(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a concept with null name', () => {
@@ -143,7 +144,7 @@ describe('Concept tries to', () => {
 
     expect(() => {
       new Concept(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a concept with empty name', () => {
@@ -151,7 +152,7 @@ describe('Concept tries to', () => {
 
     expect(() => {
       new Concept('')
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a concept undefined name', () => {
@@ -163,7 +164,7 @@ describe('Concept tries to', () => {
 
     expect(() => {
       conceptAsObjectGiven.setName(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a concept null name', () => {
@@ -175,7 +176,7 @@ describe('Concept tries to', () => {
 
     expect(() => {
       conceptAsObjectGiven.setName(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a concept empty name', () => {
@@ -187,6 +188,6 @@ describe('Concept tries to', () => {
 
     expect(() => {
       conceptAsObjectGiven.setName(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 })

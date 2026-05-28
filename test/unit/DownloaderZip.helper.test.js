@@ -5,19 +5,21 @@ const DownloaderZip = require('../../helper/DownloaderZip.helper.js')
 // Libraries
 
 const fs = require('fs')
+const path = require('path')
 
 // Constants
 
-const { FILE_SYSTEM_SEPARATOR, TEMP_FOLDER_NAME } = require('../../helper/Constant.helper')
+const { TEMP_FOLDER_NAME } = require('../../helper/Constant.helper')
 
 // Errors
 
 const DownloadFail = require('../../error/DownloadFail.error.js')
 const BadFormat = require('../../error/BadFormat.error.js')
+const { INPUT_INCORRECTLY_FORMATTED } = require('../../error/Constant.error.js')
 
 // Setup
 
-const tempPath = `${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}`
+const tempPath = path.join(process.cwd(), TEMP_FOLDER_NAME)
 
 // Happy path test suite
 
@@ -31,25 +33,12 @@ describe('Zip downloader', () => {
 
     await downloaderZip
       .downloadByElement(
-        process.cwd() +
-          FILE_SYSTEM_SEPARATOR +
-          'test' +
-          FILE_SYSTEM_SEPARATOR +
-          'unit' +
-          FILE_SYSTEM_SEPARATOR +
-          'asset' +
-          FILE_SYSTEM_SEPARATOR +
-          'example' +
-          '.zip',
+        path.join(process.cwd(), 'test', 'unit', 'asset', 'example.zip'),
         'DownloaderZip_Directory1'
       )
       .then((result) => {
         const repositoryDownloaded = fs.existsSync(
-          tempPath +
-            FILE_SYSTEM_SEPARATOR +
-            'DownloaderZip_Directory1' +
-            FILE_SYSTEM_SEPARATOR +
-            'example'
+          path.join(tempPath, 'DownloaderZip_Directory1', 'example')
         )
         const returnedDownloadedRepositoryEqualsToGivenRepository =
           JSON.stringify(result) === JSON.stringify(['example'])
@@ -59,7 +48,7 @@ describe('Zip downloader', () => {
 
         // Free
 
-        fs.rmSync(`${tempPath}${FILE_SYSTEM_SEPARATOR}DownloaderZip_Directory1`, {
+        fs.rmSync(path.join(tempPath, 'DownloaderZip_Directory1'), {
           recursive: true,
           force: true
         })
@@ -119,15 +108,7 @@ describe('Zip downloader tries to', () => {
 
     await expect(
       downloaderZip.downloadByElement(
-        process.cwd() +
-          FILE_SYSTEM_SEPARATOR +
-          'test' +
-          FILE_SYSTEM_SEPARATOR +
-          'unit' +
-          FILE_SYSTEM_SEPARATOR +
-          'asset' +
-          FILE_SYSTEM_SEPARATOR +
-          'empty.zip',
+        path.join(process.cwd(), 'test', 'unit', 'asset', 'empty.zip'),
         'DownloaderZip_Directory2'
       )
     ).rejects.toThrow(DownloadFail)

@@ -1,7 +1,11 @@
-// Model
+// Models
+
 const Sample = require('../../model/Sample.model')
-// Error
+
+// Errors
+
 const BadFormat = require('../../error/BadFormat.error.js')
+const { INPUT_INCORRECTLY_FORMATTED } = require('../../error/Constant.error.js')
 
 // Happy path test suite
 
@@ -62,7 +66,7 @@ describe('Sample tries to', () => {
 
     expect(() => {
       Sample.revive(sampleAsStringGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive an incomplete formatted object', () => {
@@ -74,7 +78,7 @@ describe('Sample tries to', () => {
 
     expect(() => {
       Sample.revive(sampleAsStringGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive an undefined object', () => {
@@ -86,7 +90,7 @@ describe('Sample tries to', () => {
 
     expect(() => {
       Sample.revive(sampleGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a null object', () => {
@@ -98,7 +102,7 @@ describe('Sample tries to', () => {
 
     expect(() => {
       Sample.revive(sampleGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a sample with null content', () => {
@@ -111,7 +115,7 @@ describe('Sample tries to', () => {
 
     expect(() => {
       Sample.revive(sampleAsObjectGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a sample with undefined content', () => {
@@ -119,7 +123,7 @@ describe('Sample tries to', () => {
 
     expect(() => {
       new Sample(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a sample with null content', () => {
@@ -127,7 +131,7 @@ describe('Sample tries to', () => {
 
     expect(() => {
       new Sample(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a sample undefined content', () => {
@@ -139,7 +143,7 @@ describe('Sample tries to', () => {
 
     expect(() => {
       sampleAsObjectGiven.setContent(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a sample null content', () => {
@@ -151,6 +155,6 @@ describe('Sample tries to', () => {
 
     expect(() => {
       sampleAsObjectGiven.setContent(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 })

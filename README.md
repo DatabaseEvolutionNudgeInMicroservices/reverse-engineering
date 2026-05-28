@@ -6,16 +6,41 @@
 
 This application enables to reverse-engineer a microservices architecture from a data perspective.
 
+## 📝 How to cite?
+
+```latex
+
+%%% Cite the paper
+
+@inproceedings{andre2025a,
+  title         = {Data Access-centered Understanding of Microservices Architectures},
+  author        = {Andr{\'e}, Maxime and Rivière, Etienne and Cleve, Anthony},
+  booktitle     = {Proceedings of the 22nd International Conference on Software Architecture (ICSA 2025): NEMI Track},
+  year          = {2025},
+  organization  = {IEEE Computer Society Press},
+  doi           = {https://doi.org/10.1109/icsa-c65153.2025.00007}
+}
+```
+
 ## ⭐ Features
 
 Here is a summary of the features currently supported.
 
-### Static Analysis
+### Static Analysis by AST
 
 #### Description
 
-The static analysis feature enables the developer to (1) retrieve one or more GitHub/GitLab microservices, (2) statically analyze them, (3) identify data access code fragments linked to certain API or database technologies and likely to change during the evolution phase, implying then the propagation of changes in components
-(e.g. other microservices or databases), (4) extract thanks to NLP the data concepts of those data access code fragments, (5) link the data access code fragments with related data concepts, (6) compare data concepts with other ones in the same microservice, (7) associate same data concepts, (8) present the result as a report, in a defined model, designed to help developers understand microservices in a conceptual data approach, so that they can pay attention to them when co-evolving API and database accesses. This report aims to provide developers with a valuable basis for software evolution tasks, such as re-documentation, visualization, quality assessment, improvement recommendations, impact analysis, or change propagation.
+The static analysis by AST feature enables the developer to (1) retrieve one or more GitHub/GitLab microservices, (2)
+statically analyze them through an AST, (3) identify, through heuristics, data access code fragments linked to certain 
+API or database technologies and likely to change during the evolution phase, implying then the propagation of 
+changes in components (e.g. other microservices or databases), (4) extract thanks to NLP the data concepts of those 
+data access code fragments, (5) link the data access code fragments with related data concepts, (6) compare data 
+concepts with other ones in the same microservice, (7) associate same data concepts, (8) present the result as a 
+report, in a defined model, designed to help developers understand microservices in a conceptual data approach, so 
+that they can pay attention to them when co-evolving API and database accesses. This report aims to provide 
+developers with a valuable basis for software evolution tasks, such as re-documentation, visualization, quality 
+assessment, improvement recommendations, impact analysis, or change propagation.  This analysis is slower compared 
+to the static analysis by NLP/TR, but it retrieves more information.
 
 Here is a summary of languages and technologies currently supported:
 
@@ -29,12 +54,31 @@ Here is a summary of languages and technologies currently supported:
 
 **INPUT**
 
-Invoke the static analysis by using the [POST /static/language/:language/repository/zip](http://locahost:3000/static/language/:language/repository/zip) root with a ZIP file inside the request as a form-data with the key `file` and the ZIP file as value, and not as a binary file.
-This zip file can be generated from GitHub/GitLab repositories thanks to [DENIM Downloading](https://github.com/DatabaseEvolutionNudgeInMicroservices/downloading).
+Invoke the static analysis by using the [POST /static/ast](http://locahost:3000/static/ast)
+root with a ZIP file inside the request as a form-data with the key `file` and the ZIP file as value, and not as a 
+binary file. This zip file can be generated from GitHub/GitLab repositories thanks to [DENIM Downloading](https://github.com/DatabaseEvolutionNudgeInMicroservices/downloading).
+Options, such as the language of the analysis, must be given in the options field with the key `options` as follows:
 
-⚠️ This can take a while depending on the repository size.
+```json
+{
+  "language": "<language>" // The language of the analysis
+}
+```
+
+⚠️ This can take a while (a few minutes) depending on the repository size.
 ⚠️ All repositories to analyze have to be integrated in the ZIP file.
 ⚠️ Each directory at the root of the zip file represents a repository.
+
+Optional hints can be provided through the body to guide the analysis with in/out (i.e., include, exclude) keywords hints (e.g., grammar of a library, list of conceptual schema concepts, etc.). This body should be structured as follows:
+
+```json
+{
+  "hints": {
+    "int": ["<int term 1>", "<int term 2>", "...", "<int term X>"], // Inclusion keywords
+    "out": ["<out term 1>", "<out term 2>", "...", "<out term X>"]  // Exclusion keywords
+  }
+}
+```
 
 **OUTPUT**
 
@@ -61,7 +105,7 @@ Consult the response object:
                 // A code fragment
                 "location": "https://github.com/<user>/<repository>/.../<file path>.js#Lx1Cx1-Lx2y2",
                 "technology": {
-                  "name": "<technology>" // E.g., javascript-api-express, javascript-db-mongo, javascript-db-redis.
+                  "name": "<technology>" // E.g., javascript-api-express-call, javascript-db-mongo-call, javascript-db-redis-call.
                 },
                 "operation": {
                   "name": "<operation>" // E.g., CREATE, READ, UPDATE, DELETE, OTHER
@@ -89,6 +133,120 @@ Consult the response object:
 ]
 ```
 
+NOTE: The response format is the same as the one produced by the static analysis by NLP/TR because it relies on the 
+same model.
+
+NOTE: This analysis is slower compared to the static analysis by NLP/TR, but it retrieves more information.
+
+### Static Analysis by NLP/TR
+
+#### Description
+
+The static analysis by NLP/TR (Natural Language Processing and Text Retrieval) feature enables the developer to (1) 
+retrieve one or more GitHub/GitLab microservices, (2) browse the entire architecture considering source file as text,
+(3) identify data access code fragments linked to certain API or database technologies and likely to change during 
+the evolution phase, implying then the propagation of changes in components (e.g. other microservices or databases), 
+by performing lexical and statistical analysis to extract candidate code fragments and concepts from source files, 
+(4) extract extra data, (5) filter and prioritize code fragments with statistical relevance metrics (e.g., TF-IDF,
+dominance, variation) and some hints, (6) compare data concepts with other ones in the same microservice, (7) associate
+same data concepts, (8) present the result as a report, in a defined model, designed to help developers understand 
+microservices in a conceptual data approach, so that they can pay attention to them when co-evolving API and database
+accesses. This report aims to provide developers with a valuable basis for software evolution tasks, such as
+re-documentation, visualization, quality assessment, improvement recommendations, impact analysis, or change
+propagation. This analysis is faster compared to the AST analysis but it retrieves less information.
+
+Here is a summary of languages and technologies currently supported:
+
+#### Implementation status
+
+| Language              | Technology | Implementation status |
+|-----------------------| ---------- | --------------------- |
+| JavaScript/TypeScript | Any        | 🌕                    |
+| Java                  | Any        | 🌕                    |
+
+#### How to?
+
+**INPUT**
+
+Invoke the static analysis by using the [POST /static/nlptr]
+(http://locahost:3000/static/nlptr) root with a ZIP file inside the request as a 
+form-data with the key `file` and the ZIP file as value, and not as a binary file. This zip file can be generated 
+from GitHub/GitLab repositories thanks to [DENIM Downloading](https://github.com/DatabaseEvolutionNudgeInMicroservices/downloading).
+The language is automatically detected.
+
+⚠️ This can take a while depending (a few seconds) on the repository size.
+⚠️ All repositories to analyze have to be integrated in the ZIP file.
+⚠️ Each directory at the root of the zip file represents a repository.
+
+Optional hints can be provided through the body to guide the analysis with in/out (i.e., include, exclude) keywords hints (e.g., grammar of a library, list of conceptual schema concepts, etc.). This body should be structured as follows:
+
+```json
+{
+  "hints": {
+    "int": ["<int term 1>", "<int term 2>", "...", "<int term X>"], // Inclusion keywords
+    "out": ["<out term 1>", "<out term 2>", "...", "<out term X>"]  // Exclusion keywords
+  }
+}
+```
+
+**OUTPUT**
+
+Consult the response object:
+
+```json
+[
+  {
+    // A repository
+    "directories": [
+      {
+        // A directory
+        "location": "https://github.com/<user>/<repository>",
+        "directories": [
+          // ...
+        ],
+        "files": [
+          {
+            // A file
+            "location": "https://github.com/<user>/<repository>/.../<file path>.js",
+            "linesOfCode": <LoC>,
+            "codeFragments": [
+              {
+                // A code fragment
+                "location": "https://github.com/<user>/<repository>/.../<file path>.js#Lx1",
+                "technology": {
+                  "name": "<technology>" // E.g., javascript-any-any-any
+                },
+                "operation": {
+                  "name": "?"
+                },
+                "method": {
+                  "name": "?"
+                },
+                "sample": {
+                  "content": "<sample>" // i.e., the line of code 
+                },
+                "concepts": [
+                  {
+                    "name": "<concept>" // E.g., a route resource concept name, a Redis key name, a MongoDB, collection name, etc.
+                  }
+                ],
+                "heuristics": "<heuristics>", // The matching heuristics tracing.
+                "score": "<score>" // The computed likelihood score.
+              }
+            ]
+          } // ...
+        ]
+      } // ...
+    ]
+  } // ...
+]
+```
+
+NOTE: This response format is the same as the one produced by the static analysis by AST because it relies on the same 
+model.
+
+NOTE: This analysis is faster compared to the static analysis by AST, but it retrieves less information (i.e. see "?").
+
 ## 👩‍💻 Development details
 
 ### Setup
@@ -101,7 +259,7 @@ Manual test suites are set up thanks through the [Postman](https://www.postman.c
 
 The tests are specified in the `/test/manual` directory and are named following the `*.test.js` pattern.
 
-⚠️ Make sure that the "maximum response size" in Postman is increased, for example to 1000 MB. `Postman > Settings > General > Max response size > 1000 MB`.
+⚠️ Files attached to requests, under the `file` key of the `form-data`, must be downloaded again from the `/test/integration/asset` directory.
 
 ### Test the app (unit testing)
 
@@ -190,6 +348,7 @@ This one is described in the `.gitlab-ci.yml`.
 - [CodeQL](https://github.com/github/codeql-cli-binaries/releases/tag/v2.13.0) is used for static code analysis.
 - [Wink](https://winkjs.org/) is used for concept extraction powered by NLP.
 - [Natural](https://naturalnode.github.io/natural/) is used for concept extraction powered by NLP.
+- [@xenova/transformers](https://www.npmjs.com/package/@xenova/transformers) is used for concept extraction powered by NLP and transformers.
 
 #### Files
 
@@ -228,16 +387,15 @@ This one is described in the `.gitlab-ci.yml`.
 
 ## 🧪 Design details
 
-### Static Analysis
+### Static Analysis by AST
 
-For finding locations of code related to some API or database technologies, some heuristics are defined based on
-pattern and rules matching according to the documentation of the technologies. These help to compute the likelihood
-scores.
+For finding locations of code fragments related to some API or database technologies, some heuristics are defined based on patterns and rules matching according to the documentation of the technologies.
 
 API (Express) Likelihood Score Heuristics.
 
 | ID  | Description                                                                                                                       |
-| --- | --------------------------------------------------------------------------------------------------------------------------------- |
+|-----| --------------------------------------------------------------------------------------------------------------------------------- |
+| E0  | The method call contains a data access concept.                                                                                   |
 | E1  | According to the Express documentation, the method call has an Express-like method name (e.g., get, post, put, delete, ...).      |
 | E2  | According to the Express documentation, the method call has an string as first argument.                                          |
 | E3  | According to the Express documentation, the method call has an Express route-like string as first argument.                       |
@@ -250,7 +408,8 @@ API (Express) Likelihood Score Heuristics.
 DB (Redis) Likelihood Score Heuristics.
 
 | ID  | Description                                                                                                                                    |
-| --- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+|-----| ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| R0  | The method call contains a data access concept.                                                                                   |
 | R1  | According to the Redis documentation, the method call has a Redis-like method name (e.g., get, set, del, scan, keys, sadd, rpush, setnx, ...). |
 | R2  | According to the Redis documentation, the method call has a string as first argument.                                                          |
 | R3  | According to the Redis documentation, the method call has an Redis-like receiver name (e.g., client, redisClient).                             |
@@ -260,18 +419,27 @@ DB (Redis) Likelihood Score Heuristics.
 
 DB (MongoDB) Likelihood Score Heuristics.
 
-| ID  | Description                                                                                                                                     |
-| --- | ----------------------------------------------------------------------------------------------------------------------------------------------- |
-| M1  | According to the MongoDB documentation, the method call has a MongoDB-like method name (e.g., findOne, insertMany, updateOne, deleteMany, ...). |
-| M2  | According to the MongoDB documentation, the method call has a string, an object or an array as first argument.                                  |
-| M3  | According to the MongoDB documentation, the method call has an MongoDB-like receiver name (e.g., db, collection).                               |
-| M4  | According to the MongoDB documentation, the method call has a MongoDB-like import around (in the same file).                                    |
-| M5  | According to the MongoDB documentation, the method call has a MongoDB-like client assignment around (in the same file).                         |
-| M6  | According to the MongoDB documentation, the method call is linked to a MongoDB-like client assignment around (in the same file).                |
+| ID   | Description                                                                                                                                     |
+|------| ----------------------------------------------------------------------------------------------------------------------------------------------- |
+| M0   | The method call contains a data access concept.                                                                                   |
+| M1   | According to the MongoDB documentation, the method call has a MongoDB-like method name (e.g., findOne, insertMany, updateOne, deleteMany, ...). |
+| M2   | According to the MongoDB documentation, the method call has a string, an object or an array as first argument.                                  |
+| M3   | According to the MongoDB documentation, the method call has an MongoDB-like receiver name (e.g., db, collection).                               |
+| M4   | According to the MongoDB documentation, the method call has a MongoDB-like import around (in the same file).                                    |
+| M5   | According to the MongoDB documentation, the method call has a MongoDB-like client assignment around (in the same file).                         |
+| M6   | According to the MongoDB documentation, the method call is linked to a MongoDB-like client assignment around (in the same file).                |
 
 The resulting report follows that model:
 
-<img src="assets/model.png" alt="Model" width="400px"/>
+<img src="assets/model.png" alt="Model"/>
+
+### Static Analysis by NLP/TR
+
+For finding locations of code fragments related to some API or database technologies, some NLP and Text Retrieval statistical computations (e.g., TF-IDF, dominance, variation, BERT sentence transformers, etc.) are applied to terms extracted.
+
+The resulting report follows that model:
+
+<img src="assets/model.png" alt="Model"/>
 
 ## 🤝 Contributing
 
@@ -292,4 +460,4 @@ following instructions:
 
 ## 📊 Evaluation
 
-The complete data of our evaluation is detailed in the [`/evaluation`](https://github.com/DatabaseEvolutionNudgeInMicroservices/reverse-engineering/tree/main/evaluation) folder. The `1-Ground truth <system name>.xlsx` files details the manual annotation performed on the system codebases. The `2-Actual <system name>.xlsx` file details the results of the empirical evaluation, for example in terms of precision and recall. The script `index.js` with files `3-expected <system name>.csv` and `4-actual <system name>.csv` help to compute precision and recall scores. The `4-actual <system name>.json` show examples of final reports according to the model. Files `5-<...>...` contains charts and metrics.
+The complete data of our evaluation is detailed in the [`/evaluation`](https://github.com/DatabaseEvolutionNudgeInMicroservices/reverse-engineering/tree/main/evaluation) directory. The first folder `/ast` is dedicated to the AST-based approach. The second folder `/nlptr` is dedicated to the NLP & TR-based approach. The commands `npm run evaluation_*` perform several evaluation scripts to compute various metrics such as *precision*, *recall*, *F1*, and *frequency*. Please consult evaluation scripts and output files for further details.

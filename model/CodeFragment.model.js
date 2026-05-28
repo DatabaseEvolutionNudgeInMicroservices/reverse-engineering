@@ -9,6 +9,7 @@ const Technology = require('./Technology.model')
 // Error
 
 const BadFormat = require('../error/BadFormat.error.js')
+const { INPUT_INCORRECTLY_FORMATTED } = require('../error/Constant.error.js')
 
 /**
  * @overview This class represents a code fragment.
@@ -32,7 +33,7 @@ class CodeFragment {
     if (location !== null && location !== undefined && location.length > 0) {
       this.location = location
     } else {
-      throw new BadFormat()
+      throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
     }
   }
 
@@ -44,7 +45,7 @@ class CodeFragment {
     if (technology !== null && technology !== undefined && technology instanceof Technology) {
       this.technology = technology
     } else {
-      throw new BadFormat()
+      throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
     }
   }
 
@@ -56,7 +57,7 @@ class CodeFragment {
     if (operation !== null && operation !== undefined && operation instanceof Operation) {
       this.operation = operation
     } else {
-      throw new BadFormat()
+      throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
     }
   }
 
@@ -68,7 +69,7 @@ class CodeFragment {
     if (method !== null && method !== undefined && method instanceof Method) {
       this.method = method
     } else {
-      throw new BadFormat()
+      throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
     }
   }
 
@@ -80,7 +81,7 @@ class CodeFragment {
     if (sample !== null && sample !== undefined && sample instanceof Sample) {
       this.sample = sample
     } else {
-      throw new BadFormat()
+      throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
     }
   }
 
@@ -89,10 +90,15 @@ class CodeFragment {
   }
 
   setConcepts(concepts) {
-    if (concepts !== null && concepts !== undefined) {
+    if (
+      concepts !== null &&
+      concepts !== undefined &&
+      Array.isArray(concepts) &&
+      (concepts.length > 0 ? concepts.every((c) => c instanceof Concept) : true)
+    ) {
       this.concepts = concepts
     } else {
-      throw new BadFormat()
+      throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
     }
   }
 
@@ -104,7 +110,7 @@ class CodeFragment {
     if (heuristics !== null && heuristics !== undefined) {
       this.heuristics = heuristics
     } else {
-      throw new BadFormat()
+      throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
     }
   }
 
@@ -116,7 +122,7 @@ class CodeFragment {
     if (score !== null && score !== undefined) {
       this.score = score
     } else {
-      throw new BadFormat()
+      throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
     }
   }
 
@@ -180,7 +186,7 @@ class CodeFragment {
           score
         )
       } else {
-        throw new BadFormat()
+        throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
       }
     } catch (error) {
       throw error

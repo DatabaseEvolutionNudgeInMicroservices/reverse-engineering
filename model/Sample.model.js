@@ -1,6 +1,7 @@
 // Error
 
 const BadFormat = require('../error/BadFormat.error.js')
+const { INPUT_INCORRECTLY_FORMATTED } = require('../error/Constant.error.js')
 
 /**
  * @overview This class represents a sample.
@@ -17,7 +18,7 @@ class Sample {
     if (content !== null && content !== undefined) {
       this.content = content
     } else {
-      throw new BadFormat()
+      throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
     }
   }
 
@@ -42,7 +43,7 @@ class Sample {
       ) {
         return new Sample(object.content)
       } else {
-        throw new BadFormat()
+        throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
       }
     } catch (error) {
       throw error

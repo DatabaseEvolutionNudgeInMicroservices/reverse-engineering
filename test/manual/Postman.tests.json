@@ -7,7 +7,7 @@
   },
   "item": [
     {
-      "name": ":3000 /static/language/javascript/repository/zip TEMP",
+      "name": ":3000 /static/ast TEMP",
       "protocolProfileBehavior": {
         "disabledSystemHeaders": {}
       },
@@ -21,21 +21,32 @@
               "key": "file",
               "type": "file",
               "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/example.zip"
+            },
+            {
+              "key": "options",
+              "value": "{\"language\":\"javascript\",\"hints\":{\"out\":[\"get\",\"post\",\"put\",\"delete\",\"patch\",\"all\",\"head\",\"del\",\"collection\",\"aggregate\",\"bulkWrite\",\"count\",\"countDocuments\",\"createIndex\",\"createIndexes\",\"deleteMany\",\"deleteOne\",\"distinct\",\"drop\",\"dropAllIndexes\",\"dropIndex\",\"dropIndexes\",\"ensureIndex\",\"estimatedDocumentCount\",\"find\",\"findAndModify\",\"findAndRemove\",\"findOne\",\"findOneAndDelete\",\"findOneAndReplace\",\"findOneAndUpdate\",\"geoHaystackSearch\",\"group\",\"indexes\",\"indexExists\",\"indexInformation\",\"initializeOrderedBulkOp\",\"initializeUnorderedBulkOp\",\"insert\",\"insertMany\",\"insertOne\",\"isCapped\",\"listIndexes\",\"mapReduce\",\"options\",\"parallelCollectionScan\",\"reIndex\",\"remove\",\"rename\",\"replaceOne\",\"save\",\"stats\",\"update\",\"updateMany\",\"updateOne\",\"watch\"],\"in\":[\"count\", \"order\"]}}\n",
+              "type": "text",
+              "uuid": "6443e67f-9a9a-4ded-8d37-5c0ad446de30"
             }
           ]
         },
         "url": {
-          "raw": "http://localhost:3000/static/language/javascript/repository/zip",
+          "raw": "http://localhost:3000/static/ast",
           "protocol": "http",
-          "host": ["localhost"],
+          "host": [
+            "localhost"
+          ],
           "port": "3000",
-          "path": ["static", "language", "javascript", "repository", "zip"]
+          "path": [
+            "static",
+            "ast"
+          ]
         }
       },
       "response": []
     },
     {
-      "name": ":3000 /static/language/javascript/repository/zip 200 repository",
+      "name": ":3000 /static/ast 200 repository",
       "protocolProfileBehavior": {
         "disabledSystemHeaders": {}
       },
@@ -49,21 +60,32 @@
               "key": "file",
               "type": "file",
               "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/example.zip"
+            },
+            {
+              "key": "options",
+              "value": "{\"language\":\"javascript\"}",
+              "type": "text",
+              "uuid": "5671623a-048d-4c9c-988e-1ed1934ffa8a"
             }
           ]
         },
         "url": {
-          "raw": "http://localhost:3000/static/language/javascript/repository/zip",
+          "raw": "http://localhost:3000/static/ast",
           "protocol": "http",
-          "host": ["localhost"],
+          "host": [
+            "localhost"
+          ],
           "port": "3000",
-          "path": ["static", "language", "javascript", "repository", "zip"]
+          "path": [
+            "static",
+            "ast"
+          ]
         }
       },
       "response": []
     },
     {
-      "name": ":3000 /static/language/javascript/repository/zip 400 repository empty",
+      "name": ":3000 /static/ast 400 repository empty",
       "protocolProfileBehavior": {
         "disabledSystemHeaders": {}
       },
@@ -77,21 +99,32 @@
               "key": "file",
               "type": "file",
               "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/empty.zip"
+            },
+            {
+              "key": "options",
+              "value": "{\"language\":\"javascript\"}",
+              "type": "text",
+              "uuid": "5d72c10a-c62e-4ebf-8e1b-babe91aefbcc"
             }
           ]
         },
         "url": {
-          "raw": "http://localhost:3000/static/language/javascript/repository/zip",
+          "raw": "http://localhost:3000/static/ast",
           "protocol": "http",
-          "host": ["localhost"],
+          "host": [
+            "localhost"
+          ],
           "port": "3000",
-          "path": ["static", "language", "javascript", "repository", "zip"]
+          "path": [
+            "static",
+            "ast"
+          ]
         }
       },
       "response": []
     },
     {
-      "name": ":3000 /static/language/javascript/repository/zip 400 repository not existent",
+      "name": ":3000 /static/ast 400 repository not existent",
       "protocolProfileBehavior": {
         "disabledSystemHeaders": {}
       },
@@ -104,22 +137,80 @@
             {
               "key": "file",
               "type": "file",
-              "src": []
+              "fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
+              "filesNotInWorkingDirectory": [
+                "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/example.zip"
+              ],
+              "value": null
+            },
+            {
+              "key": "options",
+              "value": "{\"language\":\"javascript\"}",
+              "type": "text",
+              "uuid": "f254587c-6b78-45dd-8f53-b844e4ba0385"
             }
           ]
         },
         "url": {
-          "raw": "http://localhost:3000/static/language/javascript/repository/zip",
+          "raw": "http://localhost:3000/static/ast",
           "protocol": "http",
-          "host": ["localhost"],
+          "host": [
+            "localhost"
+          ],
           "port": "3000",
-          "path": ["static", "language", "javascript", "repository", "zip"]
+          "path": [
+            "static",
+            "ast"
+          ]
         }
       },
       "response": []
     },
     {
-      "name": ":8080 /static/language/javascript/repository/zip TEMP",
+      "name": ":3000 /static/ast 400 repository no options",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {}
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
+              "filesNotInWorkingDirectory": [
+                "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/example.zip"
+              ],
+              "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/example.zip"
+            },
+            {
+              "key": "options",
+              "value": "{}",
+              "type": "text",
+              "uuid": "f254587c-6b78-45dd-8f53-b844e4ba0385"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:3000/static/ast",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "static",
+            "ast"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": ":8080 /static/ast TEMP",
       "protocolProfileBehavior": {
         "disabledSystemHeaders": {}
       },
@@ -133,21 +224,32 @@
               "key": "file",
               "type": "file",
               "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/example.zip"
+            },
+            {
+              "key": "options",
+              "value": "{\"language\":\"javascript\",\"hints\":{\"out\":[\"get\",\"post\",\"put\",\"delete\",\"patch\",\"all\",\"head\",\"del\",\"collection\",\"aggregate\",\"bulkWrite\",\"count\",\"countDocuments\",\"createIndex\",\"createIndexes\",\"deleteMany\",\"deleteOne\",\"distinct\",\"drop\",\"dropAllIndexes\",\"dropIndex\",\"dropIndexes\",\"ensureIndex\",\"estimatedDocumentCount\",\"find\",\"findAndModify\",\"findAndRemove\",\"findOne\",\"findOneAndDelete\",\"findOneAndReplace\",\"findOneAndUpdate\",\"geoHaystackSearch\",\"group\",\"indexes\",\"indexExists\",\"indexInformation\",\"initializeOrderedBulkOp\",\"initializeUnorderedBulkOp\",\"insert\",\"insertMany\",\"insertOne\",\"isCapped\",\"listIndexes\",\"mapReduce\",\"options\",\"parallelCollectionScan\",\"reIndex\",\"remove\",\"rename\",\"replaceOne\",\"save\",\"stats\",\"update\",\"updateMany\",\"updateOne\",\"watch\"],\"in\":[\"count\", \"order\"]}}\n",
+              "type": "text",
+              "uuid": "f2357984-fcb9-45db-9829-782bee027380"
             }
           ]
         },
         "url": {
-          "raw": "http://localhost:8080/static/language/javascript/repository/zip",
+          "raw": "http://localhost:8080/static/ast",
           "protocol": "http",
-          "host": ["localhost"],
+          "host": [
+            "localhost"
+          ],
           "port": "8080",
-          "path": ["static", "language", "javascript", "repository", "zip"]
+          "path": [
+            "static",
+            "ast"
+          ]
         }
       },
       "response": []
     },
     {
-      "name": ":8080 /static/language/javascript/repository/zip 200 repository",
+      "name": ":8080 /static/ast 200 repository",
       "protocolProfileBehavior": {
         "disabledSystemHeaders": {}
       },
@@ -161,21 +263,32 @@
               "key": "file",
               "type": "file",
               "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/example.zip"
+            },
+            {
+              "key": "options",
+              "value": "{\"language\":\"javascript\"}",
+              "type": "text",
+              "uuid": "9c500c77-6008-4eb2-8629-71b15e29c6e5"
             }
           ]
         },
         "url": {
-          "raw": "http://localhost:8080/static/language/javascript/repository/zip",
+          "raw": "http://localhost:8080/static/ast",
           "protocol": "http",
-          "host": ["localhost"],
+          "host": [
+            "localhost"
+          ],
           "port": "8080",
-          "path": ["static", "language", "javascript", "repository", "zip"]
+          "path": [
+            "static",
+            "ast"
+          ]
         }
       },
       "response": []
     },
     {
-      "name": ":8080 /static/language/javascript/repository/zip 400 repository empty",
+      "name": ":8080 /static/ast 400 repository empty",
       "protocolProfileBehavior": {
         "disabledSystemHeaders": {}
       },
@@ -189,21 +302,32 @@
               "key": "file",
               "type": "file",
               "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/empty.zip"
+            },
+            {
+              "key": "options",
+              "value": "{\"language\":\"javascript\"}",
+              "type": "text",
+              "uuid": "409628f0-fb62-434b-8740-28dbfd94f39b"
             }
           ]
         },
         "url": {
-          "raw": "http://localhost:8080/static/language/javascript/repository/zip",
+          "raw": "http://localhost:8080/static/ast",
           "protocol": "http",
-          "host": ["localhost"],
+          "host": [
+            "localhost"
+          ],
           "port": "8080",
-          "path": ["static", "language", "javascript", "repository", "zip"]
+          "path": [
+            "static",
+            "ast"
+          ]
         }
       },
       "response": []
     },
     {
-      "name": ":8080 /static/language/javascript/repository/zip 400 repository not existent",
+      "name": ":8080 /static/ast 400 repository not existent",
       "protocolProfileBehavior": {
         "disabledSystemHeaders": {}
       },
@@ -216,16 +340,464 @@
             {
               "key": "file",
               "type": "file",
-              "src": []
+              "fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
+              "filesNotInWorkingDirectory": [
+                "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/example.zip"
+              ],
+              "value": null
+            },
+            {
+              "key": "options",
+              "value": "{\"language\":\"javascript\"}",
+              "type": "text",
+              "uuid": "f5cac3fc-4e48-4d0a-bbbb-685342dd1cdd"
             }
           ]
         },
         "url": {
-          "raw": "http://localhost:8080/static/language/javascript/repository/zip",
+          "raw": "http://localhost:8080/static/ast",
           "protocol": "http",
-          "host": ["localhost"],
+          "host": [
+            "localhost"
+          ],
           "port": "8080",
-          "path": ["static", "language", "javascript", "repository", "zip"]
+          "path": [
+            "static",
+            "ast"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": ":8080 /static/ast 400 repository no options",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {}
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "fileNotInWorkingDirectoryWarning": "This file isn't in your working directory. Teammates you share this request with won't be able to use this file. To make collaboration easier you can setup your working directory in Settings.",
+              "filesNotInWorkingDirectory": [
+                "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/example.zip"
+              ],
+              "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/example.zip"
+            },
+            {
+              "key": "options",
+              "value": "{}",
+              "type": "text",
+              "uuid": "f254587c-6b78-45dd-8f53-b844e4ba0385"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8080/static/ast",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "static",
+            "ast"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": ":3000 /static/nlptr TEMP",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {}
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/example.zip"
+            },
+            {
+              "key": "options",
+              "value": "{\"hints\":{\"out\":[\"get\",\"post\",\"put\",\"delete\",\"patch\",\"all\",\"head\",\"del\",\"collection\",\"aggregate\",\"bulkWrite\",\"count\",\"countDocuments\",\"createIndex\",\"createIndexes\",\"deleteMany\",\"deleteOne\",\"distinct\",\"drop\",\"dropAllIndexes\",\"dropIndex\",\"dropIndexes\",\"ensureIndex\",\"estimatedDocumentCount\",\"find\",\"findAndModify\",\"findAndRemove\",\"findOne\",\"findOneAndDelete\",\"findOneAndReplace\",\"findOneAndUpdate\",\"geoHaystackSearch\",\"group\",\"indexes\",\"indexExists\",\"indexInformation\",\"initializeOrderedBulkOp\",\"initializeUnorderedBulkOp\",\"insert\",\"insertMany\",\"insertOne\",\"isCapped\",\"listIndexes\",\"mapReduce\",\"options\",\"parallelCollectionScan\",\"reIndex\",\"remove\",\"rename\",\"replaceOne\",\"save\",\"stats\",\"update\",\"updateMany\",\"updateOne\",\"watch\"],\"in\":[\"count\", \"order\"]}}\n",
+              "type": "text",
+              "uuid": "3e633b96-0930-4d9b-9697-6290d4f8e66c"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:3000/static/nlptr",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "static",
+            "nlptr"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": ":3000 /static/nlptr 200 repository",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {}
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/example.zip"
+            },
+            {
+              "key": "options",
+              "value": "{\"hints\": { \"out\" : [], \"in\" : [] }}",
+              "type": "text",
+              "uuid": "72a1962b-b0e8-4224-b0ac-08c827e2a124"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:3000/static/nlptr",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "static",
+            "nlptr"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": ":3000 /static/nlptr 200 repository hints",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {}
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/example.zip"
+            },
+            {
+              "key": "options",
+              "value": "{\"hints\": { \"out\" : [\"db\", \"redis\", \"redis client\", \"redis database port\", \"redis database host\", \"client\", \"express\", \"app\",  \"use\", \"json\", \"request\", \"response\", \"message\", \"mongodb\", \"collection\", \"connect\", \"close\", \"error\", \"status\", \"not\", \"found\", \"valid\", \"set\"], \"in\" : [\"order\", \"count\", \"order count\"] }}",
+              "type": "text",
+              "uuid": "efb32865-95e8-4782-b2de-e4f23c702637"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:3000/static/nlptr",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "static",
+            "nlptr"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": ":3000 /static/nlptr 400 repository empty",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {}
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/empty.zip"
+            },
+            {
+              "key": "options",
+              "value": "{\"hints\": { \"out\" : [], \"in\" : [] }}",
+              "type": "text",
+              "uuid": "efb32865-95e8-4782-b2de-e4f23c702637"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:3000/static/nlptr",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "static",
+            "nlptr"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": ":3000 /static/nlptr 400 repository not existent",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {}
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "value": null
+            },
+            {
+              "key": "options",
+              "value": "{\"hints\": { \"out\" : [], \"in\" : [] }}",
+              "type": "text",
+              "uuid": "efb32865-95e8-4782-b2de-e4f23c702637"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:3000/static/nlptr",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "static",
+            "nlptr"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": ":8080 /static/nlptr TEMP",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {}
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/example.zip"
+            },
+            {
+              "key": "options",
+              "value": "{\"hints\":{\"out\":[\"get\",\"post\",\"put\",\"delete\",\"patch\",\"all\",\"head\",\"del\",\"collection\",\"aggregate\",\"bulkWrite\",\"count\",\"countDocuments\",\"createIndex\",\"createIndexes\",\"deleteMany\",\"deleteOne\",\"distinct\",\"drop\",\"dropAllIndexes\",\"dropIndex\",\"dropIndexes\",\"ensureIndex\",\"estimatedDocumentCount\",\"find\",\"findAndModify\",\"findAndRemove\",\"findOne\",\"findOneAndDelete\",\"findOneAndReplace\",\"findOneAndUpdate\",\"geoHaystackSearch\",\"group\",\"indexes\",\"indexExists\",\"indexInformation\",\"initializeOrderedBulkOp\",\"initializeUnorderedBulkOp\",\"insert\",\"insertMany\",\"insertOne\",\"isCapped\",\"listIndexes\",\"mapReduce\",\"options\",\"parallelCollectionScan\",\"reIndex\",\"remove\",\"rename\",\"replaceOne\",\"save\",\"stats\",\"update\",\"updateMany\",\"updateOne\",\"watch\"],\"in\":[\"count\", \"order\"]}}\n",
+              "type": "text",
+              "uuid": "b19a43e8-fbc5-4883-a40a-de83256736b4"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8080/static/nlptr",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "static",
+            "nlptr"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": ":8080 /static/nlptr 200 repository",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {}
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/example.zip"
+            },
+            {
+              "key": "options",
+              "value": "{\"hints\": { \"out\" : [], \"in\" : [] }}",
+              "type": "text",
+              "uuid": "74c60d65-16ee-4830-95ea-9b98426f40a0"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8080/static/nlptr",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "static",
+            "nlptr"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": ":8080 /static/nlptr 200 repository hints",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {}
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/example.zip"
+            },
+            {
+              "key": "options",
+              "value": "{\"hints\": { \"out\" : [\"db\", \"redis\", \"redis client\", \"redis database port\", \"redis database host\", \"client\", \"express\", \"app\",  \"use\", \"json\", \"request\", \"response\", \"message\", \"mongodb\", \"collection\", \"connect\", \"close\", \"error\", \"status\", \"not\", \"found\", \"valid\", \"set\"], \"in\" : [\"order\", \"count\", \"order count\"] }}",
+              "type": "text",
+              "uuid": "efb32865-95e8-4782-b2de-e4f23c702637"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8080/static/nlptr",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "static",
+            "nlptr"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": ":8080 /static/nlptr 400 repository empty",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {}
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "src": "/C:/Users/Maxime/WORKSPACES/reverse-engineering/test/integration/asset/empty.zip"
+            },
+            {
+              "key": "options",
+              "value": "{\"hints\": { \"out\" : [], \"in\" : [] }}",
+              "type": "text",
+              "uuid": "efb32865-95e8-4782-b2de-e4f23c702637"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8080/static/nlptr",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "static",
+            "nlptr"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": ":8080 /static/nlptr 400 repository not existent",
+      "protocolProfileBehavior": {
+        "disabledSystemHeaders": {}
+      },
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "file",
+              "type": "file",
+              "value": null
+            },
+            {
+              "key": "options",
+              "value": "{\"hints\": { \"out\" : [], \"in\" : [] }}",
+              "type": "text",
+              "uuid": "efb32865-95e8-4782-b2de-e4f23c702637"
+            }
+          ]
+        },
+        "url": {
+          "raw": "http://localhost:8080/static/nlptr",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "static",
+            "nlptr"
+          ]
         }
       },
       "response": []

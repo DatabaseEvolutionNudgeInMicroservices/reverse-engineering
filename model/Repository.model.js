@@ -5,6 +5,7 @@ const Directory = require('./Directory.model')
 // Error
 
 const BadFormat = require('../error/BadFormat.error.js')
+const { INPUT_INCORRECTLY_FORMATTED } = require('../error/Constant.error.js')
 
 /**
  * @overview This class represents a repository.
@@ -22,7 +23,7 @@ class Repository {
     if (location !== null && location !== undefined && location.length > 0) {
       this.location = location
     } else {
-      throw new BadFormat()
+      throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
     }
   }
 
@@ -34,7 +35,7 @@ class Repository {
     if (directories !== null && directories !== undefined) {
       this.directories = directories
     } else {
-      throw new BadFormat()
+      throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
     }
   }
 
@@ -64,7 +65,7 @@ class Repository {
         object.directories.forEach((directory) => directories.push(Directory.revive(directory)))
         return new Repository(object.location, directories)
       } else {
-        throw new BadFormat()
+        throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
       }
     } catch (error) {
       throw error

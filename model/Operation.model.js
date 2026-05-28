@@ -2,6 +2,7 @@
 
 const BadFormat = require('../error/BadFormat.error.js')
 const BadOperation = require('../error/BadOperation.error')
+const { INPUT_INCORRECTLY_FORMATTED } = require('../error/Constant.error.js')
 
 /**
  * @overview This class represents an operation.
@@ -31,7 +32,7 @@ class Operation {
    * @param name The given operation candidate.
    */
   static check(name) {
-    return ['CREATE', 'READ', 'UPDATE', 'DELETE', 'OTHER'].includes(name)
+    return ['CREATE', 'READ', 'UPDATE', 'DELETE', 'OTHER', '?'].includes(name)
   }
 
   /**
@@ -51,7 +52,7 @@ class Operation {
       ) {
         return new Operation(object.name)
       } else {
-        throw new BadFormat()
+        throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
       }
     } catch (error) {
       throw error

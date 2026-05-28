@@ -1,6 +1,6 @@
 // Constants
 
-const { FILE_SYSTEM_SEPARATOR, TEMP_FOLDER_NAME } = require('./Constant.helper.js')
+const { TEMP_FOLDER_NAME } = require('./Constant.helper.js')
 
 // Errors
 
@@ -15,6 +15,7 @@ const Cleaner = require('./Cleaner.helper.js')
 // Libraries
 
 const fs = require('fs')
+const path = require('path')
 
 /**
  * @overview This class represents a file cleaner.
@@ -70,15 +71,15 @@ class CleanerFile extends Cleaner {
   cleanByElement(element) {
     return new Promise((resolve, reject) => {
       if (element !== undefined && element !== null && element.length !== 0) {
-        let path = `${process.cwd()}${FILE_SYSTEM_SEPARATOR}${TEMP_FOLDER_NAME}${FILE_SYSTEM_SEPARATOR}${element}`
-        if (fs.existsSync(path)) {
+        let elementPath = path.join(process.cwd(), TEMP_FOLDER_NAME, element)
+        if (fs.existsSync(elementPath)) {
           try {
-            const stats = fs.lstatSync(path)
+            const stats = fs.lstatSync(elementPath)
             if (stats.isDirectory()) {
-              fs.rmSync(path, { recursive: true, force: true })
+              fs.rmSync(elementPath, { recursive: true, force: true })
               resolve(true)
             } else if (stats.isFile()) {
-              fs.rmSync(path, { force: true })
+              fs.rmSync(elementPath, { force: true })
               resolve(true)
             }
           } catch (error) {

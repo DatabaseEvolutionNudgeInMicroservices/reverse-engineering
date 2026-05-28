@@ -1,12 +1,16 @@
-// Model
+// Models
+
 const CodeFragment = require('../../model/CodeFragment.model')
-// Error
-const BadFormat = require('../../error/BadFormat.error.js')
 const Technology = require('../../model/Technology.model')
 const Operation = require('../../model/Operation.model')
 const Method = require('../../model/Method.model')
 const Sample = require('../../model/Sample.model')
 const Concept = require('../../model/Concept.model')
+
+// Errors
+
+const BadFormat = require('../../error/BadFormat.error.js')
+const { INPUT_INCORRECTLY_FORMATTED } = require('../../error/Constant.error.js')
 
 // Happy path test suite
 
@@ -159,7 +163,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       CodeFragment.revive(codeFragmentAsStringGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive an incomplete formatted object', () => {
@@ -172,7 +176,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       CodeFragment.revive(codeFragmentAsStringGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive an undefined object', () => {
@@ -184,7 +188,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       CodeFragment.revive(codeFragmentGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a null object', () => {
@@ -196,7 +200,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       CodeFragment.revive(codeFragmentGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a code fragment with null location', () => {
@@ -209,7 +213,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       CodeFragment.revive(codeFragmentAsObjectGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a code fragment with empty location', () => {
@@ -222,7 +226,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       CodeFragment.revive(codeFragmentAsObjectGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a code fragment with undefined location', () => {
@@ -239,7 +243,7 @@ describe('CodeFragment tries to', () => {
         'E1E2E3E4E5E6E7E8',
         '8'
       )
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a code fragment with null location', () => {
@@ -256,7 +260,7 @@ describe('CodeFragment tries to', () => {
         'E1E2E3E4E5E6E7E8',
         '8'
       )
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a code fragment with empty location', () => {
@@ -273,7 +277,7 @@ describe('CodeFragment tries to', () => {
         'E1E2E3E4E5E6E7E8',
         '8'
       )
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a code fragment with undefined technology', () => {
@@ -290,7 +294,7 @@ describe('CodeFragment tries to', () => {
         'E1E2E3E4E5E6E7E8',
         '8'
       )
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a code fragment with null technology', () => {
@@ -307,7 +311,7 @@ describe('CodeFragment tries to', () => {
         'E1E2E3E4E5E6E7E8',
         '8'
       )
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a code fragment with a non-typed technology', () => {
@@ -324,7 +328,7 @@ describe('CodeFragment tries to', () => {
         'E1E2E3E4E5E6E7E8',
         '8'
       )
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a code fragment with undefined operation', () => {
@@ -341,7 +345,7 @@ describe('CodeFragment tries to', () => {
         'E1E2E3E4E5E6E7E8',
         '8'
       )
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a code fragment with null operation', () => {
@@ -358,7 +362,7 @@ describe('CodeFragment tries to', () => {
         'E1E2E3E4E5E6E7E8',
         '8'
       )
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a code fragment with a non-typed operation', () => {
@@ -375,7 +379,7 @@ describe('CodeFragment tries to', () => {
         'E1E2E3E4E5E6E7E8',
         '8'
       )
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a code fragment with undefined method', () => {
@@ -392,7 +396,7 @@ describe('CodeFragment tries to', () => {
         'E1E2E3E4E5E6E7E8',
         '8'
       )
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a code fragment with null method', () => {
@@ -409,7 +413,7 @@ describe('CodeFragment tries to', () => {
         'E1E2E3E4E5E6E7E8',
         '8'
       )
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a code fragment with a non-typed method', () => {
@@ -426,7 +430,7 @@ describe('CodeFragment tries to', () => {
         'E1E2E3E4E5E6E7E8',
         '8'
       )
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a code fragment with undefined sample', () => {
@@ -443,7 +447,7 @@ describe('CodeFragment tries to', () => {
         'E1E2E3E4E5E6E7E8',
         '8'
       )
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a code fragment with null sample', () => {
@@ -460,7 +464,7 @@ describe('CodeFragment tries to', () => {
         'E1E2E3E4E5E6E7E8',
         '8'
       )
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a code fragment with a non-typed sample', () => {
@@ -477,7 +481,7 @@ describe('CodeFragment tries to', () => {
         'E1E2E3E4E5E6E7E8',
         '8'
       )
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a code fragment with undefined concepts', () => {
@@ -494,7 +498,7 @@ describe('CodeFragment tries to', () => {
         'E1E2E3E4E5E6E7E8',
         '8'
       )
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a code fragment with null concepts', () => {
@@ -511,7 +515,7 @@ describe('CodeFragment tries to', () => {
         'E1E2E3E4E5E6E7E8',
         '8'
       )
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a code fragment with undefined heuristics', () => {
@@ -528,7 +532,41 @@ describe('CodeFragment tries to', () => {
         undefined,
         '8'
       )
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
+  })
+
+  test('create a code fragment with non-typed concept', () => {
+    // Given When Then
+
+    expect(() => {
+      new CodeFragment(
+        'https://www.github.com/user/project/blob/master/app.js#L0C0L1C1',
+        new Technology('javascript-api-express-call'),
+        new Operation('READ'),
+        new Method('find'),
+        new Sample('{user_id: userId}'),
+        'user',
+        undefined,
+        '8'
+      )
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
+  })
+
+  test('create a code fragment with non-typed concept list', () => {
+    // Given When Then
+
+    expect(() => {
+      new CodeFragment(
+        'https://www.github.com/user/project/blob/master/app.js#L0C0L1C1',
+        new Technology('javascript-api-express-call'),
+        new Operation('READ'),
+        new Method('find'),
+        new Sample('{user_id: userId}'),
+        ['user'],
+        undefined,
+        '8'
+      )
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a code fragment with null heuristics', () => {
@@ -545,7 +583,7 @@ describe('CodeFragment tries to', () => {
         undefined,
         '8'
       )
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a code fragment with undefined score', () => {
@@ -562,7 +600,7 @@ describe('CodeFragment tries to', () => {
         'E1E2E3E4E5E6E7E8',
         undefined
       )
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a code fragment with null score', () => {
@@ -579,7 +617,7 @@ describe('CodeFragment tries to', () => {
         'E1E2E3E4E5E6E7E8',
         null
       )
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a code fragment undefined location', () => {
@@ -600,7 +638,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       codeFragmentAsObjectGiven.setLocation(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a code fragment null location', () => {
@@ -621,7 +659,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       codeFragmentAsObjectGiven.setLocation(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a code fragment empty location', () => {
@@ -642,7 +680,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       codeFragmentAsObjectGiven.setLocation(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a code fragment undefined technology', () => {
@@ -663,7 +701,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       codeFragmentAsObjectGiven.setTechnology(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a code fragment null technology', () => {
@@ -684,7 +722,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       codeFragmentAsObjectGiven.setTechnology(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a code fragment a non-typed technology', () => {
@@ -705,7 +743,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       codeFragmentAsObjectGiven.setTechnology('javascript-api-mongo')
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a code fragment undefined operation', () => {
@@ -726,7 +764,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       codeFragmentAsObjectGiven.setOperation(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a code fragment null operation', () => {
@@ -747,7 +785,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       codeFragmentAsObjectGiven.setOperation(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a code fragment a non-typed operation', () => {
@@ -768,7 +806,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       codeFragmentAsObjectGiven.setOperation('UPDATE')
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a code fragment undefined method', () => {
@@ -789,7 +827,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       codeFragmentAsObjectGiven.setMethod(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a code fragment null method', () => {
@@ -810,7 +848,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       codeFragmentAsObjectGiven.setMethod(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a code fragment a non-typed method', () => {
@@ -831,7 +869,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       codeFragmentAsObjectGiven.setMethod('findOne')
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a code fragment undefined sample', () => {
@@ -852,7 +890,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       codeFragmentAsObjectGiven.setSample(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a code fragment null sample', () => {
@@ -873,7 +911,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       codeFragmentAsObjectGiven.setSample(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a code fragment a non-typed sample', () => {
@@ -894,7 +932,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       codeFragmentAsObjectGiven.setSample('{}')
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a code fragment undefined concepts', () => {
@@ -915,7 +953,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       codeFragmentAsObjectGiven.setConcepts(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a code fragment null concepts', () => {
@@ -936,7 +974,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       codeFragmentAsObjectGiven.setConcepts(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a code fragment undefined heuristics', () => {
@@ -957,7 +995,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       codeFragmentAsObjectGiven.setHeuristics(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a code fragment null heuristics', () => {
@@ -978,7 +1016,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       codeFragmentAsObjectGiven.setHeuristics(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a code fragment undefined score', () => {
@@ -999,7 +1037,7 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       codeFragmentAsObjectGiven.setScore(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a code fragment null score', () => {
@@ -1020,6 +1058,6 @@ describe('CodeFragment tries to', () => {
 
     expect(() => {
       codeFragmentAsObjectGiven.setScore(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 })

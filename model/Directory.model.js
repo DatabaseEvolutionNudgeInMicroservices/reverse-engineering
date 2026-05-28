@@ -5,6 +5,7 @@ const File = require('./File.model')
 // Error
 
 const BadFormat = require('../error/BadFormat.error.js')
+const { INPUT_INCORRECTLY_FORMATTED } = require('../error/Constant.error.js')
 
 /**
  * @overview This class represents a directory.
@@ -23,7 +24,7 @@ class Directory {
     if (location !== null && location !== undefined && location.length > 0) {
       this.location = location
     } else {
-      throw new BadFormat()
+      throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
     }
   }
 
@@ -35,7 +36,7 @@ class Directory {
     if (directories !== null && directories !== undefined) {
       this.directories = directories
     } else {
-      throw new BadFormat()
+      throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
     }
   }
 
@@ -47,7 +48,7 @@ class Directory {
     if (files !== null && files !== undefined) {
       this.files = files
     } else {
-      throw new BadFormat()
+      throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
     }
   }
 
@@ -82,7 +83,7 @@ class Directory {
         object.directories.forEach((directory) => directories.push(Directory.revive(directory)))
         return new Directory(object.location, directories, files)
       } else {
-        throw new BadFormat()
+        throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
       }
     } catch (error) {
       throw error

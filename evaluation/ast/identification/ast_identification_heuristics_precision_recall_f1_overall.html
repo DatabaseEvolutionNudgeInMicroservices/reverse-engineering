@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>μ Precision and μ Recall (%) depending on Score Thresholds</title>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+<body>
+<div id="precisionRecallGraph" style="width:50%;height:600px;"></div>
+<script>
+
+    // API Express data
+
+    var api_express_scores_threshold = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+    var api_express_precision = [ 61.09,	76.30,      93.42,	    94.97,      100.00,	    100.00,	    100.00,	    100.00,     100.00];
+    var api_express_recall =    [100.00,	100.00,	    100.00,	    100.00,	     96.84,	     95.50,	     58.08,	     57.31,      49.96];
+
+    var trace_api_express_precision = {
+        x: api_express_scores_threshold,
+        y: api_express_precision,
+        mode: 'lines',
+        name: 'API Express - μ Precision',
+        line: {
+            color: '#e6c200',
+            dash: 'solid',
+            width: 3
+        },
+        legendgroup: 'API Express μ Precision',
+        showlegend: true
+    };
+
+    var trace_api_express_recall = {
+        x: api_express_scores_threshold,
+        y: api_express_recall,
+        mode: 'lines',
+        name: 'API Express - μ Recall',
+        line: {
+            color: '#f6e248',
+            dash: 'dash',
+            width: 3
+        },
+        legendgroup: 'API Express μ Recall',
+        showlegend: true
+    };
+
+    // DB MongoDB data
+
+    var db_mongo_scores_threshold = [1, 2, 3, 4, 5, 6, 7];
+
+    var db_mongo_precision =    [80.70,	    86.37,      94.99,      100.00,      100.00,     100.00,     100.00];
+    var db_mongo_recall =       [100.00,	100.00,	    88.48,	    66.33,	    28.73,        4.70,       4.51];
+
+    var trace_db_mongo_precision = {
+        x: db_mongo_scores_threshold,
+        y: db_mongo_precision,
+        mode: 'lines',
+        name: 'DB MongoDB - μ Precision',
+        line: {
+            color: '#3e7c36',
+            dash: 'solid',
+            width: 3
+        },
+        legendgroup: 'DB MongoDB μ Precision',
+        showlegend: true
+    };
+
+    var trace_db_mongo_recall = {
+        x: db_mongo_scores_threshold,
+        y: db_mongo_recall,
+        mode: 'lines',
+        name: 'DB MongoDB - μ Recall',
+        line: {
+            color: '#54a850',
+            dash: 'dash',
+            width: 3
+        },
+        legendgroup: 'DB MongoDB μ Recall',
+        showlegend: true
+    };
+
+    // DB Redis data
+
+    var db_redis_scores_threshold = [1, 2, 3, 4, 5, 6];
+
+    var db_redis_precision =    [24.43,      42.51,     57.86,	    79.36,      88.89,      100.00];
+    var db_redis_recall =       [100.00,    100.00,     94.55,	    57.58,	    49.68,        1.60];
+
+    var trace_db_redis_precision = {
+        x: db_redis_scores_threshold,
+        y: db_redis_precision,
+        mode: 'lines',
+        name: 'DB Redis - μ Precision',
+        line: {
+            color: '#c7322e',
+            dash: 'solid',
+            width: 3
+        },
+        legendgroup: 'DB Redis μ Precision',
+        showlegend: true
+    };
+
+    var trace_db_redis_recall = {
+        x: db_redis_scores_threshold,
+        y: db_redis_recall,
+        mode: 'lines',
+        name: 'DB Redis - μ Recall',
+        line: {
+            color: '#f74d3e',
+            dash: 'dash',
+            width: 3
+        },
+        legendgroup: 'DB Redis μ Recall',
+        showlegend: true
+    };
+
+    // Data
+
+    var data = [
+
+        // Express
+
+        trace_api_express_precision,
+        trace_api_express_recall,
+
+        // MongoDB
+
+        trace_db_mongo_precision,
+        trace_db_mongo_recall,
+
+        // Redis
+
+        trace_db_redis_precision,
+        trace_db_redis_recall,
+    ];
+	
+    var layout = {
+        title: 'μ Precision and μ Recall (%) Depending on Score Thresholds',
+        barmode: 'group',
+        xaxis: { title: 'Scores', range: [1, 8] },
+        yaxis: { title: 'Precision and Recall (%)', automargin: true },
+        showlegend: true
+    };
+	
+    Plotly.newPlot('precisionRecallGraph', data, layout);
+</script>
+</body>
+</html>

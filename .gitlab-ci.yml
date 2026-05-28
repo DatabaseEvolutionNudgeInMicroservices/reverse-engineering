@@ -53,10 +53,8 @@ building:
     - Remove-Item -Path lib/codeql-lib/codeql-lib.zip
     #- Move-Item -Path ${env:ProgramFiles}/codeql/codeql-lib -Destination lib/codeql-lib # CodeQL CLI moving to right folder.
 
-    # Environment variables
+    # Environment
 
-    - New-Item -Name ".env" -ItemType "file" # Creates the environment variables file.
-    - Add-Content .env 'FILE_SYSTEM_SEPARATOR="\"' # Adds the file system separator environment variable for Windows.
     - New-Item -Name "TEMP" -ItemType "directory" # Creates the temporary working directory for analysis files.
 
 # Unit testing
@@ -84,7 +82,6 @@ integration-testing:
   needs: [unit-testing]
   script:
     - echo "--Integration testing--"
-    - Set-Content .env 'FILE_SYSTEM_SEPARATOR="/"' # Sets the file system separator environment variable for Linux.
     - docker-compose up -d # Sets up and starts the docker container via docker-compose started in background.
     - npm run test_integration # Launches the integration testing.
 

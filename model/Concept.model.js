@@ -1,6 +1,7 @@
 // Error
 
 const BadFormat = require('../error/BadFormat.error.js')
+const { INPUT_INCORRECTLY_FORMATTED } = require('../error/Constant.error.js')
 
 /**
  * @overview This class represents a concept.
@@ -17,7 +18,7 @@ class Concept {
     if (name !== null && name !== undefined && name.length > 0) {
       this.name = name
     } else {
-      throw new BadFormat()
+      throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
     }
   }
 
@@ -42,7 +43,7 @@ class Concept {
       ) {
         return new Concept(object.name)
       } else {
-        throw new BadFormat()
+        throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
       }
     } catch (error) {
       throw error

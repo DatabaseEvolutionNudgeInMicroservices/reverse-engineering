@@ -1,7 +1,11 @@
-// Model
+// Models
+
 const Technology = require('../../model/Technology.model')
-// Error
+
+// Errors
+
 const BadFormat = require('../../error/BadFormat.error.js')
+const { INPUT_INCORRECTLY_FORMATTED } = require('../../error/Constant.error.js')
 
 // Happy path test suite
 
@@ -62,7 +66,7 @@ describe('Technology tries to', () => {
 
     expect(() => {
       Technology.revive(technologyAsStringGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive an incomplete formatted object', () => {
@@ -74,7 +78,7 @@ describe('Technology tries to', () => {
 
     expect(() => {
       Technology.revive(technologyAsStringGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive an undefined object', () => {
@@ -86,7 +90,7 @@ describe('Technology tries to', () => {
 
     expect(() => {
       Technology.revive(technologyGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a null object', () => {
@@ -98,7 +102,7 @@ describe('Technology tries to', () => {
 
     expect(() => {
       Technology.revive(technologyGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a technology with null id', () => {
@@ -111,7 +115,7 @@ describe('Technology tries to', () => {
 
     expect(() => {
       Technology.revive(technologyAsObjectGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a technology with empty id', () => {
@@ -124,7 +128,7 @@ describe('Technology tries to', () => {
 
     expect(() => {
       Technology.revive(technologyAsObjectGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a technology with undefined id', () => {
@@ -132,7 +136,7 @@ describe('Technology tries to', () => {
 
     expect(() => {
       let technologyGiven = new Technology(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a technology with null id', () => {
@@ -140,7 +144,7 @@ describe('Technology tries to', () => {
 
     expect(() => {
       let technologyGiven = new Technology(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a technology with empty id', () => {
@@ -148,7 +152,7 @@ describe('Technology tries to', () => {
 
     expect(() => {
       let technologyGiven = new Technology('')
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a technology undefined id', () => {
@@ -160,7 +164,7 @@ describe('Technology tries to', () => {
 
     expect(() => {
       technologyAsObjectGiven.setId(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a technology null id', () => {
@@ -172,7 +176,7 @@ describe('Technology tries to', () => {
 
     expect(() => {
       technologyAsObjectGiven.setId(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a technology empty id', () => {
@@ -184,6 +188,6 @@ describe('Technology tries to', () => {
 
     expect(() => {
       technologyAsObjectGiven.setId(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 })

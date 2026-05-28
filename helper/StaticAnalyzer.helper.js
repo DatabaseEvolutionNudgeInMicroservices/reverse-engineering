@@ -8,67 +8,67 @@ class StaticAnalyzer {
   constructor() {}
 
   /**
-   * Initializes an analysis by list.
-   * @param list {[String]} The given list.
-   * @param language {String} The targeted language by the analysis.
+   * Initializes an analysis for a list of repositories.
+   * @param repositories {[Repository]} The given list of repositories.
    * @param destination {String} The destination.
+   * @param options {Object} The options.
    * @returns {Promise} A promise for the preparation.
    */
-  initializesByList(list, language, destination) {}
+  initializesByRepositories(repositories, destination, options) {}
 
   /**
-   * Initializes an analysis by element.
-   * @param element {String} The given element.
-   * @param language {String} The targeted language by the analysis.
+   * Initializes an analysis by repository.
+   * @param repository {Repository} The given repository.
    * @param destination {String} The destination.
+   * @param options {Object} The options.
    * @returns {Promise} A promise for the preparation.
    */
-  initializesByElement(element, language, destination) {}
+  initializesByRepository(repository, destination, options) {}
 
   /**
-   * Performs an identification analysis by list.
-   * @param list {[String]} The given list.
-   * @param language {String} The targeted language by the analysis.
+   * Performs an identification analysis for a list of repositories.
+   * @param repositories {[Repository]} The given list of repositories.
    * @param destination {String} The destination.
+   * @param options {Object} The options.
    * @returns {Promise} A promise for the analysis.
    */
-  identifyByList(list, language, destination) {}
+  identifyByRepositories(repositories, destination, options) {}
 
   /**
-   * Performs an identification analysis by element.
-   * @param element {String} The given element.
-   * @param language {String} The targeted language by the analysis.
+   * Performs an identification analysis by repository.
+   * @param repository {Repository} The given repository.
    * @param destination {String} The destination.
+   * @param options {Object} The options.
    * @returns {Promise} A promise for the analysis.
    */
-  identifyByElement(element, language, destination) {}
+  identifyByRepository(repository, destination, options) {}
 
   /**
-   * Extracts an analysis by list.
-   * @param list {[String]} The given list.
-   * @param language {String} The targeted language by the analysis.
+   * Extracts an analysis for a list of repositories.
+   * @param repositories {[Repository]} The given list of repositories.
    * @param destination {String} The destination.
+   * @param options {Object} The options.
    * @returns {Promise} A promise for the extraction.
    */
-  extractByList(list, language, destination) {}
+  extractByRepositories(repositories, destination, options) {}
 
   /**
-   * Extracts an analysis by element.
-   * @param element {String} The given element.
-   * @param language {String} The targeted language by the analysis.
+   * Extracts an analysis by repository.
+   * @param repository {Repository} The given repository.
    * @param destination {String} The destination.
+   * @param options {Object} The options.
    * @returns {Promise} A promise for the extraction.
    */
-  extractByElement(element, language, destination) {}
+  extractByRepository(repository, destination, options) {}
 
   /**
-   * Interprets  an analysis by list.
-   * @param list {[String]} The given list.
-   * @param language {String} The targeted language by the analysis.
+   * Interprets an analysis for a list of repositories.
+   * @param repositories {[Repository]} The given list of repositories.
    * @param destination {String} The destination.
+   * @param options {Object} The options.
    * @returns {Promise} A promise for the extraction.
    */
-  interpretByList(list, language, destination) {}
+  interpretByRepositories(repositories, destination, options) {}
 }
 
 module.exports = StaticAnalyzer

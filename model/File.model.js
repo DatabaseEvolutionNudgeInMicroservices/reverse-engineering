@@ -5,6 +5,7 @@ const CodeFragment = require('./CodeFragment.model')
 // Error
 
 const BadFormat = require('../error/BadFormat.error.js')
+const { INPUT_INCORRECTLY_FORMATTED } = require('../error/Constant.error.js')
 
 /**
  * @overview This class represents a file.
@@ -23,7 +24,7 @@ class File {
     if (location !== null && location !== undefined && location.length > 0) {
       this.location = location
     } else {
-      throw new BadFormat()
+      throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
     }
   }
 
@@ -37,15 +38,15 @@ class File {
       try {
         number = Number.parseInt(linesOfCode)
       } catch (error) {
-        throw new BadFormat()
+        throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
       }
       if (number >= 0) {
         this.linesOfCode = number
       } else {
-        throw new BadFormat()
+        throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
       }
     } else {
-      throw new BadFormat()
+      throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
     }
   }
 
@@ -57,7 +58,7 @@ class File {
     if (codeFragments !== null && codeFragments !== undefined) {
       this.codeFragments = codeFragments
     } else {
-      throw new BadFormat()
+      throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
     }
   }
 
@@ -89,7 +90,7 @@ class File {
         )
         return new File(object.location, object.linesOfCode, codeFragments)
       } else {
-        throw new BadFormat()
+        throw new BadFormat(INPUT_INCORRECTLY_FORMATTED)
       }
     } catch (error) {
       throw error

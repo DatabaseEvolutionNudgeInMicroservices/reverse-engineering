@@ -1,8 +1,12 @@
-// Model
+// Models
+
 const Operation = require('../../model/Operation.model')
-// Error
+
+// Errors
+
 const BadFormat = require('../../error/BadFormat.error.js')
 const BadOperation = require('../../error/BadOperation.error')
+const { INPUT_INCORRECTLY_FORMATTED } = require('../../error/Constant.error.js')
 
 // Happy path test suite
 
@@ -40,7 +44,7 @@ describe('Operation', () => {
   test('checks the valid operation', () => {
     // Given
 
-    let operations = ['CREATE', 'READ', 'UPDATE', 'DELETE', 'OTHER']
+    let operations = ['CREATE', 'READ', 'UPDATE', 'DELETE', 'OTHER', '?']
 
     // When
 
@@ -77,7 +81,7 @@ describe('Operation tries to', () => {
 
     expect(() => {
       Operation.revive(operationAsStringGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive an incomplete formatted object', () => {
@@ -89,7 +93,7 @@ describe('Operation tries to', () => {
 
     expect(() => {
       Operation.revive(operationAsStringGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive an undefined object', () => {
@@ -101,7 +105,7 @@ describe('Operation tries to', () => {
 
     expect(() => {
       Operation.revive(operationGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a null object', () => {
@@ -113,7 +117,7 @@ describe('Operation tries to', () => {
 
     expect(() => {
       Operation.revive(operationGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a bad operation object', () => {

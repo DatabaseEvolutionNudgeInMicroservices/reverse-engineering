@@ -20,8 +20,8 @@ You have the tree following options.
 
 #### Launching from Docker Hub (preferred)
 
-- [Docker Hub repository](https://hub.docker.com/r/maxiandr/denim-reverse-engineering).
- 
+- [Docker Hub repository](https://hub.docker.com/r/denimraindrop/denim-reverse-engineering).
+
 #### Launching from source code
 
 - Create the `/lib` directory and then the `/lib/codeql-cli` and `/lib/codeql-lib` directories.
@@ -40,18 +40,6 @@ You have the tree following options.
 
   ```bash
   npm run swagger
-  ```
-
-- Create an `.env` file with the following content.
-
-  ```shell
-  # Windows
-  FILE_SYSTEM_SEPARATOR="\"
-  ```
-
-  ```shell
-  # Linux
-  FILE_SYSTEM_SEPARATOR="/"
   ```
 
 - Create a `TEMP` directory at the root.
@@ -81,18 +69,6 @@ The app runs at [http://localhost:3000](http://localhost:3000).
 
   ```bash
   npm run swagger
-  ```
-
-- Create an `.env` file with the following content.
-
-  ```shell
-  # Windows
-  FILE_SYSTEM_SEPARATOR="\"
-  ```
-
-  ```shell
-  # Linux
-  FILE_SYSTEM_SEPARATOR="/"
   ```
 
 - Create a `TEMP` directory at the root.

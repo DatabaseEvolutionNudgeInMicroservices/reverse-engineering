@@ -1,7 +1,11 @@
-// Model
+// Models
+
 const Directory = require('../../model/Directory.model')
-// Error
+
+// Errors
+
 const BadFormat = require('../../error/BadFormat.error.js')
+const { INPUT_INCORRECTLY_FORMATTED } = require('../../error/Constant.error.js')
 
 // Happy path test suite
 
@@ -84,7 +88,7 @@ describe('Directory tries to', () => {
 
     expect(() => {
       Directory.revive(directoryAsStringGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive an incomplete object', () => {
@@ -97,7 +101,7 @@ describe('Directory tries to', () => {
 
     expect(() => {
       Directory.revive(directoryAsStringGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive an undefined object', () => {
@@ -109,7 +113,7 @@ describe('Directory tries to', () => {
 
     expect(() => {
       Directory.revive(directoryGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a null object', () => {
@@ -121,7 +125,7 @@ describe('Directory tries to', () => {
 
     expect(() => {
       Directory.revive(directoryGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a directory with null location', () => {
@@ -134,7 +138,7 @@ describe('Directory tries to', () => {
 
     expect(() => {
       Directory.revive(directoryAsObjectGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a directory with empty location', () => {
@@ -147,7 +151,7 @@ describe('Directory tries to', () => {
 
     expect(() => {
       Directory.revive(directoryAsObjectGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a directory with undefined location', () => {
@@ -155,7 +159,7 @@ describe('Directory tries to', () => {
 
     expect(() => {
       new Directory(undefined, [])
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a directory with null location', () => {
@@ -163,7 +167,7 @@ describe('Directory tries to', () => {
 
     expect(() => {
       new Directory(null, [])
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a directory with empty location', () => {
@@ -171,7 +175,7 @@ describe('Directory tries to', () => {
 
     expect(() => {
       new Directory('', [])
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a directory with undefined files', () => {
@@ -179,7 +183,7 @@ describe('Directory tries to', () => {
 
     expect(() => {
       new Directory('https://www.github.com/user/project/blob/master/app/', undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a directory with null files', () => {
@@ -187,7 +191,7 @@ describe('Directory tries to', () => {
 
     expect(() => {
       new Directory('https://www.github.com/user/project/blob/master/app/', null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a directory undefined location', () => {
@@ -203,7 +207,7 @@ describe('Directory tries to', () => {
 
     expect(() => {
       directoryAsObjectGiven.setLocation(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a directory null location', () => {
@@ -219,7 +223,7 @@ describe('Directory tries to', () => {
 
     expect(() => {
       directoryAsObjectGiven.setLocation(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a directory empty location', () => {
@@ -235,7 +239,7 @@ describe('Directory tries to', () => {
 
     expect(() => {
       directoryAsObjectGiven.setLocation(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a directory undefined files', () => {
@@ -251,7 +255,7 @@ describe('Directory tries to', () => {
 
     expect(() => {
       directoryAsObjectGiven.setFiles(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a directory null files', () => {
@@ -267,6 +271,6 @@ describe('Directory tries to', () => {
 
     expect(() => {
       directoryAsObjectGiven.setFiles(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 })

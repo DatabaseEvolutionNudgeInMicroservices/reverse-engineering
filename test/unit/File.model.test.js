@@ -1,7 +1,11 @@
-// Model
+// Models
+
 const File = require('../../model/File.model')
-// Error
+
+// Errors
+
 const BadFormat = require('../../error/BadFormat.error.js')
+const { INPUT_INCORRECTLY_FORMATTED } = require('../../error/Constant.error.js')
 
 // Happy path test suite
 
@@ -80,7 +84,7 @@ describe('File tries to', () => {
 
     expect(() => {
       File.revive(fileAsStringGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive an incomplete formatted object', () => {
@@ -93,7 +97,7 @@ describe('File tries to', () => {
 
     expect(() => {
       File.revive(fileAsStringGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive an undefined object', () => {
@@ -105,7 +109,7 @@ describe('File tries to', () => {
 
     expect(() => {
       File.revive(fileGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a null object', () => {
@@ -117,7 +121,7 @@ describe('File tries to', () => {
 
     expect(() => {
       File.revive(fileGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a file with null location', () => {
@@ -130,7 +134,7 @@ describe('File tries to', () => {
 
     expect(() => {
       File.revive(fileAsObjectGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a file with empty location', () => {
@@ -143,7 +147,7 @@ describe('File tries to', () => {
 
     expect(() => {
       File.revive(fileAsObjectGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a file with empty null lines of code', () => {
@@ -157,7 +161,7 @@ describe('File tries to', () => {
 
     expect(() => {
       File.revive(fileAsObjectGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a file with empty lines of code', () => {
@@ -171,7 +175,7 @@ describe('File tries to', () => {
 
     expect(() => {
       File.revive(fileAsObjectGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a file with negative lines of code', () => {
@@ -185,7 +189,7 @@ describe('File tries to', () => {
 
     expect(() => {
       File.revive(fileAsObjectGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a file with alphabetic lines of code', () => {
@@ -199,7 +203,7 @@ describe('File tries to', () => {
 
     expect(() => {
       File.revive(fileAsObjectGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a file with undefined location', () => {
@@ -207,7 +211,7 @@ describe('File tries to', () => {
 
     expect(() => {
       new File(undefined, 10, [])
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a file with null location', () => {
@@ -215,7 +219,7 @@ describe('File tries to', () => {
 
     expect(() => {
       new File(null, 10, [])
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a file with empty location', () => {
@@ -223,7 +227,7 @@ describe('File tries to', () => {
 
     expect(() => {
       new File('', 10, [])
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a file with undefined lines of code', () => {
@@ -231,7 +235,7 @@ describe('File tries to', () => {
 
     expect(() => {
       new File('https://www.github.com/user/project/blob/master/js/app/app.js', undefined, [])
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a file with null lines of code', () => {
@@ -239,7 +243,7 @@ describe('File tries to', () => {
 
     expect(() => {
       new File('https://www.github.com/user/project/blob/master/js/app/app.js', null, [])
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a file with empty lines of code', () => {
@@ -247,7 +251,7 @@ describe('File tries to', () => {
 
     expect(() => {
       new File('https://www.github.com/user/project/blob/master/js/app/app.js', '', [])
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a file with alphabetic lines of code', () => {
@@ -255,7 +259,7 @@ describe('File tries to', () => {
 
     expect(() => {
       new File('https://www.github.com/user/project/blob/master/js/app/app.js', 'two', [])
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a file with negative lines of code', () => {
@@ -263,7 +267,7 @@ describe('File tries to', () => {
 
     expect(() => {
       new File('https://www.github.com/user/project/blob/master/js/app/app.js', -1, [])
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a file with undefined code fragments', () => {
@@ -271,7 +275,7 @@ describe('File tries to', () => {
 
     expect(() => {
       new File('https://www.github.com/user/project/blob/master/js/app/app.js', 10, undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a file with null code fragments', () => {
@@ -279,7 +283,7 @@ describe('File tries to', () => {
 
     expect(() => {
       new File('https://www.github.com/user/project/blob/master/js/app/app.js', 10, null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a file undefined location', () => {
@@ -295,7 +299,7 @@ describe('File tries to', () => {
 
     expect(() => {
       fileAsObjectGiven.setLocation(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a file null location', () => {
@@ -311,7 +315,7 @@ describe('File tries to', () => {
 
     expect(() => {
       fileAsObjectGiven.setLocation(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a file empty location', () => {
@@ -327,7 +331,7 @@ describe('File tries to', () => {
 
     expect(() => {
       fileAsObjectGiven.setLocation(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set an undefined lines of code', () => {
@@ -343,7 +347,7 @@ describe('File tries to', () => {
 
     expect(() => {
       fileAsObjectGiven.setLinesOfCode(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a null lines of code', () => {
@@ -359,7 +363,7 @@ describe('File tries to', () => {
 
     expect(() => {
       fileAsObjectGiven.setLinesOfCode(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a empty lines of code', () => {
@@ -375,7 +379,7 @@ describe('File tries to', () => {
 
     expect(() => {
       fileAsObjectGiven.setLinesOfCode('')
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set an alphabetic lines of code', () => {
@@ -391,7 +395,7 @@ describe('File tries to', () => {
 
     expect(() => {
       fileAsObjectGiven.setLinesOfCode('two')
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a negative lines of code', () => {
@@ -407,7 +411,7 @@ describe('File tries to', () => {
 
     expect(() => {
       fileAsObjectGiven.setLinesOfCode(-1)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set undefined code fragments', () => {
@@ -423,7 +427,7 @@ describe('File tries to', () => {
 
     expect(() => {
       fileAsObjectGiven.setCodeFragments(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set null code fragments', () => {
@@ -439,6 +443,6 @@ describe('File tries to', () => {
 
     expect(() => {
       fileAsObjectGiven.setCodeFragments(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 })

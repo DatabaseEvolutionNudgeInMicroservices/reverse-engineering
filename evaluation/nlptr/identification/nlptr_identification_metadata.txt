@@ -1,0 +1,58 @@
+System: cinema-microservice
+GitHub Link: https://github.com/crizstian/cinema-microservice
+GitHub Hashes:
+- https://github.com/crizstian/cinema-microservice/tree/b6c973da8f8cf1944cee2de1ae7b64aa36c55f84
+Request route: POST /nlptr
+Request file: zip
+Request options: {"hints":{"out":["get","post","put","delete","patch","all","head","del","collection","aggregate","bulkWrite","count","countDocuments","createIndex","createIndexes","deleteMany","deleteOne","distinct","drop","dropAllIndexes","dropIndex","dropIndexes","ensureIndex","estimatedDocumentCount","find","findAndModify","findAndRemove","findOne","findOneAndDelete","findOneAndReplace","findOneAndUpdate","geoHaystackSearch","group","indexes","indexExists","indexInformation","initializeOrderedBulkOp","initializeUnorderedBulkOp","insert","insertMany","insertOne","isCapped","listIndexes","mapReduce","options","parallelCollectionScan","reIndex","remove","rename","replaceOne","save","stats","update","updateMany","updateOne","watch","get","set","del","keys","smembers","srem","scanStream","scan","mget","rpush","blpop","lrem","llen","lrange","multi","exists","setex","expire","flushdb","lset","hgetall","sadd","pexpire","nodes","hset","setnx","mset","ltrim","zrange","zremrangebyrank","zcard","zadd","zrangebyscore","strlen","exec","publish","subscribe","unsubscribe","eval"],"in":["cinema", "city", "movie", "premiere", "booking", "order", "payment", "purchase", "ticket", "notification", "email", "sms", "verify"]}}
+
+--
+
+System: cloudboost
+GitHub Link: https://github.com/CloudBoost/cloudboost
+GitHub Hashes:
+- https://github.com/CloudBoost/cloudboost/tree/aa4564056047fb6ec804590f323b7f0a2a010e3b
+Request route: POST /nlptr
+Request file: zip
+Request options: {"hints":{"out":["get","post","put","delete","patch","all","head","del","collection","aggregate","bulkWrite","count","countDocuments","createIndex","createIndexes","deleteMany","deleteOne","distinct","drop","dropAllIndexes","dropIndex","dropIndexes","ensureIndex","estimatedDocumentCount","find","findAndModify","findAndRemove","findOne","findOneAndDelete","findOneAndReplace","findOneAndUpdate","geoHaystackSearch","group","indexes","indexExists","indexInformation","initializeOrderedBulkOp","initializeUnorderedBulkOp","insert","insertMany","insertOne","isCapped","listIndexes","mapReduce","options","parallelCollectionScan","reIndex","remove","rename","replaceOne","save","stats","update","updateMany","updateOne","watch","get","set","del","keys","smembers","srem","scanStream","scan","mget","rpush","blpop","lrem","llen","lrange","multi","exists","setex","expire","flushdb","lset","hgetall","sadd","pexpire","nodes","hset","setnx","mset","ltrim","zrange","zremrangebyrank","zcard","zadd","zrangebyscore","strlen","exec","publish","subscribe","unsubscribe","eval"],"in":["admin","app","token","backup","app","import","export","settings","category","auth","connect","disconnect","file","page","server","url","user","role","login","signup","logout","password","authentication","verify","data","table","schema","collection","project","session","cb api plan","socket","config"]}}
+
+--
+
+System: comments-api
+GitHub Link: https://github.com/dev-mastery/comments-api
+GitHub Hashes:
+- https://github.com/dev-mastery/comments-api/tree/92cbc12ea285e6129c8ab016dd9c59cbcb339c46
+Request route: POST /nlptr
+Request file: zip
+Request options: {"hints":{"out":["get","post","put","delete","patch","all","head","del","collection","aggregate","bulkWrite","count","countDocuments","createIndex","createIndexes","deleteMany","deleteOne","distinct","drop","dropAllIndexes","dropIndex","dropIndexes","ensureIndex","estimatedDocumentCount","find","findAndModify","findAndRemove","findOne","findOneAndDelete","findOneAndReplace","findOneAndUpdate","geoHaystackSearch","group","indexes","indexExists","indexInformation","initializeOrderedBulkOp","initializeUnorderedBulkOp","insert","insertMany","insertOne","isCapped","listIndexes","mapReduce","options","parallelCollectionScan","reIndex","remove","rename","replaceOne","save","stats","update","updateMany","updateOne","watch"],"in":["comment","text","author","info","hash","post","reply","modified","published","created"]}}
+
+--
+
+System: overleaf
+GitHub Link: https://github.com/overleaf
+GitHub Hashes:
+- https://github.com/overleaf/chat/tree/9d16f0751b627d5a967ffd6b29c8b69bba8b159b
+- https://github.com/overleaf/clsi/tree/06d24e08ce5bbafd00b9d4dca18049b9f91d6263
+- https://github.com/overleaf/contacts/tree/3eb8b1baebe7bb41092b9fc7fd50ff28993d6a32
+- https://github.com/overleaf/docstore/tree/03779eb1884d1cc546616b647987919c7e8cc3fb
+- https://github.com/overleaf/document-updater/tree/b9011d28a698d9310d2c4b7d9b85f925ae23c865
+- https://github.com/overleaf/filestore/tree/bc11e208f3b659534e52aa312401e6e708d27243
+- https://github.com/overleaf/notifications/tree/26394c22018193e07742e14b8a27e35511d51bcb
+- https://github.com/overleaf/real-time/tree/f896afaa99a50dfd515f4e1057faeca5a29b4878
+- https://github.com/overleaf/spelling/tree/d982797ff232685ea36838804fed25b8f0183135
+- https://github.com/overleaf/tags/tree/66a351018a031870525a34ee78d30508d98fd54d
+- https://github.com/overleaf/track-changes/tree/1ae78b60d1acb227b145a92722b5431a09387106
+
+Request route: POST /nlptr
+Request file: zip
+Request options: {"hints":{"out":["get","post","put","delete","patch","all","head","del","collection","aggregate","bulkWrite","count","countDocuments","createIndex","createIndexes","deleteMany","deleteOne","distinct","drop","dropAllIndexes","dropIndex","dropIndexes","ensureIndex","estimatedDocumentCount","find","findAndModify","findAndRemove","findOne","findOneAndDelete","findOneAndReplace","findOneAndUpdate","geoHaystackSearch","group","indexes","indexExists","indexInformation","initializeOrderedBulkOp","initializeUnorderedBulkOp","insert","insertMany","insertOne","isCapped","listIndexes","mapReduce","options","parallelCollectionScan","reIndex","remove","rename","replaceOne","save","stats","update","updateMany","updateOne","watch","get","set","del","keys","smembers","srem","scanStream","scan","mget","rpush","blpop","lrem","llen","lrange","multi","exists","setex","expire","flushdb","lset","hgetall","sadd","pexpire","nodes","hset","setnx","mset","ltrim","zrange","zremrangebyrank","zcard","zadd","zrangebyscore","strlen","exec","publish","subscribe","unsubscribe","eval"],"in":["latex","project","document","doc","line","word","text","page","write","template","file","editor","client","pdf","output","compile","change","diff","state","accept","history","ops","doc ops","flush","version","snapshot","archive","pack","comment","chat","message","room","thread","chat room","conversation room","conversation thread","user","document collaborator","contact","notification","spelling preferences","tag"]}}
+
+--
+
+System: robot-shop
+GitHub Link: https://github.com/instana/robot-shop
+GitHub Hashes:
+- https://github.com/instana/robot-shop/tree/55292e2199f2fb00a165b1f7d3045fe7f8922038
+Request route: POST /nlptr
+Request file: zip
+Request options: {"hints":{"out":["get","post","put","delete","patch","all","head","del","collection","aggregate","bulkWrite","count","countDocuments","createIndex","createIndexes","deleteMany","deleteOne","distinct","drop","dropAllIndexes","dropIndex","dropIndexes","ensureIndex","estimatedDocumentCount","find","findAndModify","findAndRemove","findOne","findOneAndDelete","findOneAndReplace","findOneAndUpdate","geoHaystackSearch","group","indexes","indexExists","indexInformation","initializeOrderedBulkOp","initializeUnorderedBulkOp","insert","insertMany","insertOne","isCapped","listIndexes","mapReduce","options","parallelCollectionScan","reIndex","remove","rename","replaceOne","save","stats","update","updateMany","updateOne","watch","get","set","del","keys","smembers","srem","scanStream","scan","mget","rpush","blpop","lrem","llen","lrange","multi","exists","setex","expire","flushdb","lset","hgetall","sadd","pexpire","nodes","hset","setnx","mset","ltrim","zrange","zremrangebyrank","zcard","zadd","zrangebyscore","strlen","exec","publish","subscribe","unsubscribe","eval"],"in":["cart","shipping","cost","location","sku","rename","add","update","metrics","catalogue","product","category","qty","quantity","description","price","stock","search","user","password","email","order","history","register","login","check","uniqueid"]}}

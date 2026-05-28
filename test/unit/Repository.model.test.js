@@ -1,4 +1,5 @@
-// Model
+// Models
+
 const Repository = require('../../model/Repository.model')
 const Directory = require('../../model/Directory.model')
 const File = require('../../model/File.model')
@@ -8,8 +9,11 @@ const Operation = require('../../model/Operation.model')
 const Method = require('../../model/Method.model')
 const Sample = require('../../model/Sample.model')
 const Concept = require('../../model/Concept.model')
-// Error
+
+// Errors
+
 const BadFormat = require('../../error/BadFormat.error.js')
+const { INPUT_INCORRECTLY_FORMATTED } = require('../../error/Constant.error.js')
 
 // Happy path test suite
 
@@ -121,7 +125,7 @@ describe('Repository tries to', () => {
 
     expect(() => {
       Repository.revive(repositoryAsStringGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive an incomplete object', () => {
@@ -133,7 +137,7 @@ describe('Repository tries to', () => {
 
     expect(() => {
       Repository.revive(repositoryAsStringGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive an undefined object', () => {
@@ -145,7 +149,7 @@ describe('Repository tries to', () => {
 
     expect(() => {
       Repository.revive(repositoryGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a null object', () => {
@@ -157,7 +161,7 @@ describe('Repository tries to', () => {
 
     expect(() => {
       Repository.revive(repositoryGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a repository with null location', () => {
@@ -170,7 +174,7 @@ describe('Repository tries to', () => {
 
     expect(() => {
       Repository.revive(repositoryAsObjectGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('revive a repository with empty location', () => {
@@ -183,7 +187,7 @@ describe('Repository tries to', () => {
 
     expect(() => {
       Repository.revive(repositoryAsObjectGiven)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a repository with undefined location', () => {
@@ -191,7 +195,7 @@ describe('Repository tries to', () => {
 
     expect(() => {
       new Repository(undefined, [])
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a repository with null location', () => {
@@ -199,7 +203,7 @@ describe('Repository tries to', () => {
 
     expect(() => {
       new Repository(null, [])
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a repository with empty location', () => {
@@ -207,7 +211,7 @@ describe('Repository tries to', () => {
 
     expect(() => {
       new Repository('', [])
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a repository with undefined directories', () => {
@@ -215,7 +219,7 @@ describe('Repository tries to', () => {
 
     expect(() => {
       new Repository('https://www.github.com/user/project/blob/master/', undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('create a repository with null directories', () => {
@@ -223,7 +227,7 @@ describe('Repository tries to', () => {
 
     expect(() => {
       new Repository('https://www.github.com/user/project/blob/master/', null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a repository undefined location', () => {
@@ -238,7 +242,7 @@ describe('Repository tries to', () => {
 
     expect(() => {
       repositoryAsObjectGiven.setLocation(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a repository null id', () => {
@@ -253,7 +257,7 @@ describe('Repository tries to', () => {
 
     expect(() => {
       repositoryAsObjectGiven.setLocation(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a repository empty location', () => {
@@ -268,7 +272,7 @@ describe('Repository tries to', () => {
 
     expect(() => {
       repositoryAsObjectGiven.setLocation(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a repository undefined directories', () => {
@@ -283,7 +287,7 @@ describe('Repository tries to', () => {
 
     expect(() => {
       repositoryAsObjectGiven.setDirectories(undefined)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 
   test('set a repository null directories', () => {
@@ -298,6 +302,6 @@ describe('Repository tries to', () => {
 
     expect(() => {
       repositoryAsObjectGiven.setDirectories(null)
-    }).toThrow(new BadFormat())
+    }).toThrow(new BadFormat(INPUT_INCORRECTLY_FORMATTED))
   })
 })
